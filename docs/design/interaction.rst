@@ -24,7 +24,7 @@ Interation among different module is going to be following::
                            v                          
                  +----------------------+     
                  | Read main.yaml and   |     
-                 | find number of xxxxx |     
+                 | find number of soochi |     
                  +----------------------+     
                            |
                            |

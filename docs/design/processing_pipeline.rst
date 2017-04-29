@@ -37,9 +37,9 @@ Data flow among them::
 
 #. CLI prvided will be **nirikshak**::
 
-      nisikshak [--tags=tag1,tag2]  [--xxxxx=abc,cde]
+      nisikshak [--tags=tag1,tag2]  [--soochi=abc,cde]
 
-#. CLI invokes the controller to performs its task, it passes tags and xxxxx
+#. CLI invokes the controller to performs its task, it passes tags and soochi
    along the call. Not controller(CM) decides, how input will be taken.
    Currently multiple input mechanism will be supported to provide fetch data
    for example, file, through REST call or database.
@@ -81,7 +81,7 @@ Data flow among them::
    not be able to fine method. And main recevies key value arguments only.
 
 #. Depending on the method used for storing configuration file's, information
-   returned from all the method is the same, list of xxxxx and list of groups
+   returned from all the method is the same, list of soochi and list of groups
    to be executed and their configuration file in json format.
 
 #. Once above mentioned information is recevied from the input module then

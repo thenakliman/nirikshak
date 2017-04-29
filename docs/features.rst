@@ -5,3 +5,4 @@ Feature:
 #. To allow users to get information of the system based on configuration files supplied.
 #. Enable distributed systems to centralize storage of the results.
 #. Enable continous monitor system.
+#. Supporing multiple input and output mechnism.

@@ -18,7 +18,7 @@ If input format provides expected result then fail/pass is the output. If
 input format does not provide expected result then output should be result of
 verification
 
-Jaanch's are defined in the yaml file called xxxxx, in following format::
+Jaanch's are defined in the yaml file called soochi, in following format::
 
      items: 
        # Each set of Jaanch's can be tagged with name, which can be later on
@@ -74,10 +74,10 @@ Format of main.yaml can be following::
     name: <group name>
     <configurations key>: <configuration value>
     <item>:
-      xxxxx: <name of files>/<name of group>
+      soochi: <name of files>/<name of group>
       <configuration name>: <configuration value>
     <item>:
-      xxxxx: <name of files>/<name of group>
+      soochi: <name of files>/<name of group>
       <configuration name>: <configuration value>
 
 you can define <group name> and <group name>/name is the name of the group.
