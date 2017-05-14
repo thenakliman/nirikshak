@@ -5,6 +5,7 @@ import nirikshak
 
 nirikshak.CONF = None
 
+
 def make_dict(config):
     dict1 = {}
     sections = config.sections()
@@ -31,7 +32,7 @@ def initilize_config(config_file=None):
 
     config = ConfigParser.ConfigParser()
     try:
-        config.read(config_file)    
+        config.read(config_file)
     except:
         print("Unable to load configuration file at %s." % config_file)
 

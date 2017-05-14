@@ -56,7 +56,7 @@ class FileInput(input.Input):
 
     def _get_executable_soochis(self, soochis, groups):
         content = self._get_yaml_file(self.main_file)
-        groups = self._get_groups(content, groups) 
+        groups = self._get_groups(content, groups)
         s = set(soochis)
         for group in groups:
             if 'soochis' in content[group]:
@@ -72,7 +72,6 @@ class FileInput(input.Input):
         directory = self._get_soochi_dir()
         location = ("%s/%s.yaml" % (directory, soochi))
         return yaml_util.get_yaml(location)
-        
 
     def get_soochis(self, soochis, groups):
         s = []

@@ -15,6 +15,6 @@ def work(**kwargs):
     sock = socket.socket(socket.AF_INET,
                          PROTOCOL_MAPPING[protocol])
     sock.settimeout(1)
-    kwargs['input']['result'] = sock.connect_ex((host, port))                                      
+    kwargs['input']['result'] = sock.connect_ex((host, port))
     sock.close()
     return kwargs

@@ -10,7 +10,6 @@ class PostTaskTest(unittest.TestCase):
         dct = base.get_main_yaml()
         self.assertEqual(str(dct), dummy.format_it(**dct))
 
-
     def test_format_soochi(self):
         dct = base.get_test_keystone_soochi()
         self.assertEqual(str(dct), dummy.format_it(**dct))

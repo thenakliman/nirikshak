@@ -108,7 +108,7 @@ def create_conf():
             'input_type': 'file',
             'workers': 10
         },
-       'input_file': {
-           'main_file': '/var/nirikshak/main.yaml'
-       }
+        'input_file': {
+            'main_file': '/var/nirikshak/main.yaml'
+        }
     }

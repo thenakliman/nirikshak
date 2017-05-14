@@ -1,8 +1,9 @@
 class NirikshakException(Exception):
     msg = ("Unknown exception.")
+
     def __init__(self, *args, **kwargs):
         pass
-#        print(args, kwargs)
+
 
 class NotFoundException(NirikshakException):
     msg = "Not Found Exception."
@@ -32,11 +33,14 @@ class InvalidFormatException(InvalidException):
 class InvalidInputType(InvalidException):
     msg = "Invalid %(input_type)s input type."
 
+
 class InputExecutionException(NirikshakException):
     msg = "Error in execution of %(input)s input module."
 
+
 class OutputExecutionException(NirikshakException):
     msg = "Error in execution of %(output)s input module."
+
 
 class PostTaskException(NirikshakException):
     msg = "Error in execution of post task module."

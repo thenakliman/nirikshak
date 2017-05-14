@@ -38,8 +38,8 @@ class Router(object):
         self.queue = multiprocessing.Manager().Queue()
         logging.info("Router has been initilized")
 
-    #TODO(thenakliman): May be these methods can be moved to
-    #some generic method loading method.
+    # TODO(thenakliman): May be these methods can be moved to
+    # some generic method loading method.
     def _get_soochis(self, soochis=None, groups=None):
         input_type = nirikshak.CONF['default'].get('input_type', 'input_file')
         mod_name = input_type.split('_')[1:]
@@ -52,7 +52,8 @@ class Router(object):
             raise ImportError
 
         try:
-            soochis = getattr(module, 'get_soochis')(soochis=soochis, groups=groups)
+            soochis = getattr(module, 'get_soochis')(soochis=soochis,
+                                                     groups=groups)
         except Exception:
             logging.error("Unable to get list of soochis from the %s input "
                           "type." % input_type)
@@ -77,7 +78,6 @@ class Router(object):
         except Exception:
             msg = ("Error in performing post task for output")
             raise exceptions.PostTaskException()
-
 
     @staticmethod
     def _output_result(**k):
@@ -104,7 +104,7 @@ class Router(object):
 
         self.pool.close()
         self.pool.join()
-        while not self.queue.empty(): 
+        while not self.queue.empty():
             try:
                 jaanch = self.queue.get()
                 formatted_output = self._format_output(**jaanch)
@@ -112,7 +112,7 @@ class Router(object):
             except ImportError, exceptions.PostTaskException:
                 pass
 
-    def start(self, tags=[], soochis=[], groups=[], **kwargs): 
+    def start(self, tags=[], soochis=[], groups=[], **kwargs):
         logging.info("Starting execution of soochis.")
         soochis_def = self._get_soochis(soochis, groups)
         self._start_worker(soochis_def)

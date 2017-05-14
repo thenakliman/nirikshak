@@ -1,11 +1,12 @@
 import logging
 import yaml
 
+
 def get_yaml(location):
     with open(location, 'r') as f:
         try:
-            content = yaml.load(f) 
-        #FIXME(thenakliman): Not being raised
+            content = yaml.load(f)
+        # FIXME(thenakliman): Not being raised
         except yaml.scanner.ScannerError:
             msg = ("Invalid %s yaml file" % (location))
             logging.error(msg)

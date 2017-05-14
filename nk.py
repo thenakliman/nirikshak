@@ -15,7 +15,8 @@ def process_args():
     parser.add_argument('--soochis', metavar='s', type=str, nargs='+',
                         default=[], help='List of soochi for verification')
     parser.add_argument('--config-file', metavar='c', type=str,
-                        default=[], help='Path of configuration file for nirikshak')
+                        default=[], help='Path of configuration '
+                        'file for nirikshak')
     parser.add_argument('--groups', metavar='g', type=str, nargs='+',
                         default=[], help='List of groups to be executed')
 

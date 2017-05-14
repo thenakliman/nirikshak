@@ -209,7 +209,7 @@ class InputFileTest(unittest.TestCase):
         get_yaml.side_effect = get_yaml_file
         self.assertRaises(exceptions.GroupNotFoundException,
                           file.get_soochis, soochis=[],
-                                   groups=['monitor'])
+                          groups=['monitor'])
 
 
 unittest.main()

@@ -16,7 +16,6 @@ def format_it(**args):
 
     if not result:
         result = v['input']['result']
- 
     rs = ("%s,%s,%s...%s" % (name, type_, inpt, result))
     args[name]['formatted_output'] = rs
     return args
