@@ -36,7 +36,7 @@ class FileInput(input.Input):
             if gp not in gps:
                 gps.add(gp)
                 if not main_yaml.get(gp, False):
-                    raise GroupNotFoundException(group=gp)
+                    raise exceptions.GroupNotFoundException(group=gp)
                 try:
                     to_process += main_yaml[gp]['groups']
                 except KeyError:

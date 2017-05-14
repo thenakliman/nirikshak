@@ -1,7 +1,8 @@
 class NirikshakException(Exception):
     msg = ("Unknown exception.")
     def __init__(self, *args, **kwargs):
-        print(args, kwargs)
+        pass
+#        print(args, kwargs)
 
 class NotFoundException(NirikshakException):
     msg = "Not Found Exception."
