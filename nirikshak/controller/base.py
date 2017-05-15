@@ -22,6 +22,7 @@ def worker(queue, soochi):
         try:
             queue.put({n: getattr(module, 'work')(**jaanch)})
         except Exception as e:
+            print(e)
             logging.error("%s jaanch failed to get executed" % n)
 
 
@@ -94,7 +95,7 @@ class Router(object):
         try:
             return getattr(module, 'output')(**k)
         except Exception:
-            msg = ("Error in performing post task for output")
+            msg = ("Error in performing output")
             logging.error(msg)
             raise exceptions.OutputExecutionException(output=modname)
 
