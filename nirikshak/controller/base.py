@@ -12,6 +12,7 @@ def worker(queue, soochi):
         name = name.replace('/', '.')
         modname = jaanch['type'].split('/')[-1:]
         a_name = ("nirikshak.workers.%s" % name)
+        print(a_name)
         try:
             module = __import__(a_name, globals(), locals(), modname, -1)
         except ImportError as e:
