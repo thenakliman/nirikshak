@@ -1,6 +1,10 @@
 import dbus
 
+from nirikshak.workers import base
 
+
+@base.match_expected_output
+@base.validate(required=('service',), optional=('status',))
 def work(**kwargs):
     k = kwargs['input']['args']
     sysbus = dbus.SystemBus()
@@ -8,5 +12,4 @@ def work(**kwargs):
                                  '/org/freedesktop/systemd1')
     manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
     service = k['service']
-    kwargs['input']['result'] = manager.GetUnitFileState(service)
-    return kwargs
+    return manager.GetUnitFileState(service)

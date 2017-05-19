@@ -1,4 +1,5 @@
-import unittest
-from nirikshak.tests.unit.input import test_file
+from nirikshak.workers.network import network_port
+inti = {'port': {{'input': {{'args': {{'ip': '192.168.181.103'}, {'port': '22'}}}, {'output': {{'type': 'console'}, {'result': 0}}}}}}}
+#a = {'port_22': [{'input': {'args': {'ip': '192.168.181.103'}, {'port': '22'}}}, {'output': {'type': 'console'}, {'result': 0}}]}
 
-test_file.main()
+network_port.work(**inti)

@@ -16,6 +16,8 @@ def format_it(**args):
 
     if not result:
         result = v['input']['result']
-    rs = ("%s,%s,%s...%s" % (name, type_, inpt, result))
+
+    rs = ("%s,%s,%s" % (name, type_, inpt))
+    rs = ("%s%s%s" % (rs, (120 - len(rs)) * '.', result))
     args[name]['formatted_output'] = rs
     return args

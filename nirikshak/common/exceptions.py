@@ -26,6 +26,14 @@ class InvalidException(NirikshakException):
     msg = "Invalid data/input/resource/format"
 
 
+class MissingRequiredArgsException(InvalidException):
+    msg = "%s required arguments are missing"
+
+
+class ExtraArgsException(InvalidException):
+    msg = "%s extra arguments are provided"
+
+
 class InvalidFormatException(InvalidException):
     msg = ("%(location)s file is not in %(format)s format.")
 

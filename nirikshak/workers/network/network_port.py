@@ -1,5 +1,7 @@
 import socket
 
+from nirikshak.workers import base
+
 
 PROTOCOL_MAPPING = {
     'tcp': socket.SOCK_STREAM,
@@ -7,6 +9,8 @@ PROTOCOL_MAPPING = {
 }
 
 
+@base.match_expected_output
+@base.validate(required=('ip', 'port'), optional=('protocol',))
 def work(**kwargs):
     k = kwargs['input']['args']
     host = k['ip']
@@ -15,6 +19,6 @@ def work(**kwargs):
     sock = socket.socket(socket.AF_INET,
                          PROTOCOL_MAPPING[protocol])
     sock.settimeout(1)
-    kwargs['input']['result'] = sock.connect_ex((host, port))
+    status = sock.connect_ex((host, port))
     sock.close()
-    return kwargs
+    return status

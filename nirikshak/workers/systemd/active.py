@@ -1,6 +1,10 @@
 import dbus
 
+from nirikshak.workers import base
 
+
+@base.match_expected_output
+@base.validate(required=('service',), optional=('status',))
 def work(**kwargs):
     k = kwargs['input']['args']
     sysbus = dbus.SystemBus()
@@ -12,6 +16,4 @@ def work(**kwargs):
     kwargs['input']['result'] = False
     for unit in units:
         if unit[0] == service:
-            kwargs['input']['result'] = (k['status'] == str(unit[3]))
-
-    return kwargs
+            return str(unit[3])

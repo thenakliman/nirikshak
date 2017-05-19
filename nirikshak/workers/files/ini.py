@@ -1,10 +1,12 @@
 import ConfigParser
 
+from nirikshak.workers import base
 
+
+@base.match_expected_output
+@base.validate(required=('service',), optional=('status',))
 def work(**kwargs):
     k = kwargs['input']['args']
     config = ConfigParser.ConfigParser()
     config.read(k['file'])
-    kwargs['input']['result'] = (config.get(k['section'],
-                                            k['key']) == k['value'])
-    return kwargs
+    return config.get(k['section'], k['key'])
