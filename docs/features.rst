@@ -7,4 +7,4 @@ Feature:
 #. Enable continous monitor system.
 #. Supporing multiple input and output mechnism.
 #. Collect all the one kind of jaanch and run them once to increase performance if possible.
-#. Add a framework to check that required input is provided for the worker.
+#. Add a framework to check that required input is provided for the worker. DONE

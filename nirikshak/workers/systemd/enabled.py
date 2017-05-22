@@ -1,3 +1,4 @@
+import logging
 import dbus
 
 from nirikshak.workers import base
@@ -12,4 +13,6 @@ def work(**kwargs):
                                  '/org/freedesktop/systemd1')
     manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
     service = k['service']
-    return manager.GetUnitFileState(service)
+    status = manager.GetUnitFileState(service)
+    logging.info("%s service is %s" % (k['service'],  status))
+    return status

@@ -1,3 +1,4 @@
+import logging
 import socket
 
 from nirikshak.workers import base
@@ -20,5 +21,7 @@ def work(**kwargs):
                          PROTOCOL_MAPPING[protocol])
     sock.settimeout(1)
     status = sock.connect_ex((host, port))
+    logging.info("Reurnted code for %s host and %s ip is %d", k['ip'],
+                 k['port'], status)
     sock.close()
     return status

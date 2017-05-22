@@ -1,3 +1,4 @@
+import logging
 import psutil
 
 from nirikshak.workers import base
@@ -11,8 +12,10 @@ def work(**kwargs):
     for proc in psutil.process_iter():
         try:
             if proc.name() == name:
+                logging.info("%s process is running" % name)
                 return True
         except psutil.NoSuchProcess:
             pass
 
+    logging.info("%s process ins not running")
     return False

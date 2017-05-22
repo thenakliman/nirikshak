@@ -6,19 +6,23 @@ import nirikshak
 from nirikshak.common import exceptions
 
 
+def load_module(modname):
+    try:
+        module = __import__(modname, globals(), locals(), [modname], -1)
+    except ImportError:
+        logging.error('Unable to load module at %s' % modname)
+        raise ImportError
+
+    return module
+
+
 def worker(queue, soochi):
     for n, jaanch in soochi['jaanches'].items():
         name = jaanch['type']
         name = name.replace('/', '.')
         modname = jaanch['type'].split('/')[-1:]
         a_name = ("nirikshak.workers.%s" % name)
-        try:
-            module = __import__(a_name, globals(), locals(), modname, -1)
-        except ImportError as e:
-            logging.error("Unable to find %s type of jaanch" %
-                          jaanch['type'])
-            continue
-
+        module = load_module(a_name)
         try:
             queue.put({n: getattr(module, 'work')(**jaanch)})
         except Exception as e:
@@ -38,22 +42,23 @@ class Router(object):
         self.queue = multiprocessing.Manager().Queue()
         logging.info("Router has been initilized")
 
+    @classmethod
+    def _call_method(cls, module, method, *args, **kwargs):
+        return getattr(module, method)(*args, **kwargs)
+
     # TODO(thenakliman): May be these methods can be moved to
     # some generic method loading method.
-    def _get_soochis(self, soochis=None, groups=None):
+    @classmethod
+    def _get_soochis(cls, soochis=None, groups=None):
         input_type = nirikshak.CONF['default'].get('input_type', 'input_file')
-        mod_name = input_type.split('_')[1:]
-        mod_name = ''.join(mod_name)
-        mod_loc = ('nirikshak.input.%s' % mod_name)
-        try:
-            module = __import__(mod_loc, globals(), locals(), [mod_name], -1)
-        except ImportError:
-            logging.error('Unable to load module at %s' % mod_loc)
-            raise ImportError
+        modname = input_type.split('_')[1:]
+        modname = ''.join(modname)
+        modname = ('nirikshak.input.%s' % modname)
+        module = load_module(modname)
 
         try:
-            soochis = getattr(module, 'get_soochis')(soochis=soochis,
-                                                     groups=groups)
+            soochis = cls._call_method(module, 'get_soochis', soochis=soochis,
+                                       groups=groups)
         except Exception:
             logging.error("Unable to get list of soochis from the %s input "
                           "type." % input_type)
@@ -62,37 +67,32 @@ class Router(object):
         logging.info("Soochi list has been fetched from the input module")
         return soochis
 
-    @staticmethod
-    def _format_output(**k):
+    @classmethod
+    def _format_output(cls, **k):
         kwargs = k.values()[0]
         post_task = kwargs['input'].get('post_task', 'dummy')
         modname = ('nirikshak.post_task.%s' % post_task)
+        module = load_module(modname)
         try:
-            module = __import__(modname, globals(), locals(), [post_task], -1)
-        except ImportError:
-            logging.error("Unable to load %s module." % modname)
-            raise ImportError
-
-        try:
-            return getattr(module, 'format_it')(**k)
+            formatted = cls._call_method(module, 'format_it', **k)
         except Exception:
             msg = ("Error in performing post task for output")
             raise exceptions.PostTaskException()
 
-    @staticmethod
-    def _output_result(**k):
+        logging.info("Post task has been completed for %s jaanch" % (
+                         k.keys()[0]))
+
+        return formatted
+
+    @classmethod
+    def _output_result(cls, **k):
         kwargs = k.values()[0]
         output = kwargs['output'].get('type', 'console')
         modname = ('nirikshak.output.%s' % output)
+        module = load_module(modname)
 
         try:
-            module = __import__(modname, globals(), locals(), [output], -1)
-        except ImportError:
-            logging.error("Unable to load %s module." % modname)
-            raise ImportError
-
-        try:
-            return getattr(module, 'output')(**k)
+            cls._call_method(module, 'output', **k)
         except Exception:
             msg = ("Error in performing output")
             logging.error(msg)

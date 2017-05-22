@@ -7,7 +7,11 @@ def validate(required=(), optional=()):
     def func(f):
         def validator(**kwargs):
             require = set(required)
-            available = set(kwargs['input']['args'].keys())
+            try:
+                available = set(kwargs['input']['args'].keys())
+            except KeyError:
+                available = set()
+
             missing = require - available
             if missing:
                 raise excpetions.MissingRquiredArgException(jaanch=missing)

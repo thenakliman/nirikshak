@@ -1,3 +1,4 @@
+import logging
 import dbus
 
 from nirikshak.workers import base
@@ -16,4 +17,8 @@ def work(**kwargs):
     kwargs['input']['result'] = False
     for unit in units:
         if unit[0] == service:
+            logging.info("%s unit is active" % k['service'])
             return str(unit[3])
+
+    logging.info("%s unit is not active" % k['service'])
+    return ''

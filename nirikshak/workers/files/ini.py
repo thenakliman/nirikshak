@@ -1,3 +1,4 @@
+import logging
 import ConfigParser
 
 from nirikshak.workers import base
@@ -9,4 +10,13 @@ def work(**kwargs):
     k = kwargs['input']['args']
     config = ConfigParser.ConfigParser()
     config.read(k['file'])
-    return config.get(k['section'], k['key'])
+    value = None
+    try:
+        value = config.get(k['section'], k['key'])
+        logging.info("%s configuration option found in %s section",
+                     k['section'], k['key'])
+    except Exception:
+        logging.error("Not able to find %s configuration parameter in %s "
+                      "section" % (k['key'], k['section']))
+
+    return value

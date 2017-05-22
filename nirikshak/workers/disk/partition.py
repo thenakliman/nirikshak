@@ -18,3 +18,6 @@ def work(**kwargs):
                 result = result & (getattr(disk, key) == value)
 
             return result
+
+    logging.error("%s device could not be found on the syste." % k['device'])
+    return None

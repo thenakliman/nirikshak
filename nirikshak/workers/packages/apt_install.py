@@ -1,3 +1,4 @@
+import logging
 import apt
 
 from nirikshak.workers import base
@@ -10,4 +11,6 @@ def work(**kwargs):
     cache = apt.cache.Cache()
     cache.update()
     pkg = cache[k['package']]
-    return pkg.is_installed
+    status = pkg.is_installed
+    logging.info("%s package is %s" % (k['package'], status))
+    return status

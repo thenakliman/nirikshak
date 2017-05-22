@@ -1,8 +1,11 @@
+import logging
+
+
 class NirikshakException(Exception):
     msg = ("Unknown exception.")
 
     def __init__(self, *args, **kwargs):
-        pass
+        logging.error(self.message % kwargs)
 
 
 class NotFoundException(NirikshakException):
