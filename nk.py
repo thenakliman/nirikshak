@@ -2,7 +2,6 @@ import argparse
 import logging
 import sys
 
-from nirikshak.common import configuration as config
 from nirikshak.controller import base
 
 
@@ -25,8 +24,6 @@ def process_args():
 
 def main():
     args = process_args()
-    config.initilize_config(args.config_file)
-    config.initilize_logging()
     base.Router().start(**vars(args))
     logging.info("Jaanch has been finished, check results")
 

@@ -5,7 +5,7 @@ from nirikshak.workers import base
 
 
 @base.match_expected_output
-@base.validate(required=('service',), optional=('status',))
+@base.validate(required=('file', 'section', 'key'))
 def work(**kwargs):
     k = kwargs['input']['args']
     config = ConfigParser.ConfigParser()

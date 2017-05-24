@@ -4,16 +4,10 @@ import multiprocessing
 
 import nirikshak
 from nirikshak.common import exceptions
-
-
-def load_module(modname):
-    try:
-        module = __import__(modname, globals(), locals(), [modname], -1)
-    except ImportError:
-        logging.error('Unable to load module at %s' % modname)
-        raise ImportError
-
-    return module
+from nirikshak.common import load_module
+from nirikshak.input import base as inputs
+from nirikshak.post_task import base as post_task
+from nirikshak.output import base as output
 
 
 def worker(queue, soochi):
@@ -22,7 +16,7 @@ def worker(queue, soochi):
         name = name.replace('/', '.')
         modname = jaanch['type'].split('/')[-1:]
         a_name = ("nirikshak.workers.%s" % name)
-        module = load_module(a_name)
+        module = load_module.load(a_name)
         try:
             queue.put({n: getattr(module, 'work')(**jaanch)})
         except Exception as e:
@@ -46,57 +40,17 @@ class Router(object):
     def _call_method(cls, module, method, *args, **kwargs):
         return getattr(module, method)(*args, **kwargs)
 
-    # TODO(thenakliman): May be these methods can be moved to
-    # some generic method loading method.
     @classmethod
     def _get_soochis(cls, soochis=None, groups=None):
-        input_type = nirikshak.CONF['default'].get('input_type', 'input_file')
-        modname = input_type.split('_')[1:]
-        modname = ''.join(modname)
-        modname = ('nirikshak.input.%s' % modname)
-        module = load_module(modname)
-
-        try:
-            soochis = cls._call_method(module, 'get_soochis', soochis=soochis,
-                                       groups=groups)
-        except Exception:
-            logging.error("Unable to get list of soochis from the %s input "
-                          "type." % input_type)
-            raise exceptions.InputExecutionException(input=input_type)
-
-        logging.info("Soochi list has been fetched from the input module")
-        return soochis
+        return inputs.get_soochis(soochis, groups)
 
     @classmethod
     def _format_output(cls, **k):
-        kwargs = k.values()[0]
-        post_task = kwargs['input'].get('post_task', 'dummy')
-        modname = ('nirikshak.post_task.%s' % post_task)
-        module = load_module(modname)
-        try:
-            formatted = cls._call_method(module, 'format_it', **k)
-        except Exception:
-            msg = ("Error in performing post task for output")
-            raise exceptions.PostTaskException()
-
-        logging.info("Post task has been completed for %s jaanch" % (
-                         k.keys()[0]))
-
-        return formatted
+        return post_task.format_for_output(**k)
 
     @classmethod
     def _output_result(cls, **k):
-        kwargs = k.values()[0]
-        output = kwargs['output'].get('type', 'console')
-        modname = ('nirikshak.output.%s' % output)
-        module = load_module(modname)
-
-        try:
-            cls._call_method(module, 'output', **k)
-        except Exception:
-            msg = ("Error in performing output")
-            logging.error(msg)
-            raise exceptions.OutputExecutionException(output=modname)
+        return output.output(**k)
 
     def _start_worker(self, soochis_def):
         for soochi in soochis_def:
