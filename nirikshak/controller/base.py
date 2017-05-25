@@ -8,19 +8,17 @@ from nirikshak.common import load_module
 from nirikshak.input import base as inputs
 from nirikshak.post_task import base as post_task
 from nirikshak.output import base as output
+from nirikshak.workers import base as base_worker
+
+LOG = logging.getLogger(__name__)
 
 
 def worker(queue, soochi):
     for n, jaanch in soochi['jaanches'].items():
-        name = jaanch['type']
-        name = name.replace('/', '.')
-        modname = jaanch['type'].split('/')[-1:]
-        a_name = ("nirikshak.workers.%s" % name)
-        module = load_module.load(a_name)
         try:
-            queue.put({n: getattr(module, 'work')(**jaanch)})
+            queue.put({n: base_worker.do_work(**{n: jaanch})})
         except Exception as e:
-            logging.error("%s jaanch failed to get executed" % n)
+            LOG.error("%s jaanch failed to get executed" % n)
 
 
 class Router(object):
@@ -34,7 +32,7 @@ class Router(object):
 
         self.pool = multiprocessing.Pool(workers)
         self.queue = multiprocessing.Manager().Queue()
-        logging.info("Router has been initilized")
+        LOG.info("Router has been initilized")
 
     @classmethod
     def _call_method(cls, module, method, *args, **kwargs):
@@ -67,7 +65,7 @@ class Router(object):
                 pass
 
     def start(self, tags=[], soochis=[], groups=[], **kwargs):
-        logging.info("Starting execution of soochis.")
+        LOG.info("Starting execution of soochis.")
         soochis_def = self._get_soochis(soochis, groups)
         self._start_worker(soochis_def)
-        logging.info("Execution of soochis are finished.")
+        LOG.info("Execution of soochis are finished.")

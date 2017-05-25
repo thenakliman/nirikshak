@@ -1,6 +1,8 @@
 import logging
 import yaml
 
+LOG = logging.getLogger(__name__)
+
 
 def get_yaml(location):
     with open(location, 'r') as f:
@@ -9,11 +11,11 @@ def get_yaml(location):
         # FIXME(thenakliman): Not being raised
         except yaml.scanner.ScannerError:
             msg = ("Invalid %s yaml file" % (location))
-            logging.error(msg)
+            LOG.error(msg)
             raise InvalidFormatException(location=location)
         except IOError:
             msg = ("%s file not found")
-            logging.error(msg)
+            LOG.error(msg)
             raise FileNotFound(location)
 
     return content

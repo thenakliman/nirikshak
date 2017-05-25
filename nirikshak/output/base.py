@@ -7,6 +7,8 @@ import nirikshak
 from nirikshak.common import exceptions
 from nirikshak.input import input
 
+LOG = logging.getLogger(__name__)
+
 OUTPUT_PLUGIN_MAPPER = {}
 
 
@@ -15,8 +17,8 @@ def register(output):
         global OUTPUT_PLUGIN_MAPPER
 
         if output in OUTPUT_PLUGIN_MAPPER:
-            logging.info("For %s output, plugin is already "
-                         "registered" % output)
+            LOG.info("For %s output, plugin is already "
+                     "registered" % output)
         else:
             OUTPUT_PLUGIN_MAPPER[output] = cls()
 
@@ -38,11 +40,11 @@ def output(**kwargs):
     output = values['output'].get('type', 'console')
     plugin = OUTPUT_PLUGIN_MAPPER[output]
     soochis = getattr(plugin, 'output')(**kwargs)
-    logging.info("%s soochis has been returned by the plugin" % soochis)
+    LOG.info("%s soochis has been returned by the plugin" % soochis)
     return soochis
 
 
-def make_output_dict(**kwargs, key):
+def make_output_dict(key, expected_result, **kwargs):
     jaanch = {
         key: {
             'input': kwargs[key]['input']['args'],

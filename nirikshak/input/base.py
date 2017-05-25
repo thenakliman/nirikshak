@@ -7,6 +7,7 @@ import nirikshak
 from nirikshak.common import exceptions
 from nirikshak.input import input
 
+LOG = logging.getLogger(__name__)
 
 INPUT_PLUGIN_MAPPER = {}
 
@@ -16,8 +17,8 @@ def register(input_type):
         global INPUT_PLUGIN_MAPPER
 
         if input_type in INPUT_PLUGIN_MAPPER:
-            logging.info("For %s input type, plugin is already "
-                         "registered" % input_type)
+            LOG.info("For %s input type, plugin is already "
+                     "registered" % input_type)
 
         INPUT_PLUGIN_MAPPER[input_type] = cls()
         return cls
@@ -52,7 +53,7 @@ class Input(input.Input):
             gps |= deps
             gps.add(group)
 
-        logging.info("%s groups are to be executed." % gps)
+        LOG.info("%s groups are to be executed." % gps)
         return list(gps)
 
     @abstractmethod
@@ -71,7 +72,7 @@ class Input(input.Input):
             if 'soochis' in content[group]:
                 s |= set(content[group]['soochis'].keys())
 
-        logging.info("%s soochis to be executed." % s)
+        LOG.info("%s soochis to be executed." % s)
         return list(s)
 
     def get_soochis(self, soochis, groups):
@@ -87,5 +88,5 @@ def get_soochis(soochis=[], groups=[]):
     input_type = nirikshak.CONF['default'].get('input_type', 'input_file')
     plugin = INPUT_PLUGIN_MAPPER[input_type]
     soochis = getattr(plugin, 'get_soochis')(soochis=soochis, groups=groups)
-    logging.info("%s soochis has been returned by the plugin" % soochis)
+    LOG.info("%s soochis has been returned by the plugin" % soochis)
     return soochis

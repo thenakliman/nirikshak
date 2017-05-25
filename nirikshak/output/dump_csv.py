@@ -1,7 +1,10 @@
+import logging
 import csv
 
 import nirikshak
 from nirikshak.output import base
+
+LOG = logging.getLogger(__name__)
 
 
 @base.register('csv')
@@ -40,4 +43,5 @@ class CSVFormatOutput(base.FormatOutput):
             for row in output_file:
                 csv_writer.writerow(row[0].split(','))
 
+        LOG.info("Output has been dumped in %s file" % f)
         csv_file.close()

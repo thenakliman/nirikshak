@@ -1,9 +1,11 @@
+import logging
 import yaml
-
 
 import nirikshak
 from nirikshak.common import yaml_util
 from nirikshak.output import base
+
+LOG = logging.getLogger(__name__)
 
 
 @base.register('yaml')
@@ -25,7 +27,7 @@ class YAMLFormatOutput(base.FormatOutput):
         except KeyError:
             expected_result = None
 
-        jaanch = base.make_output_dict(**kwargs, key)
+        jaanch = base.make_output_dict(key, expected_result, **kwargs)
         if not output_file:
             output_file = jaanch
         else:
@@ -33,5 +35,5 @@ class YAMLFormatOutput(base.FormatOutput):
 
         with open(f, "w") as output:
             yaml.dump(output_file, output, default_flow_style=False)
-
+        LOG.info("Output has been dumped in %s file" % f)
         output.close()

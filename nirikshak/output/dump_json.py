@@ -1,8 +1,10 @@
+import logging
 import json
-
 
 import nirikshak
 from nirikshak.output import base
+
+LOG = logging.getLogger(__name__)
 
 
 @base.register('json')
@@ -25,7 +27,7 @@ class JSONFormatOutput(base.FormatOutput):
         except KeyError:
             expected_result = None
 
-        jaanch = base.make_output_dict(**kwargs, key)
+        jaanch = base.make_output_dict(key, expected_result, **kwargs)
         if not output_file:
             output_file = jaanch
         else:
@@ -36,4 +38,5 @@ class JSONFormatOutput(base.FormatOutput):
                               sort_keys=True, separators=(',', ': '))
             output.write(str_)
 
+        LOG.info("Output has been dumped in %s" % f)
         output.close()

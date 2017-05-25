@@ -7,6 +7,8 @@ import nirikshak
 from nirikshak.common import exceptions
 from nirikshak.input import input
 
+LOG = logging.getLogger(__name__)
+
 POST_TASK_PLUGIN_MAPPER = {}
 
 
@@ -15,8 +17,8 @@ def register(post_task):
         global POST_TASK_PLUGIN_MAPPER
 
         if post_task in POST_TASK_PLUGIN_MAPPER:
-            logging.info("For %s post task, plugin is already "
-                         "registered" % post_task)
+            LOG.info("For %s post task, plugin is already "
+                     "registered" % post_task)
         else:
             POST_TASK_PLUGIN_MAPPER[post_task] = cls()
 
@@ -38,5 +40,5 @@ def format_for_output(**kwargs):
     post_task = values['input'].get('post_task', 'dummy')
     plugin = POST_TASK_PLUGIN_MAPPER[post_task]
     soochis = getattr(plugin, 'format_output')(**kwargs)
-    logging.info("%s soochis has been returned by the plugin" % soochis)
+    LOG.info("%s soochis has been returned by the plugin" % soochis)
     return soochis

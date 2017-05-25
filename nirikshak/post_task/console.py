@@ -1,4 +1,8 @@
+import logging
+
 from nirikshak.post_task import base
+
+LOG = logging.getLogger(__name__)
 
 
 @base.register('console')
@@ -26,4 +30,5 @@ class FormatOutputConsole(base.FormatOutput):
         rs = ("%s,%s,%s" % (name, type_, inpt))
         rs = ("%s%s%s" % (rs, (120 - len(rs)) * '.', result))
         args[name]['formatted_output'] = rs
+        LOG.info("Output has been formaated for console")
         return args

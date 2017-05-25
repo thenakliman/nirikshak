@@ -5,6 +5,7 @@ import requests
 import nirikshak
 from nirikshak.output import base
 
+LOG = logging.getLogger(__name__)
 
 SECTION = 'output_send'
 
@@ -23,9 +24,12 @@ class NetworkSendOutput(base.FormatOutput):
             expected_result = kwargs[key]['output']['result']
         except KeyError:
             expected_result = None
-        jaanch = base.make_output_dict(**kwargs, key)
+        jaanch = base.make_output_dict(key, expected_result, **kwargs)
         payld = json.dumps(jaanch)
         try:
             getattr(requests, method)(url, data=payld)
         except requests.exceptions.ConnectionError:
-            logging.error("Output sent to %s host on %s port" % (host, port))
+            LOG.error("Error in output sent to %s host on %s port" % (
+                      host, port))
+
+        LOG.error("Output sent to %s host on %s port" % (host, port))

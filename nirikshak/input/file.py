@@ -5,6 +5,7 @@ import nirikshak
 from nirikshak.common import yaml_util
 from nirikshak.input import base
 
+LOG = logging.getLogger(__name__)
 
 INPUT_TYPE_NAME = 'input_file'
 
@@ -21,8 +22,7 @@ class InputFile(base.Input):
             raise exceptions.ConfigurationNotFound(option='main_file',
                                                    section='input_file')
 
-        logging.info("Main file location is %s" % self.main_file)
-        logging.info("%s Plugin has been initialized" % INPUT_TYPE_NAME)
+        LOG.info("Main file location is %s" % self.main_file)
 
     def _get_soochi_dir(self):
         return os.path.dirname(self.main_file)
@@ -38,5 +38,5 @@ class InputFile(base.Input):
         except exceptions.FileNotFound:
             raise exceptions.FileNotFound(location=self.main_file)
 
-        logging.info("%s content of the main file" % content)
+        LOG.info("%s content of the main file" % content)
         return content

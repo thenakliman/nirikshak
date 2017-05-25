@@ -1,5 +1,5 @@
-from nirikshak.output import console
-from nirikshak.output import dump_yaml
-from nirikshak.output import dump_json
-from nirikshak.output import dump_csv
-from nirikshak.output import send
+import pkgutil
+
+
+for loader, name, _ in pkgutil.walk_packages(__path__):
+    loader.find_module(name).load_module(name)
