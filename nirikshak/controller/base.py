@@ -5,6 +5,7 @@ import multiprocessing
 import nirikshak
 from nirikshak.common import exceptions
 from nirikshak.common import load_module
+from nirikshak.common import utils
 from nirikshak.input import base as inputs
 from nirikshak.post_task import base as post_task
 from nirikshak.output import base as output
@@ -14,7 +15,7 @@ LOG = logging.getLogger(__name__)
 
 
 def worker(queue, soochi):
-    for n, jaanch in soochi['jaanches'].items():
+    for n, jaanch in soochi['jaanches'].iteritems():
         try:
             queue.put({n: base_worker.do_work(**{n: jaanch})})
         except Exception as e:
@@ -64,8 +65,20 @@ class Router(object):
             except ImportError, exceptions.PostTaskException:
                 pass
 
+    @staticmethod
+    def _merge_configs(soochis_def):
+        new_def = []
+        for soochis in soochis_def:
+            config = soochis[0]
+            for jaanch in soochis[1]['jaanches']:
+                utils.merge_dict(soochis[1]['jaanches'][jaanch], config)
+            new_def.append(soochis[1])
+
+        return new_def
+
     def start(self, tags=[], soochis=[], groups=[], **kwargs):
         LOG.info("Starting execution of soochis.")
         soochis_def = self._get_soochis(soochis, groups)
+        soochis_def = self._merge_configs(soochis_def)
         self._start_worker(soochis_def)
         LOG.info("Execution of soochis are finished.")

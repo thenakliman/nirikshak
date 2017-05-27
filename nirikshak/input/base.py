@@ -1,10 +1,12 @@
 from abc import ABCMeta, abstractmethod
+from copy import deepcopy
 import logging
 import os
 import six
 
 import nirikshak
 from nirikshak.common import exceptions
+from nirikshak.common import utils
 from nirikshak.input import input
 
 LOG = logging.getLogger(__name__)
@@ -64,22 +66,60 @@ class Input(input.Input):
     def get_soochi_content(self, soochi):
         pass
 
+    @staticmethod
+    def _get_config(configuration, group):
+        return configuration[group].get('config', {})
+
+    @classmethod
+    def _merge_config(cls, group_config, soochi_config):
+        config = {}
+        for k, v in group_config.iteritems():
+            if soochi_config.get(k):
+                if isinstance(soochi_config[k], dict):
+                    config[k] = cls._merge_config(group_config[k],
+                                                  soochi_config[k])
+                else:
+                    config[k] = v
+            else:
+                config[k] = deepcopy(v)
+
+        return config
+
     def _get_executable_soochis(self, soochis, groups):
+        group_config = {}
+        soochi_config = {}
         content = self.get_yaml_file(self.main_file)
         groups = self._get_groups(content, groups)
-        s = set(soochis)
+
+        s = {}
+        for soochi in soochis:
+            s[soochi] = {
+                'soochi': soochi,
+                'config': {}
+            }
+
         for group in groups:
+            group_config[group] = self._get_config(content, group)
             if 'soochis' in content[group]:
-                s |= set(content[group]['soochis'].keys())
+                for name, soochi_def in content[group]['soochis'].iteritems():
+                    config = deepcopy(soochi_def.get('config', {}))
+                    utils.merge_dict(config, group_config[group])
+                    s[name] = {'config': config}
 
         LOG.info("%s soochis to be executed." % s)
-        return list(s)
+        soochis_with_config = []
+        for soochi, config in s.iteritems():
+            soochis_with_config.append({soochi: config})
+        return soochis_with_config
 
     def get_soochis(self, soochis, groups):
         s = []
         soochis = self._get_executable_soochis(soochis, groups)
         for soochi in soochis:
-            s.append(self.get_soochi_content(soochi))
+            name = soochi.keys()[0]
+            soochi_content = self.get_soochi_content(name)
+            soochi = (soochi[name]['config'], soochi_content)
+            s.append(soochi)
 
         return s
 

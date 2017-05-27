@@ -45,14 +45,20 @@ def output(**kwargs):
 
 
 def make_output_dict(key, expected_result, **kwargs):
+    if expected_result:
+        output = {
+            'actual_output': kwargs[key]['input']['result'],
+            'expected_output': expected_result
+        }
+
+    else:
+        output = {'actual_output': kwargs[key]['input']['result']}
+
     jaanch = {
         key: {
-            'input': kwargs[key]['input']['args'],
-            'output': {
-                 'expected_output': expected_result,
-                 'actual_output': kwargs[key]['input']['result']
+                'input': kwargs[key]['input']['args'],
+                'output': output
             }
         }
-    }
 
     return jaanch
