@@ -1,6 +1,8 @@
 import logging
 import yaml
 
+from nirikshak.common import exceptions
+
 LOG = logging.getLogger(__name__)
 
 
@@ -10,8 +12,8 @@ def get_yaml(location):
             try:
                 content = yaml.load(f)
             except yaml.scanner.ScannerError:
-                raise InvalidFormatException(location=location)
+                raise exceptions.InvalidFormatException(location=location)
     except IOError:
-        raise FileNotFound(location)
+        raise exceptions.FileNotFound(location)
 
     return content

@@ -7,7 +7,6 @@ from nirikshak.workers import base
 
 LOG = logging.getLogger(__name__)
 
-
 LOCK_NAME = 'APT'
 
 
@@ -20,13 +19,13 @@ class APTWorker(base.Worker):
         k = kwargs['input']['args']
         LOCK_INDEX = getattr(constants.LOCKABLE_RESOURCES_INDEX, LOCK_NAME)
         LOG.info("Acquiring lock for %s jaanch", kwargs)
-        synchronizer.LOCK[LOCK_INDEX].acquire()
-        LOG.info("Acquired lock for %s jaanch", kwargs)
-        cache = apt.cache.Cache()
-        cache.update()
-        pkg = cache[k['package']]
-        status = pkg.is_installed
-        synchronizer.LOCK[LOCK_INDEX].release()
+        with synchronizer.LOCK[LOCK_INDEX]:
+            LOG.info("Acquired lock for %s jaanch", kwargs)
+            cache = apt.cache.Cache()
+            cache.update()
+            pkg = cache[k['package']]
+            status = pkg.is_installed
+            # synchronizer.LOCK[LOCK_INDEX].release()
         LOG.info("Released lock for %s jaanch", kwargs)
         LOG.info("%s package is %s" % (k['package'], status))
         return status

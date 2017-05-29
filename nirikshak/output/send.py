@@ -4,12 +4,14 @@ import requests
 
 import nirikshak
 from nirikshak.output import base
+from nirikshak.common import validators
 
 LOG = logging.getLogger(__name__)
 
 SECTION = 'output_send'
 
 
+@validators.config_validator(SECTION, ('host', 'port'))
 @base.register('send')
 class NetworkSendOutput(base.FormatOutput):
     def output(self, **kwargs):

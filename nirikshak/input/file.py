@@ -3,6 +3,7 @@ import os
 
 import nirikshak
 from nirikshak.common import yaml_util
+from nirikshak.common import validators
 from nirikshak.input import base
 
 LOG = logging.getLogger(__name__)
@@ -10,6 +11,7 @@ LOG = logging.getLogger(__name__)
 INPUT_TYPE_NAME = 'input_file'
 
 
+@validators.config_validator(INPUT_TYPE_NAME, ('main_file',))
 @base.register(INPUT_TYPE_NAME)
 class InputFile(base.Input):
     def __init__(self):

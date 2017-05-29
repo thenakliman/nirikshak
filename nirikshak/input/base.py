@@ -51,9 +51,13 @@ class Input(input.Input):
     def _get_groups(self, main_file, groups):
         gps = set()
         for group in groups:
-            deps = self._get_group_dependencies(group, main_file)
-            gps |= deps
-            gps.add(group)
+            try:
+                deps = self._get_group_dependencies(group, main_file)
+            except exceptions.GroupNotFoundException:
+                LOG.error("%s group could not be found", group)
+            else:
+                gps |= deps
+                gps.add(group)
 
         LOG.info("%s groups are to be executed." % gps)
         return list(gps)
@@ -117,9 +121,16 @@ class Input(input.Input):
         soochis = self._get_executable_soochis(soochis, groups)
         for soochi in soochis:
             name = soochi.keys()[0]
-            soochi_content = self.get_soochi_content(name)
-            soochi = (soochi[name]['config'], soochi_content)
-            s.append(soochi)
+            soochi_content = []
+            try:
+                soochi_content = self.get_soochi_content(name)
+            except exceptions.FileNotFound:
+                LOG.error("%s file not found", name)
+            except exceptions.InvalidFormatException:
+                LOG.error("%s file has invalid format", name)
+            else:
+                soochi = (soochi[name]['config'], soochi_content)
+                s.append(soochi)
 
         return s
 

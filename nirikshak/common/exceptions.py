@@ -12,7 +12,11 @@ class NotFoundException(NirikshakException):
     msg = "Not Found Exception."
 
 
-class ConfigurationNotFound(NotFoundException):
+class SectionNotFoundException(NotFoundException):
+    msg = "%(section)s could not be found"
+
+
+class ConfigurationNotFoundException(NotFoundException):
     msg = ("%(option)s configuration option in %(section)s section of "
            " configuration file not found.")
 

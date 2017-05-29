@@ -6,7 +6,7 @@ from nirikshak.controller import base
 
 
 def process_args():
-    parser = argparse.ArgumentParser(description='Process nirikshak command'
+    parser = argparse.ArgumentParser(description='Process nirikshak command '
                                                  'line arguments')
 
     parser.add_argument('--tags', metavar='t', type=str, nargs='+',
