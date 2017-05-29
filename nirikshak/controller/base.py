@@ -6,6 +6,8 @@ import nirikshak
 from nirikshak.common import exceptions
 from nirikshak.common import load_module
 from nirikshak.common import utils
+from nirikshak.common import constants
+from nirikshak.common import synchronizer
 from nirikshak.input import base as inputs
 from nirikshak.post_task import base as post_task
 from nirikshak.output import base as output
@@ -28,10 +30,19 @@ class Router(object):
     def __init__(self):
         workers = nirikshak.CONF['default'].get('workers', -1)
         workers = int(workers)
+        lock = []
+        for resource in constants.LOCKABLE_RESOURCES_INDEX.__dict__:
+            if not resource.startswith('__'):
+                lock.append(multiprocessing.Lock())
+
         if workers == -1:
             workers = multiprocessing.cpu_count()
 
-        self.pool = multiprocessing.Pool(workers)
+        # TODO(thenakliman): Verify locking is really being done
+        self.pool = multiprocessing.Pool(workers,
+                                         initializer=synchronizer.init_locks,
+                                         initargs=(lock,))
+
         self.queue = multiprocessing.Manager().Queue()
         LOG.info("Router has been initilized")
 

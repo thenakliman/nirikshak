@@ -1,5 +1,6 @@
 import logging
 import json
+import os
 
 import nirikshak
 from nirikshak.output import base
@@ -16,9 +17,12 @@ class JSONFormatOutput(base.FormatOutput):
             f = '/var/nirikshak/result.json'
 
         try:
-            with open(f, 'r') as output:
-                output_file = json.load(output)
-        except IOError:
+            if os.stat(f).st_size:
+                with open(f, 'r') as output:
+                    output_file = json.load(output)
+            else:
+                output_file = {}
+        except OSError:
             output_file = {}
 
         key = kwargs.keys()[0]

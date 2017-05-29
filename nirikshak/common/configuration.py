@@ -50,7 +50,7 @@ def initilize_logging():
                  " PID:%(process)d %(message)s")
 
     logging.basicConfig(filename=nirikshak.CONF['default']['log_file'],
-                        log_level=getattr(logging, log_level.upper()),
+                        level=getattr(logging, log_level.upper()),
                         format=formatter)
 
     logging.info("Logging module loaded successfully")
