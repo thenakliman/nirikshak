@@ -11,9 +11,9 @@ LOG = logging.getLogger(__name__)
 SECTION = 'output_send'
 
 
-@validators.config_validator(SECTION, ('host', 'port'))
 @base.register('send')
 class NetworkSendOutput(base.FormatOutput):
+    @validators.config_validator(SECTION, ('host', 'port'))
     def output(self, **kwargs):
         host = nirikshak.CONF[SECTION]['host']
         port = nirikshak.CONF[SECTION]['port']

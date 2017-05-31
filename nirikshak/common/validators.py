@@ -5,6 +5,7 @@ from nirikshak.common import exceptions
 
 LOG = logging.getLogger(__name__)
 
+
 def config_validator(section, config_opts=()):
     if section not in nirikshak.CONF:
         LOG.error("%s section could not be found in "

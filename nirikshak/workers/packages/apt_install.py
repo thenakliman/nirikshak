@@ -25,7 +25,7 @@ class APTWorker(base.Worker):
             cache.update()
             pkg = cache[k['package']]
             status = pkg.is_installed
-            # synchronizer.LOCK[LOCK_INDEX].release()
+
         LOG.info("Released lock for %s jaanch", kwargs)
         LOG.info("%s package is %s" % (k['package'], status))
         return status
