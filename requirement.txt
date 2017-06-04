@@ -1,7 +1,0 @@
-yaml
-psutils
-python-apt
-python3-distutils-extra
-python3-dbus
-requests
-pkgutil

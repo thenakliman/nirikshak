@@ -15,10 +15,7 @@ def make_dict(config):
         for option in options:
             try:
                 dict2[option] = config.get(section, option)
-                if dict2[option] == -1:
-                    DebugPrint("skip: %s" % option)
             except:
-                print("exception on %s!" % option)
                 dict2[option] = None
 
         dict1[section] = dict2

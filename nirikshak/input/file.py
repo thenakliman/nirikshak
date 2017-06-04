@@ -2,6 +2,7 @@ import logging
 import os
 
 import nirikshak
+from nirikshak.common import exceptions
 from nirikshak.common import yaml_util
 from nirikshak.common import validators
 from nirikshak.input import base

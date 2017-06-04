@@ -35,7 +35,7 @@ def validate(required=(), optional=()):
 
             missing = require - available
             if missing:
-                raise excpetions.MissingRquiredArgException(jaanch=missing)
+                raise exceptions.MissingRquiredArgException(jaanch=missing)
 
             require.update(set(optional))
             extra = available - require
@@ -47,6 +47,7 @@ def validate(required=(), optional=()):
     return func
 
 
+@six.add_metaclass(ABCMeta)
 class Worker(object):
     @abstractmethod
     def work(self, **kwargs):

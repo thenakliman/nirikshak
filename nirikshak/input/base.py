@@ -1,7 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
 import logging
-import os
 import six
 
 import nirikshak
@@ -91,7 +90,6 @@ class Input(input.Input):
 
     def _get_executable_soochis(self, soochis, groups):
         group_config = {}
-        soochi_config = {}
         content = self.get_yaml_file(self.main_file)
         groups = self._get_groups(content, groups)
 

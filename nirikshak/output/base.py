@@ -1,11 +1,6 @@
 from abc import ABCMeta, abstractmethod
 import logging
-import os
 import six
-
-import nirikshak
-from nirikshak.common import exceptions
-from nirikshak.input import input
 
 LOG = logging.getLogger(__name__)
 

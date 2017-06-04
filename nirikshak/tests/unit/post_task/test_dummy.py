@@ -1,4 +1,3 @@
-import mock
 import unittest
 
 from nirikshak.post_task import dummy

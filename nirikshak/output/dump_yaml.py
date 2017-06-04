@@ -18,7 +18,9 @@ class YAMLFormatOutput(base.FormatOutput):
 
         try:
             output_file = yaml_util.get_yaml(f)
-        except IOError, ValueError:
+        except IOError:
+            output_file = {}
+        except ValueError:
             output_file = {}
 
         key = kwargs.keys()[0]

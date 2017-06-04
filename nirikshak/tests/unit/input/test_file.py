@@ -171,7 +171,7 @@ class InputFileTest(unittest.TestCase):
         self.assertEqual(soochis, exp_soochis)
 
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
-    def test_get_soochis_with_no_soochi_groups(self, get_yaml):
+    def test_get_soochis_with_no_soochi_groups_(self, get_yaml):
         soochis = file.get_soochis(soochis=[],
                                    groups=['monitor'])
         self.assertEqual(soochis, [])

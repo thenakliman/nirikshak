@@ -1,10 +1,8 @@
-import time
 import logging
 import multiprocessing
 
 import nirikshak
 from nirikshak.common import exceptions
-from nirikshak.common import load_module
 from nirikshak.common import utils
 from nirikshak.common import constants
 from nirikshak.common import synchronizer
@@ -20,7 +18,7 @@ def worker(queue, soochi):
     for n, jaanch in soochi['jaanches'].iteritems():
         try:
             queue.put({n: base_worker.do_work(**{n: jaanch})})
-        except Exception as e:
+        except Exception:
             LOG.error("%s jaanch failed to get executed" % n)
 
 

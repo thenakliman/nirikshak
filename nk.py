@@ -1,6 +1,5 @@
 import argparse
 import logging
-import sys
 
 from nirikshak.controller import base
 
@@ -26,6 +25,7 @@ def main():
     args = process_args()
     base.Router().start(**vars(args))
     logging.info("Jaanch has been finished, check results")
+
 
 if __name__ == "__main__":
     main()
