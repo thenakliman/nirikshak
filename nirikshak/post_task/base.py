@@ -47,7 +47,12 @@ class FormatOutput(object):
 def format_for_output(**kwargs):
     values = kwargs.values()[0]
     post_task = values.get('post_task', 'dummy')
-    plugin = POST_TASK_PLUGIN_MAPPER[post_task]
+    try:
+        plugin = POST_TASK_PLUGIN_MAPPER[post_task]
+    except KeyError:
+        LOG.error("%s plugin for task could not be found", post_task)
+        return kwargs
+
     soochis = getattr(plugin, 'format_output')(**kwargs)
     LOG.info("%s soochis has been returned by the plugin" % soochis)
     return soochis

@@ -12,19 +12,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import unittest
-
-from nirikshak.output import console
-from nirikshak.tests.unit import base
+from nirikshak.common import yaml_util
+from nirikshak.workers.packages import apt_install
 
 
-class OutputTest(unittest.TestCase):
-    def test_output(self):
-        inp = {}
-        t = base.get_test_keystone_soochi()['jaanches']['port_5000']
-        inp['port_5000'] = t
-        inp['port_5000']['formatted_output'] = 'test_output'
-        self.assertcalled(console.output(**inp), 'test_output')
-
-
-unittest.main()
+def worker():
+    inp = yaml_util.get_yaml('/var/nirikshak/paypal.yaml')
+    apt_install.APTWorker().work(**(inp['jaanches'].values()[0]))

@@ -1,4 +1,5 @@
-Feature:
+Planned Feature
+===============
 
 #. Enable configuration saving into database, because modification in large files might have maintenance issue. and provide CLI for the same to add, delete and update configurations.
 #. Timeout definition

@@ -83,8 +83,18 @@ def match_expected_output(validator):
 def do_work(**kwargs):
     key = kwargs.keys()[0]
     kwargs = kwargs[key]
-    worker = kwargs['type']
-    plugin = WORKER_PLUGIN_MAPPER[worker]
+    try:
+        worker = kwargs['type']
+    except KeyError:
+        LOG.error("type for worker is not defined")
+        return kwargs
+
+    try:
+        plugin = WORKER_PLUGIN_MAPPER[worker]
+    except KeyError:
+        LOG.error("%s worker could not be found", worker)
+        return kwargs
+
     result = getattr(plugin, 'work')(**kwargs)
     LOG.info("%s jaanch has been completed by the plugin" % key)
     return result

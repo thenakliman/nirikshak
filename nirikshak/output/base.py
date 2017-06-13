@@ -47,7 +47,12 @@ class FormatOutput(object):
 def output(**kwargs):
     values = kwargs.values()[0]
     output = values['output'].get('type', 'console')
-    plugin = OUTPUT_PLUGIN_MAPPER[output]
+    try:
+        plugin = OUTPUT_PLUGIN_MAPPER[output]
+    except KeyError:
+        LOG.error("%s plugin for output could not be found", output)
+        return kwargs
+
     soochis = getattr(plugin, 'output')(**kwargs)
     LOG.info("%s soochis has been returned by the plugin" % soochis)
     return soochis

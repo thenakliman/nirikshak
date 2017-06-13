@@ -149,7 +149,12 @@ class Input(input.Input):
 
 def get_soochis(soochis=[], groups=[]):
     input_type = nirikshak.CONF['default'].get('input_type', 'input_file')
-    plugin = INPUT_PLUGIN_MAPPER[input_type]
+    try:
+        plugin = INPUT_PLUGIN_MAPPER[input_type]
+    except KeyError:
+        LOG.error("%s plugin for input could not found", input_type)
+        return []
+
     soochis = getattr(plugin, 'get_soochis')(soochis=soochis, groups=groups)
     LOG.info("%s soochis has been returned by the plugin" % soochis)
     return soochis

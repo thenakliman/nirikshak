@@ -101,7 +101,7 @@ Data flow among them::
    If user provides category as well then it becomes easy for the locating the
    plugin. Location of the processing module will be::
 
-     plugin:
+     plugin
         |___network
         |       |____network_ip
         |       |____network_bond
@@ -143,6 +143,7 @@ Data flow among them::
 #. What pre post processing module has to be called depends on the
    configuration for that particular jaanch, and up in
    hierarchy(mentioned later)::
+
        nirikshak
             |____posttask
                      |_____boolean
