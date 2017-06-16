@@ -23,12 +23,14 @@ from nirikshak.common import synchronizer
 from nirikshak.input import base as inputs
 from nirikshak.post_task import base as post_task
 from nirikshak.output import base as output
+from nirikshak import workers
 from nirikshak.workers import base as base_worker
 
 LOG = logging.getLogger(__name__)
 
 
 def worker(queue, soochi):
+    workers.load_workers()
     for n, jaanch in soochi['jaanches'].iteritems():
         try:
             queue.put({n: base_worker.do_work(**{n: jaanch})})

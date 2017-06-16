@@ -27,7 +27,6 @@ WORKER_PLUGIN_MAPPER = {}
 def register(worker):
     def register_worker(cls):
         global WORKER_PLUGIN_MAPPER
-
         if worker in WORKER_PLUGIN_MAPPER:
             LOG.info("For %s worker type, plugin is already "
                      "registered" % worker)
@@ -81,6 +80,7 @@ def match_expected_output(validator):
 
 
 def do_work(**kwargs):
+    global WORKER_PLUGIN_MAPPER
     key = kwargs.keys()[0]
     kwargs = kwargs[key]
     try:

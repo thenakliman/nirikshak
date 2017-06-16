@@ -59,14 +59,19 @@ def output(**kwargs):
 
 
 def make_output_dict(key, expected_result, **kwargs):
-    if expected_result:
-        output = {
-            'actual_output': kwargs[key]['input']['result'],
-            'expected_output': expected_result
-        }
+    try:
+        if expected_result:
+            output = {
+                'actual_output': kwargs[key]['input']['result'],
+                'expected_output': expected_result
+            }
 
-    else:
-        output = {'actual_output': kwargs[key]['input']['result']}
+        else:
+            output = {'actual_output': kwargs[key]['input']['result']}
+
+    except KeyError:
+        LOG.error("result key does not exist in the dictionary")
+        output = None
 
     jaanch = {
         key: {

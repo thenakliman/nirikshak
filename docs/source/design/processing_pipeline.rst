@@ -5,11 +5,12 @@ Processing Pipeline
 This section describes processing pipeline, how data will be processed through
 different modules available in this software. It shows data flow among modules.
 Following are the components of Nirikshak
-1. Input Module(IM)
-2. Controller Module(CM)
-3. Processing Module(PM)
-4. Post Processing Module(PPM)
-5. Output Module(OM)
+
+#. Input Module(IM)
+#. Controller Module(CM)
+#. Processing Module(PM)
+#. Post Processing Module(PPM)
+#. Output Module(OM)
 
 Data flow among them::
 
@@ -30,12 +31,15 @@ Data flow among them::
                                         | Module(OM) | 
                                         +------------+ 
                                         
+----
 
 #. Currently niriskshak is operated through command line, but in future it can
    be made to run continuosly then it's role will be changed from verifier to
    monitor and notifier.
 
-#. CLI prvided will be **nirikshak**::
+#. CLI prvided will be **nirikshak**
+
+.. code::
 
       nisikshak [--tags=tag1,tag2]  [--soochi=abc,cde]
 

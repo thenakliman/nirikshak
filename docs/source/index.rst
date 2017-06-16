@@ -9,5 +9,8 @@ Nirikshak: A System Verifier
     :hidden:
     :glob:
 
+    developer/quickstart.rst
+    developer/usage.rst
+    tutorials/tutorials.rst
     design/*
     *
