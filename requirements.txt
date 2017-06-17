@@ -1,7 +1,9 @@
 PyYAML==3.11
 psutil==5.2.2
-#apt
-#python3-distutils-extra
+six==1.10.0
+python3-distutils-extra
 dbus-python==1.2.4
 requests==2.9.1
-#pkgutil
+pkgutil
+ConfigParser
+socket

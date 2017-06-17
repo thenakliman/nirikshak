@@ -1,6 +1,5 @@
-***********
 Interaction
-***********
+-----------
 
 **jaanch** cli will be provided, which start the verification process.
 When command is fired then main.yaml file at following location::

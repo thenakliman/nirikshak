@@ -1,6 +1,5 @@
-******
 Output
-******
+------
 
 This section describes, how output will be produced for the given input.
 Following are the planned ways to produce output
@@ -17,14 +16,14 @@ per requirement. Configuration which are not specific to jaanch/group are
 stored in the configuration file for the Nirikshak.
 
 stdout
-------
+^^^^^^
 
 Whatever is passed to the output, it will be directly displyed on the console,
 there will be no formatting done, however their is a mechanism(discussed later)
 to provide, customized output display.
 
 File
-----
+^^^^
 
 It stores the output to the file without changing the format, there is a
 mechnism where you can do some formatting or processing before dumping to
@@ -42,7 +41,7 @@ output type. For example, for File
 
 
 Network
--------
+^^^^^^^
 
 If user's application requires data to be transmitted over the internet to some
 api or some endpoint then it will be possible through this plugin. User's
@@ -60,7 +59,7 @@ provided through the configuration file present in the /etc/nirikshak.
 
 
 webserver(TBD)
---------------
+^^^^^^^^^^^^^^
 
 A temporary web server will be created and content will be exposed over a URL,
 application will be able to download this information from the setup web
@@ -75,9 +74,8 @@ which will be used for expose.
   url_prefix = /output/data/ # example
 
 
-********************
 Output Customization
-********************
+^^^^^^^^^^^^^^^^^^^^
 
 If output format is required to be in some format, users will be able to write
 their own output customization callables. Information of the callable may be

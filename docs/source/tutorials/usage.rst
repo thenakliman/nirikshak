@@ -1,6 +1,5 @@
-*****
 Usage
-*****
+=====
 
 Nirikshak can be used as System verifier, health check tool, monitoring tool
 testing tools etc. It depends completly on you, how you configure it to behave.
@@ -55,3 +54,5 @@ Use Cases
 Above are some of the ways, nirikshak can be configured. It is upto your
 problem solving skills and imagination, which decide how you use this
 framework.
+
+.. include:: tutorials.rst

@@ -1,37 +1,13 @@
-************
-Installation
-************
+Developer Quickstart
+====================
 
-Nirikshak can be installed using following steps on ubuntu 16.04
+Setup development Environment
+.............................
 
-#. Installation of git using following command
-
-.. code::
-
-   # apt-get install git
-
-#. Get the code of nirikshak from the git using following command
-
-.. code::
-
-  # git clone https://github.com/thenakliman/nirikshak
-
-#. Install dependency for the nirikshak
-
-.. code::
-
-  # apt-get install python-apt
-
-#. Install nirikshak using following command
-
-.. code::
-
-  # cd nirikshak
-  # sudo ython setup.py install
-
+.. include:: ../tutorials/installation_content.rst
 
 Testing
--------
+.......
 
 Testing framework for nirikshak includes unit tests, functional test cases
 and docs checks etc
@@ -46,7 +22,6 @@ For unit testing tox has been used, tox includes many testing enviornment
 #. cover
 #. pep8
 #. docs
-#. functional
 
 All fo the enviornment has different purpose and all of them needs not be
 tested before commitng the code

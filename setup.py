@@ -21,10 +21,11 @@ setuptools.setup(
     description='Health Check tools for distributed system',
     author='thenakliman',
     author_email='thenakliman@gmail.com',
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=['nirikshak.tests']),
     install_requires=[
         "PyYAML==3.11",
         "psutil==5.2.2",
+        "six==1.10.0",
         # Need to fix for following packages
         # "python-apt==1.1.0b1",
         # "python3-distutils-extra",

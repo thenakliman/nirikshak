@@ -1,6 +1,5 @@
-=====
 Input
-=====
+-----
 
 This section describes design of the input, provided to the Nirikshak. To
 make maintenance easier for the users, input can be provided into serveral
@@ -9,7 +8,7 @@ the input files to be processed for a particular execution. This file also
 provides way of configuring the Nirikshak.
 
 Jaanch
-------
+^^^^^^
 
 Jaanch is the verification to be done, these are defined in yaml file. We
 need to define inputs and the way Jaanch has to be done. To represent Jaanch
@@ -65,7 +64,7 @@ Jaanch's are defined in the yaml file called soochi, in following format
            result: <expected result>
 
 Main Input File
----------------
+^^^^^^^^^^^^^^^
 
 It(main.yaml) defines the verification to be done, as there can be multiple
 input files, this file bring them together and provide a way to configure a

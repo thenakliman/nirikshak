@@ -1,6 +1,5 @@
-*******************
 Processing Pipeline
-*******************
+-------------------
 
 This section describes processing pipeline, how data will be processed through
 different modules available in this software. It shows data flow among modules.

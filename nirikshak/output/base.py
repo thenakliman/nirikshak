@@ -45,8 +45,13 @@ class FormatOutput(object):
 
 
 def output(**kwargs):
-    values = kwargs.values()[0]
-    output = values['output'].get('type', 'console')
+    try:
+        values = kwargs.values()[0]
+        output = values['output'].get('type', 'console')
+    except KeyError:
+        LOG.error("Required argument 'output' not found in input")
+        return kwargs
+
     try:
         plugin = OUTPUT_PLUGIN_MAPPER[output]
     except KeyError:
@@ -73,11 +78,13 @@ def make_output_dict(key, expected_result, **kwargs):
         LOG.error("result key does not exist in the dictionary")
         output = None
 
-    jaanch = {
-        key: {
+    try:
+        jaanch = {
+            key: {
                 'input': kwargs[key]['input']['args'],
-                'output': output
+                'output': output}
             }
-        }
+    except KeyError:
+        jaanch = {key: {'output': output}}
 
     return jaanch

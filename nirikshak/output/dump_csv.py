@@ -27,7 +27,7 @@ class CSVFormatOutput(base.FormatOutput):
         try:
             f = nirikshak.CONF['output_csv']['output_dir']
         except KeyError:
-            f = '/var/nirikshak/result.csv'
+            f = '/var/lib/nirikshak/result.csv'
 
         output_file = []
         try:

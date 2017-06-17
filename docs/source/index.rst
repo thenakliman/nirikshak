@@ -1,6 +1,6 @@
-============================
-Nirikshak: A System Verifier
-============================
+=========
+Nirikshak
+=========
 
 .. include:: ../../README.rst
 
@@ -9,8 +9,8 @@ Nirikshak: A System Verifier
     :hidden:
     :glob:
 
+    tutorials/usage.rst
+    tutorials/installation.rst
     developer/quickstart.rst
-    developer/usage.rst
-    tutorials/tutorials.rst
-    design/*
+    developer/design/design.rst
     *

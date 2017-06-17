@@ -1,6 +1,5 @@
-**********
-Tutorial 1
-**********
+How to Use
+----------
 
 Nirikshak has to be configured to get expected behaviour. Following are the
 terms used across this document as well as throughout the project.

@@ -28,7 +28,7 @@ class JSONFormatOutput(base.FormatOutput):
         try:
             f = nirikshak.CONF['output_json']['output_dir']
         except KeyError:
-            f = '/var/nirikshak/result.json'
+            f = '/var/lib/nirikshak/result.json'
 
         try:
             if os.stat(f).st_size:

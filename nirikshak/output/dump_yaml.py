@@ -13,10 +13,12 @@
 # under the License.
 
 import logging
+import os
 import yaml
 
 import nirikshak
 from nirikshak.common import yaml_util
+from nirikshak.common import exceptions
 from nirikshak.output import base
 
 LOG = logging.getLogger(__name__)
@@ -28,13 +30,18 @@ class YAMLFormatOutput(base.FormatOutput):
         try:
             f = nirikshak.CONF['output_file']['output_dir']
         except KeyError:
-            f = '/var/nirikshak/result.yaml'
+            f = '/var/lib/nirikshak/result.yaml'
 
         try:
-            output_file = yaml_util.get_yaml(f)
+            if os.stat(f).st_size:
+                output_file = yaml_util.get_yaml(f)
+            else:
+                output_file = {}
         except IOError:
             output_file = {}
-        except ValueError:
+        except exceptions.FileNotFound:
+            output_file = {}
+        except Exception:
             output_file = {}
 
         key = kwargs.keys()[0]

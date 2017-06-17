@@ -104,7 +104,12 @@ class Input(input.Input):
 
     def _get_executable_soochis(self, soochis, groups):
         group_config = {}
-        content = self.get_yaml_file(self.main_file)
+        try:
+            content = self.get_yaml_file(self.main_file)
+        except KeyError:
+            LOG.error("main.yaml file could not found at %s", self.main_file)
+            return []
+
         groups = self._get_groups(content, groups)
 
         s = {}
