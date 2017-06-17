@@ -106,7 +106,7 @@ class Input(input.Input):
         group_config = {}
         try:
             content = self.get_yaml_file(self.main_file)
-        except KeyError:
+        except exceptions.FileNotFound:
             LOG.error("main.yaml file could not found at %s", self.main_file)
             return []
 
