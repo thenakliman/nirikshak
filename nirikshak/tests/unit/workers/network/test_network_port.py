@@ -30,7 +30,6 @@ class WorkerTest(unittest.TestCase):
         self.sample_jaanch = sample_jaanch
         super(WorkerTest, self).setUp()
 
-    @unittest.skip("APT package not available fo pip installation")
     @mock.patch.object(socket, 'socket')
     def test_work_with_invalid_port(self, socket):
         mock_sock = mock.Mock()

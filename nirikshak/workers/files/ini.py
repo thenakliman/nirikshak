@@ -36,6 +36,6 @@ class INIConfigValidatorWorker(base.Worker):
                      k['section'], k['key'])
         except Exception:
             LOG.error("Not able to find %s configuration parameter in %s "
-                      "section" % (k['key'], k['section']))
+                      "section" % (k['key'], k['section']), exc_info=True)
 
         return value

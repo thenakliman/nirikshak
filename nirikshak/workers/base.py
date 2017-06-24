@@ -48,7 +48,7 @@ def validate(required=(), optional=()):
 
             missing = require - available
             if missing:
-                raise exceptions.MissingRquiredArgException(jaanch=missing)
+                raise exceptions.MissingRequiredArgsException(jaanch=missing)
 
             require.update(set(optional))
             extra = available - require
@@ -70,7 +70,7 @@ class Worker(object):
 def match_expected_output(validator):
     def convert_output(self, **kwargs):
         tmp = validator(self, **kwargs)
-        if 'result' in kwargs['output']:
+        if 'result' in kwargs.get('output', {}):
             tmp = (tmp == kwargs['output']['result'])
 
         kwargs['input']['result'] = tmp
@@ -95,6 +95,11 @@ def do_work(**kwargs):
         LOG.error("%s worker could not be found", worker)
         return kwargs
 
-    result = getattr(plugin, 'work')(**kwargs)
-    LOG.info("%s jaanch has been completed by the plugin" % key)
+    try:
+        result = getattr(plugin, 'work')(**kwargs)
+    except Exception:
+        LOG.error("%s worker failed", exc_info=True)
+    else:
+        LOG.info("%s jaanch has been completed by the plugin" % key)
+
     return result

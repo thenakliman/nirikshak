@@ -26,12 +26,9 @@ LOG = logging.getLogger(__name__)
 
 @base.register('yaml')
 class YAMLFormatOutput(base.FormatOutput):
-    def output(self, **kwargs):
-        try:
-            f = nirikshak.CONF['output_file']['output_dir']
-        except KeyError:
-            f = '/var/lib/nirikshak/result.yaml'
 
+    @staticmethod
+    def _read_file(f):
         try:
             if os.stat(f).st_size:
                 output_file = yaml_util.get_yaml(f)
@@ -44,6 +41,20 @@ class YAMLFormatOutput(base.FormatOutput):
         except Exception:
             output_file = {}
 
+        return output_file
+
+    @staticmethod
+    def _write_file(output_file, f):
+        with open(f, "w") as output:
+            yaml.dump(output_file, output, default_flow_style=False)
+
+    def output(self, **kwargs):
+        try:
+            f = nirikshak.CONF['output_yaml']['output_dir']
+        except KeyError:
+            f = '/var/lib/nirikshak/result.yaml'
+
+        output_file = self._read_file(f)
         key = kwargs.keys()[0]
         try:
             expected_result = kwargs[key]['output']['result']
@@ -56,7 +67,5 @@ class YAMLFormatOutput(base.FormatOutput):
         else:
             output_file.update(jaanch)
 
-        with open(f, "w") as output:
-            yaml.dump(output_file, output, default_flow_style=False)
+        self._write_file(output_file, f)
         LOG.info("Output has been dumped in %s file" % f)
-        output.close()

@@ -24,12 +24,8 @@ LOG = logging.getLogger(__name__)
 
 @base.register('json')
 class JSONFormatOutput(base.FormatOutput):
-    def output(self, **kwargs):
-        try:
-            f = nirikshak.CONF['output_json']['output_dir']
-        except KeyError:
-            f = '/var/lib/nirikshak/result.json'
-
+    @staticmethod
+    def _get_output_file(f):
         try:
             if os.stat(f).st_size:
                 with open(f, 'r') as output:
@@ -38,7 +34,26 @@ class JSONFormatOutput(base.FormatOutput):
                 output_file = {}
         except OSError:
             output_file = {}
+        except ValueError:
+            LOG.error("Invalid json file, creating new file", exc_info=True)
+            output_file = {}
 
+        return output_file
+
+    @staticmethod
+    def _output_json(output_file, f):
+        with open(f, "w") as output:
+            str_ = json.dumps(output_file, indent=4,
+                              sort_keys=True, separators=(',', ': '))
+            output.write(str_)
+
+    def output(self, **kwargs):
+        try:
+            f = nirikshak.CONF['output_json']['output_dir']
+        except KeyError:
+            f = '/var/lib/nirikshak/result.json'
+
+        output_file = self._get_output_file(f)
         key = kwargs.keys()[0]
         try:
             expected_result = kwargs[key]['output']['result']
@@ -51,10 +66,5 @@ class JSONFormatOutput(base.FormatOutput):
         else:
             output_file.update(jaanch)
 
-        with open(f, "w") as output:
-            str_ = json.dumps(output_file, indent=4,
-                              sort_keys=True, separators=(',', ': '))
-            output.write(str_)
-
-        LOG.info("Output has been dumped in %s" % f)
-        output.close()
+        self._output_json(output_file, f)
+        LOG.info("Output has been dumped in %s", f)

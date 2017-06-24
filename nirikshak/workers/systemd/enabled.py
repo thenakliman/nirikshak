@@ -32,6 +32,12 @@ class SystemdEnabledWorker(base.Worker):
                                      '/org/freedesktop/systemd1')
         manager = dbus.Interface(systemd1, 'org.freedesktop.systemd1.Manager')
         service = k['service']
-        status = str(manager.GetUnitFileState(service))
+        try:
+            status = str(manager.GetUnitFileState(service))
+        except Exception:
+            status = None
+            LOG.error("Error in retrieving enabled status for %s service",
+                      service, exc_info=True)
+
         LOG.info("%s service is %s" % (k['service'],  status))
         return status

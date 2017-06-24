@@ -30,7 +30,13 @@ LOG = logging.getLogger(__name__)
 
 
 def worker(queue, soochi):
-    workers.load_workers()
+    try:
+        workers.load_workers()
+    except Exception:
+        LOG.error("Failed to load workers.", exc_info=True)
+    else:
+        LOG.info("Loading worker modules.")
+
     for n, jaanch in soochi['jaanches'].iteritems():
         try:
             queue.put({n: base_worker.do_work(**{n: jaanch})})
@@ -60,20 +66,20 @@ class Router(object):
         self.queue = multiprocessing.Manager().Queue()
         LOG.info("Router has been initilized")
 
-    @classmethod
-    def _call_method(cls, module, method, *args, **kwargs):
+    @staticmethod
+    def _call_method(module, method, *args, **kwargs):
         return getattr(module, method)(*args, **kwargs)
 
-    @classmethod
-    def _get_soochis(cls, soochis=None, groups=None):
+    @staticmethod
+    def _get_soochis(soochis=None, groups=None):
         return inputs.get_soochis(soochis, groups)
 
-    @classmethod
-    def _format_output(cls, **k):
+    @staticmethod
+    def _format_output(**k):
         return post_task.format_for_output(**k)
 
-    @classmethod
-    def _output_result(cls, **k):
+    @staticmethod
+    def _output_result(**k):
         return output.output(**k)
 
     def _start_worker(self, soochis_def):

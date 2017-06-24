@@ -4,7 +4,7 @@ Nirikshak can be installed using following steps on ubuntu 16.04
 
 .. code::
 
-   # apt-get install git python-pip libyaml-dev libpython2.7-dev python3-distutils-extra python-apt
+   # apt-get install git python-pip libyaml-dev libpython2.7-dev python3-distutils-extra python-apt libdbus-1-dev libdbus-glib-1-dev
 
 #. Get the code of nirikshak from the git using following command
 

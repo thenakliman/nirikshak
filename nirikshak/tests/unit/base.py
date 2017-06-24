@@ -11,6 +11,8 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+import mock
+import unittest
 
 import nirikshak
 
@@ -126,3 +128,41 @@ def create_conf():
             'main_file': '/var/nirikshak/main.yaml'
         }
     }
+
+
+def get_disk_jaanch():
+    jaanch = {
+        'type': 'disk_partition',
+        'input': {
+            'args': {
+                'device': '/dev/sda1',
+                'fstype': 'ext4',
+                'mountpoint': '/',
+            }
+        }
+    }
+
+    return jaanch
+
+
+def get_ini_jaanch():
+    jaanch = {
+        'type': 'ini',
+        'input': {
+            'args': {
+                'file': '/etc/nirikshak/nirikshak.conf',
+                'section': 'default',
+                'key': 'log_level',
+            },
+        },
+        'output': {
+             'type': 'yaml'
+         }
+    }
+
+    return jaanch
+
+
+class BaseTestCase(unittest.TestCase):
+    def setUp(self):
+        mock.patch('logging.getLogger')

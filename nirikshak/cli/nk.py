@@ -22,8 +22,6 @@ def process_args():
     parser = argparse.ArgumentParser(description='Process nirikshak command '
                                                  'line arguments')
 
-    parser.add_argument('--tags', metavar='t', type=str, nargs='+',
-                        default=[], help='List of tags for jaanch')
     parser.add_argument('--soochis', metavar='s', type=str, nargs='+',
                         default=[], help='List of soochi for verification')
     parser.add_argument('--config-file', metavar='c', type=str,

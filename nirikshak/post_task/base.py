@@ -46,13 +46,28 @@ class FormatOutput(object):
 
 def format_for_output(**kwargs):
     values = kwargs.values()[0]
-    post_task = values.get('post_task', 'dummy')
+    # TODO(thenakliman) It is a workaround to avoid the situation
+    # where both output and post task are not defined. Some
+    # standard way can be developed to avoid this workaround
+
+    if values.get('output', {}).get('type', 'console') == 'console':
+        post_task = values.get('post_task', 'console')
+    else:
+        post_task = values.get('post_task', 'dummy')
+
     try:
         plugin = POST_TASK_PLUGIN_MAPPER[post_task]
     except KeyError:
         LOG.error("%s plugin for task could not be found", post_task)
         return kwargs
 
-    soochis = getattr(plugin, 'format_output')(**kwargs)
-    LOG.info("%s soochis has been returned by the plugin" % soochis)
+    try:
+        soochis = getattr(plugin, 'format_output')(**kwargs)
+    except Exception:
+        LOG.error("Error in formatting %s jaanch for %s post_task",
+                  kwargs.keys()[0], post_task, exc_info=True)
+    else:
+        LOG.info("%s jaanch has been formatter by %s plugin",
+                 kwargs.keys()[0], post_task)
+
     return soochis

@@ -44,5 +44,5 @@ class FormatOutputConsole(base.FormatOutput):
         rs = ("%s,%s,%s" % (name, type_, inpt))
         rs = ("%s%s%s" % (rs, (120 - len(rs)) * '.', result))
         args[name]['formatted_output'] = rs
-        LOG.info("Output has been formaated for console")
+        LOG.info("%s output has been formatted for console", rs)
         return args
