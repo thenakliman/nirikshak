@@ -12,12 +12,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import mock
 import socket
 import unittest
 
+import mock
+
 from nirikshak.tests.unit import base
-# FIXME(thenakliman): imported package inside base apt is not
+# fixme(thenakliman): imported package inside base apt is not
 # available for pip installation yet.
 from nirikshak.workers.network import network_port
 
@@ -31,10 +32,10 @@ class WorkerTest(unittest.TestCase):
         super(WorkerTest, self).setUp()
 
     @mock.patch.object(socket, 'socket')
-    def test_work_with_invalid_port(self, socket):
+    def test_work_with_invalid_port(self, skt):
         mock_sock = mock.Mock()
         mock_sock.connect_ex = mock.Mock(return_value=1)
-        socket.return_value = mock_sock
+        skt.return_value = mock_sock
         self.sample_jaanch['input']['result'] = 1
         res = network_port.NetworkPortWorker().work(**self.sample_jaanch)
         self.assertEqual(res, self.sample_jaanch)

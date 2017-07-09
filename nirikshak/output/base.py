@@ -21,15 +21,15 @@ LOG = logging.getLogger(__name__)
 OUTPUT_PLUGIN_MAPPER = {}
 
 
-def register(output):
+def register(plugin_name):
     def register_output(cls):
         global OUTPUT_PLUGIN_MAPPER
 
         if output in OUTPUT_PLUGIN_MAPPER:
             LOG.info("For %s output, plugin is already "
-                     "registered" % output)
+                     "registered", plugin_name)
         else:
-            OUTPUT_PLUGIN_MAPPER[output] = cls()
+            OUTPUT_PLUGIN_MAPPER[plugin_name] = cls()
 
         return cls
 
@@ -40,18 +40,18 @@ def register(output):
 class FormatOutput(object):
 
     @abstractmethod
-    def output(**args):
+    def output(self, **kwargs):
         pass
 
 
 def output(**kwargs):
     values = kwargs.values()[0]
-    output = values.get('output', {}).get('type', 'console')
+    out = values.get('output', {}).get('type', 'console')
 
     try:
-        plugin = OUTPUT_PLUGIN_MAPPER[output]
+        plugin = OUTPUT_PLUGIN_MAPPER[out]
     except KeyError:
-        LOG.error("%s plugin for output could not be found", output)
+        LOG.error("%s plugin for output could not be found", out)
         return kwargs
 
     soochis = kwargs
@@ -59,9 +59,9 @@ def output(**kwargs):
         soochis = getattr(plugin, 'output')(**kwargs)
     except Exception:
         LOG.error("%s jaanch get failed for %s output.",
-                  kwargs.keys()[0], output, exc_info=True)
+                  kwargs.keys()[0], out, exc_info=True)
     else:
-        LOG.info("%s soochis has been returned by the plugin" % soochis)
+        LOG.info("%s soochis has been returned by the plugin", soochis)
 
     return soochis
 
@@ -69,24 +69,24 @@ def output(**kwargs):
 def make_output_dict(key, expected_result, **kwargs):
     try:
         if expected_result:
-            output = {
+            out = {
                 'actual_output': kwargs[key]['input']['result'],
                 'expected_output': expected_result
             }
 
         else:
-            output = {'actual_output': kwargs[key]['input']['result']}
+            out = {'actual_output': kwargs[key]['input']['result']}
     except KeyError:
         LOG.error("result key does not exist in the dictionary")
-        output = None
+        out = None
 
     try:
         jaanch = {
             key: {
                 'input': kwargs[key]['input']['args'],
-                'output': output}
+                'output': out}
             }
     except KeyError:
-        jaanch = {key: {'output': output}}
+        jaanch = {key: {'output': out}}
 
     return jaanch

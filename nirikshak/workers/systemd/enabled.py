@@ -39,5 +39,5 @@ class SystemdEnabledWorker(base.Worker):
             LOG.error("Error in retrieving enabled status for %s service",
                       service, exc_info=True)
 
-        LOG.info("%s service is %s" % (k['service'],  status))
+        LOG.info("%s service is %s", k['service'], status)
         return status

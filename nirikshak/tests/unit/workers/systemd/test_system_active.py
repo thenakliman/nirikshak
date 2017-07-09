@@ -35,10 +35,8 @@ class SystemdActiveWorkerTest(base.BaseTestCase):
 
     @staticmethod
     def _get_fake_systemd_unit():
-        units = [
-                    ['ssh.service', 'test', 'test1', 'active'],
-                    ['test.service', 'test', 'test2', 'inactive']
-                ]
+        units = [['ssh.service', 'test', 'test1', 'active'],
+                 ['test.service', 'test', 'test2', 'inactive']]
         return units
 
     @mock.patch('dbus.Interface')

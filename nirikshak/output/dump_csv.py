@@ -25,13 +25,13 @@ LOG = logging.getLogger(__name__)
 class CSVFormatOutput(base.FormatOutput):
     def output(self, **kwargs):
         try:
-            f = nirikshak.CONF['output_csv']['output_dir']
+            out_file = nirikshak.CONF['output_csv']['output_dir']
         except KeyError:
-            f = '/var/lib/nirikshak/result.csv'
+            out_file = '/var/lib/nirikshak/result.csv'
 
         output_file = []
         try:
-            with open(f, 'r') as fobj:
+            with open(out_file, 'r') as fobj:
                 reader = csv.reader(fobj, delimiter=' ', quotechar='|')
                 for row in reader:
                     output_file.append(row)
@@ -45,17 +45,16 @@ class CSVFormatOutput(base.FormatOutput):
             expected_result = None
 
         jaanch = ("%s,input") % key
-        for k, v in kwargs[key]['input']['args'].iteritems():
-            jaanch = ("%s,%s,%s" % (jaanch, k, v))
-
+        for k, value in kwargs[key]['input']['args'].iteritems():
+            jaanch = ("%s,%s,%s" % (jaanch, k, value))
             jaanch = ("%s,output,expected_output,%s,actual_output,%s" % (
-                      jaanch, expected_result, kwargs[key]['input']['result']))
+                jaanch, expected_result,
+                kwargs[key]['input']['result']))
 
         output_file.append([jaanch])
-        with open(f, "w") as csv_file:
+        with open(out_file, "w") as csv_file:
             csv_writer = csv.writer(csv_file)
             for row in output_file:
                 csv_writer.writerow(row[0].split(','))
 
-        LOG.info("Output has been dumped in %s file" % f)
-        csv_file.close()
+        LOG.info("Output has been dumped in %s file", out_file)

@@ -34,7 +34,7 @@ def config_validator(section, config_opts=()):
 
             raise exceptions.ConfigurationNotFoundException(section=section)
 
-    def func(f):
-        return f
+    def func(function):
+        return function
 
     return func

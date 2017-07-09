@@ -27,7 +27,7 @@ def register(post_task):
 
         if post_task in POST_TASK_PLUGIN_MAPPER:
             LOG.info("For %s post task, plugin is already "
-                     "registered" % post_task)
+                     "registered", post_task)
         else:
             POST_TASK_PLUGIN_MAPPER[post_task] = cls()
 
@@ -40,13 +40,13 @@ def register(post_task):
 class FormatOutput(object):
 
     @abstractmethod
-    def format_output(**args):
+    def format_output(self, **kwargs):
         pass
 
 
 def format_for_output(**kwargs):
     values = kwargs.values()[0]
-    # TODO(thenakliman) It is a workaround to avoid the situation
+    # fixme(thenakliman) It is a workaround to avoid the situation
     # where both output and post task are not defined. Some
     # standard way can be developed to avoid this workaround
 

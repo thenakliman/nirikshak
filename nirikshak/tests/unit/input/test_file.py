@@ -12,19 +12,19 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import mock
 import unittest
+import mock
 
-from nirikshak.common import configuration
-from nirikshak.input import base as file
+import nirikshak
+from nirikshak.input import base as input_file
 from nirikshak.tests.unit import base
 
 
 class InputFileTest(unittest.TestCase):
     def setUp(self):
         base.create_conf()
-        configuration.initilize_config()
-        configuration.initilize_logging()
+        nirikshak.initialize_config()
+        nirikshak.initialize_logging()
         super(InputFileTest, self).setUp()
 
     @staticmethod
@@ -47,7 +47,7 @@ class InputFileTest(unittest.TestCase):
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
     def test_get_soochis_keystone(self, get_yaml):
         get_yaml.side_effect = self.mock_get_yaml
-        soochis = file.get_soochis(soochis=['test_keystone'], groups=[])
+        soochis = input_file.get_soochis(soochis=['test_keystone'], groups=[])
         exp_output = [base.get_test_keystone_soochi()]
         expected_output = self.match_soochi_format(exp_output)
         self.assertEqual(soochis, expected_output)
@@ -55,7 +55,7 @@ class InputFileTest(unittest.TestCase):
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
     def test_get_soochis_glance(self, get_yaml):
         get_yaml.side_effect = self.mock_get_yaml
-        soochis = file.get_soochis(soochis=['test_glance'], groups=[])
+        soochis = input_file.get_soochis(soochis=['test_glance'], groups=[])
         exp_output = [base.get_test_glance_soochi()]
         expected_output = self.match_soochi_format(exp_output)
         self.assertEqual(soochis, expected_output)
@@ -63,8 +63,9 @@ class InputFileTest(unittest.TestCase):
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
     def test_get_soochis_both(self, get_yaml):
         get_yaml.side_effect = self.mock_get_yaml
-        soochis = file.get_soochis(soochis=['test_glance', 'test_keystone'],
-                                   groups=[])
+        soochis = input_file.get_soochis(
+            soochis=['test_glance', 'test_keystone'],
+            groups=[])
 
         exp_output = [base.get_test_keystone_soochi(),
                       base.get_test_glance_soochi()]
@@ -73,30 +74,30 @@ class InputFileTest(unittest.TestCase):
             self.assertIn(exp, soochis)
 
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
-    def test_get_soochis_with_group_monitor(self, get_yaml):
+    def test_soochis_with_group_monitor(self, get_yaml):
         get_yaml.side_effect = self.mock_get_yaml
-        soochis = file.get_soochis(soochis=[],
-                                   groups=['monitor'])
+        soochis = input_file.get_soochis(soochis=[],
+                                         groups=['monitor'])
 
         for _, soochi in soochis:
             self.assertIn(soochi, [base.get_test_keystone_soochi(),
-                          base.get_test_glance_soochi()])
+                                   base.get_test_glance_soochi()])
 
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
-    def test_get_soochis_with_group_deployment(self, get_yaml):
+    def test_soochis_with_group(self, get_yaml):
         get_yaml.side_effect = self.mock_get_yaml
-        soochis = file.get_soochis(soochis=[],
-                                   groups=['deployment'])
+        soochis = input_file.get_soochis(soochis=[],
+                                         groups=['deployment'])
 
         for _, soochi in soochis:
             self.assertIn(soochi, [base.get_test_keystone_soochi(),
-                          base.get_test_glance_soochi()])
+                                   base.get_test_glance_soochi()])
 
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
-    def test_get_soochis_with_both_group(self, get_yaml):
+    def test_soochis_two_group(self, get_yaml):
         get_yaml.side_effect = self.mock_get_yaml
-        soochis = file.get_soochis(soochis=[],
-                                   groups=['monitor', 'deployment'])
+        soochis = input_file.get_soochis(soochis=[],
+                                         groups=['monitor', 'deployment'])
 
         exp_soochis = [base.get_test_keystone_soochi(),
                        base.get_test_glance_soochi()]
@@ -105,12 +106,13 @@ class InputFileTest(unittest.TestCase):
             self.assertIn(soochi, exp_soochis)
 
         self.assertEqual(len(soochis), len(exp_soochis))
+        self.assertEqual(get_yaml.call_count, 3)
 
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
-    def test_get_soochis_with_delete_1_jaanch(self, get_yaml):
+    def test_soochis_invalid_jaanch(self, get_yaml):
         get_yaml.side_effect = self.mock_get_yaml
-        soochis = file.get_soochis(soochis=[],
-                                   groups=['monitor', 'deployment'])
+        soochis = input_file.get_soochis(soochis=[],
+                                         groups=['monitor', 'deployment'])
 
         exp_soochis = [base.get_test_keystone_soochi()]
         tmp = base.get_test_glance_soochi()
@@ -124,19 +126,19 @@ class InputFileTest(unittest.TestCase):
             self.assertIn(soochi, exp_soochis)
 
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
-    def test_get_soochis_with_soochi_group(self, get_yaml):
+    def test_soochis_soochi_group(self, get_yaml):
         def get_yaml_file(location):
             if 'main' in location:
-                t = base.get_main_yaml()
-                del t['monitor']['soochis']['test_keystone']
-                del t['monitor']['groups']
-                return t
+                t_soochis = base.get_main_yaml()
+                del t_soochis['monitor']['soochis']['test_keystone']
+                del t_soochis['monitor']['groups']
+                return t_soochis
 
             return self.mock_get_yaml(location)
 
         get_yaml.side_effect = get_yaml_file
-        soochis = file.get_soochis(soochis=['test_keystone'],
-                                   groups=['monitor'])
+        soochis = input_file.get_soochis(soochis=['test_keystone'],
+                                         groups=['monitor'])
         exp_soochis = [base.get_test_keystone_soochi(),
                        base.get_test_glance_soochi()]
 
@@ -146,54 +148,54 @@ class InputFileTest(unittest.TestCase):
         self.assertEqual(len(soochis), len(exp_soochis))
 
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
-    def test_get_soochis_with_no_soochi_group(self, get_yaml):
+    def test_soochis_with_no_input(self, get_yaml):
         def get_yaml_file(location):
             if 'main' in location:
-                t = base.get_main_yaml()
-                del t['monitor']['soochis']['test_keystone']
-                del t['monitor']['groups']
-                return t
+                t_soochis = base.get_main_yaml()
+                del t_soochis['monitor']['soochis']['test_keystone']
+                del t_soochis['monitor']['groups']
+                return t_soochis
 
             return self.mock_get_yaml(location)
 
         get_yaml.side_effect = get_yaml_file
-        soochis = file.get_soochis(soochis=[],
-                                   groups=['monitor'])
+        soochis = input_file.get_soochis(soochis=[],
+                                         groups=['monitor'])
         exp_soochis = self.match_soochi_format([base.get_test_glance_soochi()])
         self.assertEqual(soochis, exp_soochis)
 
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
-    def test_get_soochis_with_no_soochi_groups(self, get_yaml):
+    def test_soochis_no_soochi_groups(self, get_yaml):
         def get_yaml_file(location):
             if 'main' in location:
-                t = base.get_main_yaml()
-                del t['monitor']['soochis']['test_keystone']
-                del t['deployment']['soochis']['test_keystone']
-                return t
+                t_soochis = base.get_main_yaml()
+                del t_soochis['monitor']['soochis']['test_keystone']
+                del t_soochis['deployment']['soochis']['test_keystone']
+                return t_soochis
 
             return self.mock_get_yaml(location)
 
         get_yaml.side_effect = get_yaml_file
-        soochis = file.get_soochis(soochis=[],
-                                   groups=['monitor'])
+        soochis = input_file.get_soochis(soochis=[],
+                                         groups=['monitor'])
         exp_soochis = [base.get_test_glance_soochi()]
         exp_soochis = self.match_soochi_format(exp_soochis)
         self.assertEqual(soochis, exp_soochis)
 
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
-    def test_get_soochis_with_all_soochi_groups(self, get_yaml):
+    def test_with_all_soochi_groups(self, get_yaml):
         def get_yaml_file(location):
             if 'main' in location:
-                t = base.get_main_yaml()
-                del t['monitor']['soochis']['test_keystone']
-                del t['deployment']['soochis']['test_glance']
-                return t
+                t_soochis = base.get_main_yaml()
+                del t_soochis['monitor']['soochis']['test_keystone']
+                del t_soochis['deployment']['soochis']['test_glance']
+                return t_soochis
 
             return self.mock_get_yaml(location)
 
         get_yaml.side_effect = get_yaml_file
-        soochis = file.get_soochis(soochis=[],
-                                   groups=['monitor'])
+        soochis = input_file.get_soochis(soochis=[],
+                                         groups=['monitor'])
         exp_soochis = [base.get_test_keystone_soochi(),
                        base.get_test_glance_soochi()]
 
@@ -202,26 +204,27 @@ class InputFileTest(unittest.TestCase):
             self.assertIn(soochi, soochis)
 
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
-    def test_get_soochis_with_no_soochi_groups_(self, get_yaml):
-        soochis = file.get_soochis(soochis=[],
-                                   groups=['monitor'])
+    def test_with_no_soochi_groups_(self, get_yaml):
+        soochis = input_file.get_soochis(soochis=[],
+                                         groups=['monitor'])
+        get_yaml.assert_called_once()
         self.assertEqual(soochis, [])
 
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
-    def test_get_soochis_with_invalid_soochi(self, get_yaml):
+    def test_with_invalid_soochi(self, get_yaml):
         def get_yaml_file(location):
             if 'main' in location:
-                t = base.get_main_yaml()
-                t['monitor']['soochis']['test_soochi'] = {
+                t_soochis = base.get_main_yaml()
+                t_soochis['monitor']['soochis']['test_soochi'] = {
                     'soochi': 'test_soochi'}
 
-                return t
+                return t_soochis
 
             return self.mock_get_yaml(location)
 
         get_yaml.side_effect = get_yaml_file
-        soochis = file.get_soochis(soochis=[],
-                                   groups=['monitor'])
+        soochis = input_file.get_soochis(soochis=[],
+                                         groups=['monitor'])
         exp_soochis = [base.get_test_keystone_soochi(),
                        base.get_test_glance_soochi()]
 
@@ -229,15 +232,15 @@ class InputFileTest(unittest.TestCase):
             self.assertIn(({}, soochi), soochis)
 
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
-    def test_get_soochis_with_invalid_groups(self, get_yaml):
+    def test_with_invalid_groups(self, get_yaml):
         def get_yaml_file(location):
             if 'main' in location:
-                t = base.get_main_yaml()
-                t['monitor']['groups'] = ['test_group']
-                return t
+                t_soochis = base.get_main_yaml()
+                t_soochis['monitor']['groups'] = ['test_group']
+                return t_soochis
 
             return self.mock_get_yaml(location)
 
         get_yaml.side_effect = get_yaml_file
-        soochis = file.get_soochis(soochis=[], groups=['monitor'])
+        soochis = input_file.get_soochis(soochis=[], groups=['monitor'])
         self.assertEqual([], soochis)

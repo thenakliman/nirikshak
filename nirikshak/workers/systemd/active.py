@@ -36,8 +36,8 @@ class SystemdActiveWorker(base.Worker):
         kwargs['input']['result'] = False
         for unit in units:
             if unit[0] == service:
-                LOG.info("%s unit is active" % k['service'])
+                LOG.info("%s unit is active", k['service'])
                 return str(unit[3])
 
-        LOG.info("%s unit is not active" % k['service'])
+        LOG.info("%s unit is not active", k['service'])
         return ''

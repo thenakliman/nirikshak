@@ -19,4 +19,4 @@ from nirikshak.output import base
 class ConsoleFormatOutput(base.FormatOutput):
     def output(self, **args):
         k = args.keys()[0]
-        print(args[k]['formatted_output'])
+        print args[k]['formatted_output']

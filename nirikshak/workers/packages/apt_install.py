@@ -13,6 +13,7 @@
 # under the License.
 
 import logging
+# pylint: disable=import-error
 import apt
 
 from nirikshak.common import constants
@@ -21,6 +22,7 @@ from nirikshak.workers import base
 
 LOG = logging.getLogger(__name__)
 
+# pylint: disable=invalid-name
 LOCK_NAME = 'APT'
 
 
@@ -41,5 +43,5 @@ class APTWorker(base.Worker):
             status = pkg.is_installed
 
         LOG.info("Released lock for %s jaanch", kwargs)
-        LOG.info("%s package is %s" % (k['package'], status))
+        LOG.info("%s package is %s", k['package'], status)
         return status

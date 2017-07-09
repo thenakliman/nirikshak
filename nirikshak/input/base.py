@@ -13,14 +13,14 @@
 # under the License.
 
 from abc import ABCMeta, abstractmethod
-from copy import deepcopy
+import copy
 import logging
 import six
 
 import nirikshak
 from nirikshak.common import exceptions
 from nirikshak.common import utils
-from nirikshak.input import input
+from nirikshak.input import input as input_base
 
 LOG = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ def register(input_type):
 
         if input_type in INPUT_PLUGIN_MAPPER:
             LOG.info("For %s input type, plugin is already "
-                     "registered" % input_type)
+                     "registered", input_type)
 
         INPUT_PLUGIN_MAPPER[input_type] = cls()
         return cls
@@ -42,20 +42,18 @@ def register(input_type):
 
 
 @six.add_metaclass(ABCMeta)
-class Input(input.Input):
-    def __init__(self):
-        pass
-
-    def _get_group_dependencies(self, group, main_file):
+class Input(input_base.Input):
+    @staticmethod
+    def _get_group_dependencies(group, main_file):
         gps = set()
         to_process = [group]
-        for gp in to_process:
-            if gp not in gps:
-                gps.add(gp)
-                if not main_file.get(gp, False):
-                    raise exceptions.GroupNotFoundException(group=gp)
+        for grp in to_process:
+            if grp not in gps:
+                gps.add(grp)
+                if not main_file.get(grp, False):
+                    raise exceptions.GroupNotFoundException(group=grp)
                 try:
-                    to_process += main_file[gp]['groups']
+                    to_process += main_file[grp]['groups']
                 except KeyError:
                     pass
 
@@ -72,15 +70,19 @@ class Input(input.Input):
                 gps |= deps
                 gps.add(group)
 
-        LOG.info("%s groups are to be executed." % gps)
+        LOG.info("%s groups are to be executed.", gps)
         return list(gps)
 
     @abstractmethod
-    def get_yaml_file(self):
+    def get_yaml_file(self, location):
         pass
 
     @abstractmethod
     def get_soochi_content(self, soochi):
+        pass
+
+    @abstractmethod
+    def get_main_file(self):
         pass
 
     @staticmethod
@@ -90,31 +92,32 @@ class Input(input.Input):
     @classmethod
     def _merge_config(cls, group_config, soochi_config):
         config = {}
-        for k, v in group_config.iteritems():
-            if soochi_config.get(k):
-                if isinstance(soochi_config[k], dict):
-                    config[k] = cls._merge_config(group_config[k],
-                                                  soochi_config[k])
+        for key, value in group_config.iteritems():
+            if soochi_config.get(key):
+                if isinstance(soochi_config[key], dict):
+                    config[key] = cls._merge_config(group_config[key],
+                                                    soochi_config[key])
                 else:
-                    config[k] = v
+                    config[key] = value
             else:
-                config[k] = deepcopy(v)
+                config[key] = copy.deepcopy(value)
 
         return config
 
     def _get_executable_soochis(self, soochis, groups):
         group_config = {}
+
         try:
-            content = self.get_yaml_file(self.main_file)
+            content = self.get_main_file()
         except exceptions.FileNotFound:
-            LOG.error("main.yaml file could not found at %s", self.main_file)
+            LOG.error("main file could not found.")
             return []
 
         groups = self._get_groups(content, groups)
 
-        s = {}
+        t_soochis = {}
         for soochi in soochis:
-            s[soochi] = {
+            t_soochis[soochi] = {
                 'soochi': soochi,
                 'config': {}
             }
@@ -123,18 +126,18 @@ class Input(input.Input):
             group_config[group] = self._get_config(content, group)
             if 'soochis' in content[group]:
                 for name, soochi_def in content[group]['soochis'].iteritems():
-                    config = deepcopy(soochi_def.get('config', {}))
+                    config = copy.deepcopy(soochi_def.get('config', {}))
                     utils.merge_dict(config, group_config[group])
-                    s[name] = {'config': config}
+                    t_soochis[name] = {'config': config}
 
-        LOG.info("%s soochis to be executed." % s)
+        LOG.info("%s soochis to be executed.", t_soochis)
         soochis_with_config = []
-        for soochi, config in s.iteritems():
+        for soochi, config in t_soochis.iteritems():
             soochis_with_config.append({soochi: config})
         return soochis_with_config
 
     def get_soochis(self, soochis, groups):
-        s = []
+        t_soochis = []
         soochis = self._get_executable_soochis(soochis, groups)
         for soochi in soochis:
             name = soochi.keys()[0]
@@ -147,12 +150,12 @@ class Input(input.Input):
                 LOG.error("%s file has invalid format", name)
             else:
                 soochi = (soochi[name]['config'], soochi_content)
-                s.append(soochi)
+                t_soochis.append(soochi)
 
-        return s
+        return t_soochis
 
 
-def get_soochis(soochis=[], groups=[]):
+def get_soochis(soochis=None, groups=None):
     input_type = nirikshak.CONF['default'].get('input_type', 'input_file')
     try:
         plugin = INPUT_PLUGIN_MAPPER[input_type]
@@ -161,5 +164,5 @@ def get_soochis(soochis=[], groups=[]):
         return []
 
     soochis = getattr(plugin, 'get_soochis')(soochis=soochis, groups=groups)
-    LOG.info("%s soochis has been returned by the plugin" % soochis)
+    LOG.info("%s soochis has been returned by the plugin", soochis)
     return soochis

@@ -4,7 +4,7 @@ import pkgutil
 LOG = logging.getLogger(__name__)
 
 
-# FIXME(thenakliman): Fix such that workers are loaded
+# fixme(thenakliman): Fix such that workers are loaded
 # Automatically.
 def load_workers():
     for loader, name, _ in pkgutil.walk_packages(__path__):

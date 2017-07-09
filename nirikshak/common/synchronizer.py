@@ -16,6 +16,6 @@
 LOCK = None
 
 
-def init_locks(l):
+def init_locks(lock):
     global LOCK
-    LOCK = l
+    LOCK = lock

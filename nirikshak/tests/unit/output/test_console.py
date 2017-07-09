@@ -13,20 +13,21 @@
 # under the License.
 
 import __builtin__ as builtin
-import mock
 import unittest
+import mock
 
 from nirikshak.output import console
 from nirikshak.tests.unit import base
 
 
 class OutputTest(unittest.TestCase):
+    # pylint: disable=no-self-use
     def ttest_output(self):
         inp = {}
-        t = base.get_test_keystone_soochi()['jaanches']['port_5000']
-        inp['port_5000'] = t
+        t_soochis = base.get_test_keystone_soochi()['jaanches']['port_5000']
+        inp['port_5000'] = t_soochis
         inp['port_5000']['formatted_output'] = 'test_output'
         with mock.patch.object(builtin, 'print') as mock_print:
             console.ConsoleFormatOutput().output(**inp)
-            # FIXME(thenakliman): mock print
+            # fixme(thenakliman): mock print
             mock_print.assert_called()

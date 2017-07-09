@@ -13,5 +13,5 @@
 # under the License.
 
 # Indexes for lock arrary for each lockable worker.
-
+# pylint: disable=invalid-name
 LOCKABLE_RESOURCES_INDEX = type('enum', (), {'APT': 0, 'SYSTEMD': 1})

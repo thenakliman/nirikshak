@@ -45,7 +45,6 @@ class NetworkSendOutput(base.FormatOutput):
         try:
             getattr(requests, method)(url, data=payld)
         except requests.exceptions.ConnectionError:
-            LOG.error("Error in output sent to %s host on %s port" % (
-                      host, port))
+            LOG.error("Error in output sent to %s host on %s port", host, port)
 
-        LOG.error("Output sent to %s host on %s port" % (host, port))
+        LOG.error("Output sent to %s host on %s port", host, port)

@@ -12,13 +12,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from copy import deepcopy
+import copy
 
 
 def merge_dict(dict2, dict1):
-    for k, v in dict1.iteritems():
-        if dict2.get(k):
-            if isinstance(dict2[k], dict):
-                merge_dict(dict2[k], dict1[k])
+    for key, value in dict1.iteritems():
+        if dict2.get(key):
+            if isinstance(dict2[key], dict):
+                merge_dict(dict2[key], dict1[key])
         else:
-            dict2[k] = deepcopy(v)
+            dict2[key] = copy.deepcopy(value)

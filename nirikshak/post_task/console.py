@@ -22,27 +22,27 @@ LOG = logging.getLogger(__name__)
 @base.register('console')
 class FormatOutputConsole(base.FormatOutput):
 
-    def format_output(self, **args):
-        name = args.keys()[0]
-        v = args[name]
+    def format_output(self, **kwargs):
+        name = kwargs.keys()[0]
+        val = kwargs[name]
         inpt = ''
-        for key, value in v['input']['args'].items():
+        for key, value in val['input']['args'].items():
             inpt = ("%s%s:%s," % (inpt, key, value))
 
-        type_ = v['type']
+        type_ = val['type']
 
         result = ''
-        if 'result' in args:
-            if str(v['args']['result']) == str(args['result']):
+        if 'result' in kwargs:
+            if str(val['args']['result']) == str(kwargs['result']):
                 result = 'pass'
             else:
                 result = 'fail'
 
         if not result:
-            result = v['input']['result']
+            result = val['input']['result']
 
-        rs = ("%s,%s,%s" % (name, type_, inpt))
-        rs = ("%s%s%s" % (rs, (120 - len(rs)) * '.', result))
-        args[name]['formatted_output'] = rs
-        LOG.info("%s output has been formatted for console", rs)
-        return args
+        rslt = ("%s,%s,%s" % (name, type_, inpt))
+        rslt = ("%s%s%s" % (rslt, (120 - len(rslt)) * '.', result))
+        kwargs[name]['formatted_output'] = rslt
+        LOG.info("%s output has been formatted for console", rslt)
+        return kwargs

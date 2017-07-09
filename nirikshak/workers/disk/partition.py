@@ -38,5 +38,5 @@ class DiskPartitionWorker(base.Worker):
 
                 return result
 
-        LOG.error("%s device could not be found on the syste." % k['device'])
+        LOG.error("%s device could not be found on the syste.", k['device'])
         return None

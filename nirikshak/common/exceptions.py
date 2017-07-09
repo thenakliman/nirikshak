@@ -18,8 +18,10 @@ import logging
 class NirikshakException(Exception):
     msg = ("Unknown exception.")
 
+    # pylint: disable=unused-argument
     def __init__(self, *args, **kwargs):
-        logging.error(self.message % kwargs)
+        super(NirikshakException, self).__init__()
+        logging.error(self.message, kwargs)
 
 
 class NotFoundException(NirikshakException):

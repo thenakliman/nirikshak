@@ -15,6 +15,7 @@
 import argparse
 import logging
 
+import nirikshak
 from nirikshak.controller import base
 
 
@@ -35,7 +36,14 @@ def process_args():
 
 def main():
     args = process_args()
-    base.Router().start(**vars(args))
+    argument = vars(args)
+    # fixme(thenakliman): Allow passing of configuration file
+    # for the execution of jaanch. Currently config is loaded
+    # during module load therefore it is not possible to use CLI passed
+    # configuration file.
+    del argument['config_file']
+    nirikshak.initialize_logging()
+    base.Router().start(**argument)
     logging.info("Jaanch has been finished, check results")
 
 

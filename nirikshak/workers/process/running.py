@@ -30,10 +30,10 @@ class RunningProcessWorker(base.Worker):
         for proc in psutil.process_iter():
             try:
                 if proc.name() == name:
-                    LOG.info("%s process is running" % name)
+                    LOG.info("%s process is running", name)
                     return True
             except psutil.NoSuchProcess:
                 pass
 
-        LOG.info("%s process is not running")
+        LOG.info("%s process is not running", name)
         return False

@@ -28,10 +28,10 @@ LOG = logging.getLogger(__name__)
 class YAMLFormatOutput(base.FormatOutput):
 
     @staticmethod
-    def _read_file(f):
+    def read_file(f_name):
         try:
-            if os.stat(f).st_size:
-                output_file = yaml_util.get_yaml(f)
+            if os.stat(f_name).st_size:
+                output_file = yaml_util.get_yaml(f_name)
             else:
                 output_file = {}
         except IOError:
@@ -44,17 +44,17 @@ class YAMLFormatOutput(base.FormatOutput):
         return output_file
 
     @staticmethod
-    def _write_file(output_file, f):
-        with open(f, "w") as output:
+    def _write_file(output_file, f_name):
+        with open(f_name, "w") as output:
             yaml.dump(output_file, output, default_flow_style=False)
 
     def output(self, **kwargs):
         try:
-            f = nirikshak.CONF['output_yaml']['output_dir']
+            out_file = nirikshak.CONF['output_yaml']['output_dir']
         except KeyError:
-            f = '/var/lib/nirikshak/result.yaml'
+            out_file = '/var/lib/nirikshak/result.yaml'
 
-        output_file = self._read_file(f)
+        output_file = self.read_file(out_file)
         key = kwargs.keys()[0]
         try:
             expected_result = kwargs[key]['output']['result']
@@ -67,5 +67,5 @@ class YAMLFormatOutput(base.FormatOutput):
         else:
             output_file.update(jaanch)
 
-        self._write_file(output_file, f)
-        LOG.info("Output has been dumped in %s file" % f)
+        self._write_file(output_file, out_file)
+        LOG.info("Output has been dumped in %s file", out_file)

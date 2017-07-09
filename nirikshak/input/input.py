@@ -22,5 +22,5 @@ class Input(object):
         pass
 
     @abc.abstractmethod
-    def get_soochis(self, **kwargs):
+    def get_soochis(self, soochis, groups):
         pass

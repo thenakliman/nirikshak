@@ -22,9 +22,9 @@ LOG = logging.getLogger(__name__)
 
 def get_yaml(location):
     try:
-        with open(location, 'r') as f:
+        with open(location, 'r') as fid:
             try:
-                content = yaml.load(f)
+                content = yaml.load(fid)
             except yaml.scanner.ScannerError:
                 raise exceptions.InvalidFormatException(location=location)
     except IOError:

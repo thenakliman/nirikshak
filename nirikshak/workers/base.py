@@ -29,7 +29,7 @@ def register(worker):
         global WORKER_PLUGIN_MAPPER
         if worker in WORKER_PLUGIN_MAPPER:
             LOG.info("For %s worker type, plugin is already "
-                     "registered" % worker)
+                     "registered", worker)
 
         WORKER_PLUGIN_MAPPER[worker] = cls()
         return cls
@@ -38,7 +38,7 @@ def register(worker):
 
 
 def validate(required=(), optional=()):
-    def func(f):
+    def func(function):
         def validator(self, **kwargs):
             require = set(required)
             try:
@@ -53,9 +53,9 @@ def validate(required=(), optional=()):
             require.update(set(optional))
             extra = available - require
             if extra:
-                raise exceptions.ExtraArgException(params=[list(extra)])
+                raise exceptions.ExtraArgsException(params=[list(extra)])
 
-            return f(self, **kwargs)
+            return function(self, **kwargs)
         return validator
     return func
 
@@ -100,6 +100,6 @@ def do_work(**kwargs):
     except Exception:
         LOG.error("%s worker failed", exc_info=True)
     else:
-        LOG.info("%s jaanch has been completed by the plugin" % key)
+        LOG.info("%s jaanch has been completed by the plugin", key)
 
     return result
