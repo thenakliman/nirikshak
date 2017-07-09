@@ -1,15 +1,15 @@
-*******************
 Processing Pipeline
-*******************
+-------------------
 
 This section describes processing pipeline, how data will be processed through
 different modules available in this software. It shows data flow among modules.
 Following are the components of Nirikshak
-1. Input Module(IM)
-2. Controller Module(CM)
-3. Processing Module(PM)
-4. Post Processing Module(PPM)
-5. Output Module(OM)
+
+#. Input Module(IM)
+#. Controller Module(CM)
+#. Processing Module(PM)
+#. Post Processing Module(PPM)
+#. Output Module(OM)
 
 Data flow among them::
 
@@ -30,16 +30,19 @@ Data flow among them::
                                         | Module(OM) | 
                                         +------------+ 
                                         
+----
 
 #. Currently niriskshak is operated through command line, but in future it can
    be made to run continuosly then it's role will be changed from verifier to
    monitor and notifier.
 
-#. CLI prvided will be **nirikshak**::
+#. CLI prvided will be **nirikshak**
 
-      nisikshak [--tags=tag1,tag2]  [--xxxxx=abc,cde]
+.. code::
 
-#. CLI invokes the controller to performs its task, it passes tags and xxxxx
+      nisikshak [--tags=tag1,tag2]  [--soochi=abc,cde]
+
+#. CLI invokes the controller to performs its task, it passes tags and soochi
    along the call. Not controller(CM) decides, how input will be taken.
    Currently multiple input mechanism will be supported to provide fetch data
    for example, file, through REST call or database.
@@ -81,7 +84,7 @@ Data flow among them::
    not be able to fine method. And main recevies key value arguments only.
 
 #. Depending on the method used for storing configuration file's, information
-   returned from all the method is the same, list of xxxxx and list of groups
+   returned from all the method is the same, list of soochi and list of groups
    to be executed and their configuration file in json format.
 
 #. Once above mentioned information is recevied from the input module then
@@ -101,7 +104,7 @@ Data flow among them::
    If user provides category as well then it becomes easy for the locating the
    plugin. Location of the processing module will be::
 
-     plugin:
+     plugin
         |___network
         |       |____network_ip
         |       |____network_bond
@@ -143,6 +146,7 @@ Data flow among them::
 #. What pre post processing module has to be called depends on the
    configuration for that particular jaanch, and up in
    hierarchy(mentioned later)::
+
        nirikshak
             |____posttask
                      |_____boolean

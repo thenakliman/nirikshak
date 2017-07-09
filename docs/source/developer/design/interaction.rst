@@ -1,6 +1,5 @@
-***********
 Interaction
-***********
+-----------
 
 **jaanch** cli will be provided, which start the verification process.
 When command is fired then main.yaml file at following location::
@@ -24,7 +23,7 @@ Interation among different module is going to be following::
                            v                          
                  +----------------------+     
                  | Read main.yaml and   |     
-                 | find number of xxxxx |     
+                 | find number of soochi |     
                  +----------------------+     
                            |
                            |

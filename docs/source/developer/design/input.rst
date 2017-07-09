@@ -1,5 +1,5 @@
 Input
-=====
+-----
 
 This section describes design of the input, provided to the Nirikshak. To
 make maintenance easier for the users, input can be provided into serveral
@@ -8,7 +8,7 @@ the input files to be processed for a particular execution. This file also
 provides way of configuring the Nirikshak.
 
 Jaanch
-======
+^^^^^^
 
 Jaanch is the verification to be done, these are defined in yaml file. We
 need to define inputs and the way Jaanch has to be done. To represent Jaanch
@@ -18,7 +18,9 @@ If input format provides expected result then fail/pass is the output. If
 input format does not provide expected result then output should be result of
 verification
 
-Jaanch's are defined in the yaml file called xxxxx, in following format::
+Jaanch's are defined in the yaml file called soochi, in following format
+
+.. code:: yaml
 
      items: 
        # Each set of Jaanch's can be tagged with name, which can be later on
@@ -61,23 +63,25 @@ Jaanch's are defined in the yaml file called xxxxx, in following format::
            # If some output is expected then mention here
            result: <expected result>
 
-main.yaml File
-==============
+Main Input File
+^^^^^^^^^^^^^^^
 
-It defines the verification to be done, as there can be multiple input files,
-this file bring them together and provide a way to configure a file with
-particular settings
+It(main.yaml) defines the verification to be done, as there can be multiple
+input files, this file bring them together and provide a way to configure a
+file with particular settings
 
-Format of main.yaml can be following::
+Format of main.yaml can be following
+
+.. code:: yaml
 
   <group name>:
     name: <group name>
     <configurations key>: <configuration value>
     <item>:
-      xxxxx: <name of files>/<name of group>
+      soochi: <name of files>/<name of group>
       <configuration name>: <configuration value>
     <item>:
-      xxxxx: <name of files>/<name of group>
+      soochi: <name of files>/<name of group>
       <configuration name>: <configuration value>
 
 you can define <group name> and <group name>/name is the name of the group.

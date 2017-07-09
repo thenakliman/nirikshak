@@ -1,0 +1,60 @@
+jaanches: 
+  port_5000:
+    type: network_port
+    input:
+      args:
+        ip: 192.168.1.100
+        port: 5000
+    output:
+      type: yaml
+  port_35357:
+    type: network_port
+    post_task: dummy
+    input:
+      args:
+        ip: 192.168.1.100
+        port: 35357
+    output:
+      type: json
+  disk:
+    type: disk_partition
+    input:
+      args:
+        device: /dev/sda5
+        fstype: ext4
+        mountpoint: /
+  ssh:
+    type: process_running
+    input:
+      args:
+        name: sshd
+  service_active:
+    type: systemd_active
+    input:
+      args:
+        service: ssh.service
+  service_enabled:
+    type: systemd_enabled
+    input:
+      args:
+        service: ssh.service
+    output:
+      type: csv
+#  ssh_package:
+#    type: packages/apt_install
+#    input:
+#      type: file
+#      post_task: dummy
+#      args:
+#        package: openssh-server
+#    output:
+#      type: dummy
+  ini:
+    type: ini
+    input:
+      args:
+        file: /etc/nirikshak/nirikshak.conf
+        section: default
+        key: log_level
+    output:
+      type: yaml
