@@ -64,7 +64,3 @@ def initialize_logging():
                         format=formatter)
 
     logging.info("Logging module loaded successfully")
-
-
-initialize_config()
-initialize_logging()

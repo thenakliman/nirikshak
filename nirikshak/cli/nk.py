@@ -42,6 +42,7 @@ def main():
     # during module load therefore it is not possible to use CLI passed
     # configuration file.
     del argument['config_file']
+    nirikshak.initialize_config()
     nirikshak.initialize_logging()
     base.Router().start(**argument)
     logging.info("Jaanch has been finished, check results")

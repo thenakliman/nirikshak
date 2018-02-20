@@ -12,10 +12,12 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import os
 import unittest
 import mock
 
 import nirikshak
+from nirikshak.common import utils
 from nirikshak.input import base as input_file
 from nirikshak.tests.unit import base
 
@@ -23,8 +25,7 @@ from nirikshak.tests.unit import base
 class InputFileTest(unittest.TestCase):
     def setUp(self):
         base.create_conf()
-        nirikshak.initialize_config()
-        nirikshak.initialize_logging()
+        utils.load_modules_from_location([os.path.dirname(input_file.__file__)])
         super(InputFileTest, self).setUp()
 
     @staticmethod

@@ -122,7 +122,7 @@ def create_conf():
         'default': {
             'log_file': '/var/log/nirikshak.log',
             'log_level': 'critical',
-            'input_type': 'file',
+            'input_type': 'input_file',
             'workers': 10
         },
         'input_file': {

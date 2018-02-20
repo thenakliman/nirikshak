@@ -13,6 +13,7 @@
 # under the License.
 
 import copy
+import pkgutil
 
 
 def merge_dict(dict2, dict1):
@@ -22,3 +23,8 @@ def merge_dict(dict2, dict1):
                 merge_dict(dict2[key], dict1[key])
         else:
             dict2[key] = copy.deepcopy(value)
+
+
+def load_modules_from_location(location):
+    for loader, name, _ in pkgutil.walk_packages(location):
+        loader.find_module(name).load_module(name)
