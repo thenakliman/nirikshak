@@ -92,7 +92,7 @@ class Input(input_base.Input):
     @classmethod
     def _merge_config(cls, group_config, soochi_config):
         config = {}
-        for key, value in group_config.iteritems():
+        for key, value in group_config.items():
             if soochi_config.get(key):
                 if isinstance(soochi_config[key], dict):
                     config[key] = cls._merge_config(group_config[key],
@@ -125,14 +125,14 @@ class Input(input_base.Input):
         for group in groups:
             group_config[group] = self._get_config(content, group)
             if 'soochis' in content[group]:
-                for name, soochi_def in content[group]['soochis'].iteritems():
+                for name, soochi_def in content[group]['soochis'].items():
                     config = copy.deepcopy(soochi_def.get('config', {}))
                     utils.merge_dict(config, group_config[group])
                     t_soochis[name] = {'config': config}
 
         LOG.info("%s soochis to be executed.", t_soochis)
         soochis_with_config = []
-        for soochi, config in t_soochis.iteritems():
+        for soochi, config in t_soochis.items():
             soochis_with_config.append({soochi: config})
         return soochis_with_config
 
@@ -140,7 +140,7 @@ class Input(input_base.Input):
         t_soochis = []
         soochis = self._get_executable_soochis(soochis, groups)
         for soochi in soochis:
-            name = soochi.keys()[0]
+            name = list(soochi.keys())[0]
             soochi_content = []
             try:
                 soochi_content = self.get_soochi_content(name)

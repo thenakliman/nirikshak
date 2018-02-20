@@ -17,7 +17,7 @@ import pkgutil
 
 
 def merge_dict(dict2, dict1):
-    for key, value in dict1.iteritems():
+    for key, value in dict1.items():
         if dict2.get(key):
             if isinstance(dict2[key], dict):
                 merge_dict(dict2[key], dict1[key])

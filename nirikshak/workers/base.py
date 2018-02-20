@@ -42,7 +42,7 @@ def validate(required=(), optional=()):
         def validator(self, **kwargs):
             require = set(required)
             try:
-                available = set(kwargs['input']['args'].keys())
+                available = set(list(kwargs['input']['args'].keys()))
             except KeyError:
                 available = set()
 
@@ -81,7 +81,7 @@ def match_expected_output(validator):
 
 def do_work(**kwargs):
     global WORKER_PLUGIN_MAPPER
-    key = kwargs.keys()[0]
+    key = list(kwargs.keys())[0]
     kwargs = kwargs[key]
     try:
         worker = kwargs['type']

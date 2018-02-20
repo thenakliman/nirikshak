@@ -55,7 +55,7 @@ class YAMLFormatOutput(base.FormatOutput):
             out_file = '/var/lib/nirikshak/result.yaml'
 
         output_file = self.read_file(out_file)
-        key = kwargs.keys()[0]
+        key = list(kwargs.keys())[0]
         try:
             expected_result = kwargs[key]['output']['result']
         except KeyError:

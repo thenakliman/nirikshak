@@ -61,9 +61,9 @@ def format_for_output(**kwargs):
         soochis = getattr(plugin, 'format_output')(**kwargs)
     except Exception:
         LOG.error("Error in formatting %s jaanch for %s post_task",
-                  kwargs.keys()[0], post_task, exc_info=True)
+                  list(kwargs.keys())[0], post_task, exc_info=True)
     else:
         LOG.info("%s jaanch has been formatter by %s plugin",
-                 kwargs.keys()[0], post_task)
+                 list(kwargs.keys())[0], post_task)
 
     return soochis

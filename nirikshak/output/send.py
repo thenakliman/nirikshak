@@ -35,7 +35,7 @@ class NetworkSendOutput(base.FormatOutput):
         protocol = nirikshak.CONF[SECTION].get('protocol', 'http')
         url = nirikshak.CONF[SECTION].get('url', '')
         url = ("%s://%s:%s/%s" % (protocol, host, port, url))
-        key = kwargs.keys()[0]
+        key = list(kwargs.keys())[0]
         try:
             expected_result = kwargs[key]['output']['result']
         except KeyError:
