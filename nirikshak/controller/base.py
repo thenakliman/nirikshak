@@ -14,6 +14,7 @@
 
 import logging
 import multiprocessing
+import os
 
 import nirikshak
 from nirikshak.common import exceptions
@@ -52,6 +53,7 @@ class Router(object):
     def __init__(self):
         workers_num = nirikshak.CONF['default'].get('workers', -1)
         workers_num = int(workers_num)
+        # fixme(thenakliman): Verify locking is really being done
         lock = []
         for resource in constants.LOCKABLE_RESOURCES_INDEX.__dict__:
             if not resource.startswith('__'):
@@ -60,13 +62,18 @@ class Router(object):
         if workers_num == -1:
             workers_num = multiprocessing.cpu_count()
 
-        # fixme(thenakliman): Verify locking is really being done
         self.pool = multiprocessing.Pool(workers_num,
                                          initializer=synchronizer.init_locks,
                                          initargs=(lock,))
 
         self.queue = multiprocessing.Manager().Queue()
+        utils.load_modules_from_location(self.get_module_path(output))
+        utils.load_modules_from_location(self.get_module_path(inputs))
         LOG.info("Router has been initilized")
+
+    @staticmethod
+    def get_module_path(module):
+        return [os.path.dirname(module.__file__)]
 
     @staticmethod
     def _call_method(module, method, *args, **kwargs):

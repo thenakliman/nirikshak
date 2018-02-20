@@ -11,6 +11,7 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+from __future__ import print_function
 
 from nirikshak.output import base
 
@@ -19,4 +20,4 @@ from nirikshak.output import base
 class ConsoleFormatOutput(base.FormatOutput):
     def output(self, **args):
         k = args.keys()[0]
-        print args[k]['formatted_output']
+        print(args[k]['formatted_output'])

@@ -49,7 +49,7 @@ class CSVFormatOutput(base.FormatOutput):
             jaanch = ("%s,%s,%s" % (jaanch, k, value))
             jaanch = ("%s,output,expected_output,%s,actual_output,%s" % (
                 jaanch, expected_result,
-                kwargs[key]['input']['result']))
+                kwargs[key]['input'].get('result')))
 
         output_file.append([jaanch])
         with open(out_file, "w") as csv_file:

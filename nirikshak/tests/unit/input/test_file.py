@@ -12,19 +12,18 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import unittest
+import os
 import mock
 
-import nirikshak
+from nirikshak.common import utils
 from nirikshak.input import base as input_file
 from nirikshak.tests.unit import base
 
 
-class InputFileTest(unittest.TestCase):
+class InputFileTest(base.BaseTestCase):
     def setUp(self):
         base.create_conf()
-        nirikshak.initialize_config()
-        nirikshak.initialize_logging()
+        utils.load_modules_from_location([os.path.dirname(input_file.__file__)])
         super(InputFileTest, self).setUp()
 
     @staticmethod
@@ -43,6 +42,9 @@ class InputFileTest(unittest.TestCase):
             return base.get_test_keystone_soochi()
         elif 'test_glance' in yaml_file:
             return base.get_test_glance_soochi()
+
+        # fixme(thenakliman): Correct it
+        return ''
 
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
     def test_get_soochis_keystone(self, get_yaml):
