@@ -14,6 +14,7 @@
 
 import logging
 import multiprocessing
+import os
 
 import nirikshak
 from nirikshak.common import exceptions
@@ -50,20 +51,9 @@ class Router(object):
     """This class routes the work to proper modules and load them
        as per requirement."""
     def __init__(self):
-        # fixme(thenakliman): Verify locking is really being done
-        self.pool = multiprocessing.Pool(self.get_workers(),
-                                         initializer=synchronizer.init_locks,
-                                         initargs=(lock,))
-
-        self.queue = multiprocessing.Manager().Queue()
-        utils.load_modules_from_location(output.__path__)
-        inputs.load_modules_from_location(inputs.__path__)
-        LOG.info("Router has been initilized")
-
-    @staticmethod
-    def get_workers()
         workers_num = nirikshak.CONF['default'].get('workers', -1)
         workers_num = int(workers_num)
+        # fixme(thenakliman): Verify locking is really being done
         lock = []
         for resource in constants.LOCKABLE_RESOURCES_INDEX.__dict__:
             if not resource.startswith('__'):
@@ -71,6 +61,19 @@ class Router(object):
 
         if workers_num == -1:
             workers_num = multiprocessing.cpu_count()
+
+        self.pool = multiprocessing.Pool(workers_num,
+                                         initializer=synchronizer.init_locks,
+                                         initargs=(lock,))
+
+        self.queue = multiprocessing.Manager().Queue()
+        utils.load_modules_from_location(self.get_module_path(output))
+        utils.load_modules_from_location(self.get_module_path(inputs))
+        LOG.info("Router has been initilized")
+
+    @staticmethod
+    def get_module_path(module):
+        return [os.path.dirname(module.__file__)]
 
     @staticmethod
     def _call_method(module, method, *args, **kwargs):

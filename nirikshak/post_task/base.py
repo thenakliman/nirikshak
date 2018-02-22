@@ -46,11 +46,7 @@ class FormatOutput(object):
 
 def format_for_output(**kwargs):
     values = kwargs.values()[0]
-    # fixme(thenakliman) It is a workaround to avoid the situation
-    # where both output and post task are not defined. Some
-    # standard way can be developed to avoid this workaround
-
-    if values.get('output', {}).get('type', 'console') == 'console':
+    if values.get('post_task', 'console') == 'console':
         post_task = values.get('post_task', 'console')
     else:
         post_task = values.get('post_task', 'dummy')

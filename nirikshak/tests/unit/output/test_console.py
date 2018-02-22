@@ -20,7 +20,7 @@ from nirikshak.output import console
 from nirikshak.tests.unit import base
 
 
-class OutputTest(unittest.TestCase):
+class OutputTest(base.BaseTestCase):
     # pylint: disable=no-self-use
     def ttest_output(self):
         inp = {}
