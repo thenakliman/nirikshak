@@ -59,7 +59,7 @@ def output(**kwargs):
         soochis = getattr(plugin, 'output')(**kwargs)
     except Exception:
         LOG.error("%s jaanch get failed for %s output.",
-                  kwargs.keys()[0], out, exc_info=True)
+                  list(kwargs.keys())[0], out, exc_info=True)
     else:
         LOG.info("%s soochis has been returned by the plugin", soochis)
 

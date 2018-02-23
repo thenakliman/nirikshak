@@ -21,7 +21,7 @@ class NirikshakException(Exception):
     # pylint: disable=unused-argument
     def __init__(self, *args, **kwargs):
         super(NirikshakException, self).__init__()
-        logging.error(self.message, kwargs)
+        logging.error(self.msg, kwargs)
 
 
 class NotFoundException(NirikshakException):

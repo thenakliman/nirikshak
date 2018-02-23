@@ -140,7 +140,7 @@ class Input(input_base.Input):
         t_soochis = []
         soochis = self._get_executable_soochis(soochis, groups)
         for soochi in soochis:
-            name = soochi.keys()[0]
+            name = list(soochi.keys())[0]
             soochi_content = []
             try:
                 soochi_content = self.get_soochi_content(name)

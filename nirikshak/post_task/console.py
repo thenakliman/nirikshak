@@ -23,7 +23,7 @@ LOG = logging.getLogger(__name__)
 class FormatOutputConsole(base.FormatOutput):
 
     def format_output(self, **kwargs):
-        name = kwargs.keys()[0]
+        name = list(kwargs.keys())[0]
         val = kwargs[name]
         inpt = ''
         for key, value in val['input']['args'].items():

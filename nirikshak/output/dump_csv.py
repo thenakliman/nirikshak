@@ -38,7 +38,7 @@ class CSVFormatOutput(base.FormatOutput):
         except IOError:
             pass
 
-        key = kwargs.keys()[0]
+        key = list(kwargs.keys())[0]
         try:
             expected_result = kwargs[key]['output']['result']
         except KeyError:
