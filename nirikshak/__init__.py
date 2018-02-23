@@ -12,6 +12,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from __future__ import print_function
 import logging
 import ConfigParser
 
@@ -44,7 +45,7 @@ def initialize_config(config_file=None):
     try:
         config.read(config_file)
     except Exception:
-        print "Unable to load configuration file at %s." % config_file
+        print("Unable to load configuration file at %s." % config_file)
 
     CONF = make_dict(config)
 

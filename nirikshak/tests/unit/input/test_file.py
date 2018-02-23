@@ -13,7 +13,6 @@
 # under the License.
 
 import os
-import unittest
 import mock
 
 from nirikshak.common import utils

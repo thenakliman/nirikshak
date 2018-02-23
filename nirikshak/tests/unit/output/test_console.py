@@ -13,7 +13,6 @@
 # under the License.
 
 import __builtin__ as builtin
-import unittest
 import mock
 
 from nirikshak.output import console
