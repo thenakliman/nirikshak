@@ -11,7 +11,7 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-import ConfigParser
+import configparser
 
 import mock
 
@@ -22,8 +22,8 @@ from nirikshak.workers.files import ini
 class INIConfigValidatorWorkerTest(base.BaseTestCase):
 
     # pylint: disable=unused-argument
-    @mock.patch.object(ConfigParser.ConfigParser, 'read')
-    @mock.patch.object(ConfigParser.ConfigParser, 'get')
+    @mock.patch.object(configparser.ConfigParser, 'read')
+    @mock.patch.object(configparser.ConfigParser, 'get')
     def test_init_config_validtor(self, mock_config_get, mock_config_parser):
         jaanch = base.get_ini_jaanch()
 
@@ -34,7 +34,7 @@ class INIConfigValidatorWorkerTest(base.BaseTestCase):
         result = ini.INIConfigValidatorWorker().work(**jaanch)
         self.assertEqual(result, jaanch)
 
-    @mock.patch.object(ConfigParser.ConfigParser, 'read')
+    @mock.patch.object(configparser.ConfigParser, 'read')
     def test_init_invalid_config(self, mock_config_parser):
         jaanch = base.get_ini_jaanch()
 

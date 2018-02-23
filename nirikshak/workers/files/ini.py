@@ -13,7 +13,7 @@
 # under the License.
 
 import logging
-import ConfigParser
+import configparser
 
 from nirikshak.workers import base
 
@@ -27,7 +27,7 @@ class INIConfigValidatorWorker(base.Worker):
     @base.validate(required=('file', 'section', 'key'))
     def work(self, **kwargs):
         k = kwargs['input']['args']
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(k['file'])
         value = None
         try:

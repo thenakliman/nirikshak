@@ -14,7 +14,7 @@
 
 from __future__ import print_function
 import logging
-import ConfigParser
+import configparser
 
 CONF = None
 
@@ -41,7 +41,7 @@ def initialize_config(config_file=None):
     if not config_file:
         config_file = '/etc/nirikshak/nirikshak.conf'
 
-    config = ConfigParser.ConfigParser()
+    config = configparser.ConfigParser()
     try:
         config.read(config_file)
     except Exception:
