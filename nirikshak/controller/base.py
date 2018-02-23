@@ -40,7 +40,7 @@ def worker(queue, soochi):
     else:
         LOG.info("Loading worker modules.")
 
-    for name, jaanch in soochi['jaanches'].iteritems():
+    for name, jaanch in soochi['jaanches'].items():
         try:
             queue.put({name: base_worker.do_work(**{name: jaanch})})
         except Exception:
