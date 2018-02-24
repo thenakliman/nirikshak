@@ -1,0 +1,14 @@
+FROM ubuntu:latest
+MAINTAINER thenakliman@gmail.com
+
+# Update source repos
+RUN apt-get update
+
+# Install required dependency
+RUN apt-get install -y python2.7 python-pip git tox python-dev python3-dev
+
+# Clone the code
+RUN git clone http://github.com/thenakliman/nirikshak -b new_env_cleanup
+
+# Run the command for verification
+RUN cd nirikshak && tox -epy27

@@ -42,7 +42,7 @@ class FileNotFound(NotFoundException):
 
 
 class GroupNotFoundException(NotFoundException):
-    msg = ("%(req_group)s is not found, but specified in definition.")
+    msg = ("%(group)s is not found, but specified in definition.")
 
 
 class InvalidException(NirikshakException):

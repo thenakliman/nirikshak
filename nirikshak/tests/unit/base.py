@@ -13,6 +13,7 @@
 # under the License.
 import unittest
 
+import logging
 import mock
 
 import nirikshak
@@ -166,4 +167,5 @@ def get_ini_jaanch():
 
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
-        mock.patch('logging.getLogger')
+        super(BaseTestCase, self).setUp()
+        logging.disable(logging.NOTSET)

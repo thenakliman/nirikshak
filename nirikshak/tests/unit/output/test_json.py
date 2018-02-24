@@ -21,15 +21,18 @@ from nirikshak.tests.unit import base as base_test
 
 
 class JSONFormatOutputTest(base_test.BaseTestCase):
+    def setUp(self):
+        super(JSONFormatOutputTest, self).setUp()
+        base_test.create_conf()
+
+    def teaDown(self):
+        super(JSONFormatOutputTest, self).tearDown()
+        nirikshak.CONF.clear()
+
     # pylint: disable=no-self-use
     @mock.patch.object(dump_json.JSONFormatOutput, 'get_output_file')
     @mock.patch.object(dump_json.JSONFormatOutput, '_output_json')
     def test_conf_without_section(self, mock_output_json, mock_output_file):
-        try:
-            del nirikshak.CONF['output_json']
-        except KeyError:
-            pass
-
         f_name = '/var/lib/nirikshak/result.json'
         soochis = base_test.get_test_keystone_soochi()['jaanches']
         mock_output_file.return_value = {'port_5000': soochis['port_5000']}

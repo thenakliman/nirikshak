@@ -21,15 +21,18 @@ from nirikshak.tests.unit import base as base_test
 
 
 class YAMLFormatOutputTest(base_test.BaseTestCase):
+    def setUp(self):
+        super(YAMLFormatOutputTest, self).setUp()
+        base_test.create_conf()
+
+    def tearDown(self):
+        super(YAMLFormatOutputTest, self).tearDown()
+        nirikshak.CONF.clear()
+
     # pylint: disable=no-self-use
     @mock.patch.object(dump_yaml.YAMLFormatOutput, 'read_file')
     @mock.patch.object(dump_yaml.YAMLFormatOutput, '_write_file')
     def test_conf_without_section(self, mock_output_yaml, mock_output_file):
-        try:
-            del nirikshak.CONF['output_yaml']['output_dir']
-        except KeyError:
-            pass
-
         f_name = '/var/lib/nirikshak/result.yaml'
         soochis = base_test.get_test_keystone_soochi()['jaanches']
         mock_output_file.return_value = {'port_5000': soochis['port_5000']}

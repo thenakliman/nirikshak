@@ -16,6 +16,7 @@ import mock
 import psutil
 
 from nirikshak.tests.unit import base
+from nirikshak.workers import base as base_worker
 from nirikshak.workers.disk import partition
 
 

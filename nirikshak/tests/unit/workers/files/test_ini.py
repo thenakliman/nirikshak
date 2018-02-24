@@ -24,10 +24,9 @@ class INIConfigValidatorWorkerTest(base.BaseTestCase):
     # pylint: disable=unused-argument
     @mock.patch.object(configparser.ConfigParser, 'read')
     @mock.patch.object(configparser.ConfigParser, 'get')
-    def test_init_config_validtor(self, mock_config_get, mock_config_parser):
+    def ktest_init_config_validtor(self, mock_config_get, mock_config_parser):
         jaanch = base.get_ini_jaanch()
-
-        def test_get():
+        def test_get(section, key):
             return 'debug'
 
         mock_config_get.side_effect = test_get
@@ -37,7 +36,6 @@ class INIConfigValidatorWorkerTest(base.BaseTestCase):
     @mock.patch.object(configparser.ConfigParser, 'read')
     def test_init_invalid_config(self, mock_config_parser):
         jaanch = base.get_ini_jaanch()
-
         def test_get(section=None, key=None):
             raise ValueError
 
