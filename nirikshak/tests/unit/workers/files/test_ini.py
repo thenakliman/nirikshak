@@ -24,7 +24,7 @@ class INIConfigValidatorWorkerTest(base.BaseTestCase):
     # pylint: disable=unused-argument
     @mock.patch.object(configparser.ConfigParser, 'read')
     @mock.patch.object(configparser.ConfigParser, 'get')
-    def ktest_init_config_validtor(self, mock_config_get, mock_config_parser):
+    def test_init_config_validtor(self, mock_config_get, mock_config_parser):
         jaanch = base.get_ini_jaanch()
         def test_get(section, key):
             return 'debug'

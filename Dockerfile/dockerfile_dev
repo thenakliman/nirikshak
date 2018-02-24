@@ -33,7 +33,7 @@ RUN mkdir -p /etc/nirikshak /var/lib/nirikshak
 WORKDIR /nirikshak
 
 # Copy test cases
-COPY var/ /var/
+COPY var/ /var/lib
 
 # Copy nirikshak config file
 COPY etc/ /etc/nirikshak
