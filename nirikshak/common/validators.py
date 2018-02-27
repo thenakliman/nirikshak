@@ -30,9 +30,10 @@ def config_validator(section, config_opts=()):
     for opt in config_opts:
         if opt not in nirikshak.CONF[section]:
             LOG.error("%s configuration option could not be "
-                      "found in %s section.", section, opt)
+                      "found in %s section.", opt, section)
 
-            raise exceptions.ConfigurationNotFoundException(section=section)
+            raise exceptions.ConfigurationNotFoundException(section=section,
+                                                            option=opt)
 
     def func(function):
         return function
