@@ -47,4 +47,4 @@ class NetworkSendOutput(base.FormatOutput):
         except requests.exceptions.ConnectionError:
             LOG.error("Error in output sent to %s host on %s port", host, port)
 
-        LOG.error("Output sent to %s host on %s port", host, port)
+        LOG.info("Output sent to %s host on %s port", host, port)

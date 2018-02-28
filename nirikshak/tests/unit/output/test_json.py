@@ -25,7 +25,7 @@ class JSONFormatOutputTest(base_test.BaseTestCase):
         super(JSONFormatOutputTest, self).setUp()
         base_test.create_conf()
 
-    def teaDown(self):
+    def tearDown(self):
         super(JSONFormatOutputTest, self).tearDown()
         nirikshak.CONF.clear()
 

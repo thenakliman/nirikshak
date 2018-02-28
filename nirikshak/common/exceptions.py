@@ -38,7 +38,7 @@ class ConfigurationNotFoundException(NotFoundException):
 
 
 class FileNotFound(NotFoundException):
-    msg = ("%(loction)s file not found.")
+    msg = ("%(location)s file not found.")
 
 
 class GroupNotFoundException(NotFoundException):

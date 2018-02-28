@@ -13,7 +13,6 @@
 # under the License.
 
 import unittest
-import pkgutil
 
 from nirikshak.common import utils
 

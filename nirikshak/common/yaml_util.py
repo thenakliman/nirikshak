@@ -26,8 +26,9 @@ def get_yaml(location):
             try:
                 content = yaml.load(fid)
             except yaml.scanner.ScannerError:
-                raise exceptions.InvalidFormatException(location=location)
+                raise exceptions.InvalidFormatException(location=location,
+                                                        format='yaml')
     except IOError:
-        raise exceptions.FileNotFound(location)
+        raise exceptions.FileNotFound(location=location)
 
     return content
