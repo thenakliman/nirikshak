@@ -21,28 +21,31 @@ LOG = logging.getLogger(__name__)
 
 @base.register('console')
 class FormatOutputConsole(base.FormatOutput):
+    @staticmethod
+    def _get_jaanch_result(jaanch_parameter):
+        jaanch_result = ''
+        if 'result' in jaanch_parameter['output']:
+            if str(jaanch_parameter['output']['result']) == str(jaanch_parameter['input']['result']):
+                return 'pass'
+            else:
+                return 'fail'
+
+        if jaanch_result == '':
+            return jaanch_parameter['input']['result']
 
     def format_output(self, **kwargs):
-        name = list(kwargs.keys())[0]
-        val = kwargs[name]
-        inpt = ''
-        for key, value in val['input']['args'].items():
-            inpt = ("%s%s:%s," % (inpt, key, value))
+        jaanch_name = list(kwargs.keys())[0]
+        jaanch_parameter = kwargs[jaanch_name]
+        input_parameter = ''
+        for key, value in jaanch_parameter['input']['args'].items():
+            input_parameter = ("%s%s:%s," % (input_parameter, key, value))
 
-        type_ = val['type']
-
-        result = ''
-        if 'result' in kwargs:
-            if str(val['args']['result']) == str(kwargs['result']):
-                result = 'pass'
-            else:
-                result = 'fail'
-
-        if not result:
-            result = val['input']['result']
-
-        rslt = ("%s,%s,%s" % (name, type_, inpt))
-        rslt = ("%s%s%s" % (rslt, (120 - len(rslt)) * '.', result))
-        kwargs[name]['formatted_output'] = rslt
-        LOG.info("%s output has been formatted for console", rslt)
+        jaanch_result = self._get_jaanch_result(jaanch_parameter)
+        jaanch_type = jaanch_parameter['type']
+        jaanch_name_type_param = ("%s,%s,%s" % (jaanch_name, jaanch_type, input_parameter))
+        formatted_output = ("%s%s%s" % (jaanch_name_type_param,
+                                        (120 - len(jaanch_name_type_param)) * '.',
+                                        jaanch_result))
+        jaanch_parameter['formatted_output'] = formatted_output
+        LOG.info("%s output has been formatted for console", formatted_output)
         return kwargs
