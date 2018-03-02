@@ -21,21 +21,26 @@ LOG = logging.getLogger(__name__)
 
 
 def config_validator(section, config_opts=()):
-    if section not in nirikshak.CONF:
-        LOG.error("%s section could not be found in "
-                  "configuration file", section)
+    def validate():
+        if section not in nirikshak.CONF:
+            LOG.error("%s section could not be found in "
+                      "configuration file", section)
 
-        raise exceptions.SectionNotFoundException(section=section)
+            raise exceptions.SectionNotFoundException(section=section)
 
-    for opt in config_opts:
-        if opt not in nirikshak.CONF[section]:
-            LOG.error("%s configuration option could not be "
-                      "found in %s section.", opt, section)
+        for opt in config_opts:
+            if opt not in nirikshak.CONF[section]:
+                LOG.error("%s configuration option could not be "
+                          "found in %s section.", opt, section)
 
-            raise exceptions.ConfigurationNotFoundException(section=section,
-                                                            option=opt)
+                raise exceptions.ConfigurationNotFoundException(section=section,
+                                                                option=opt)
 
     def func(function):
-        return function
+        def inject_validation(self, **kwargs):
+            validate()
+            return function(self, **kwargs)
+
+        return inject_validation
 
     return func

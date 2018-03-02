@@ -34,26 +34,28 @@ class ConfigValidatorTest(unittest.TestCase):
         super(ConfigValidatorTest, self).tearDown()
         del nirikshak.CONF
 
-    def _get_decorated_method(self, section, config_opts):
-        @validators.config_validator(section, config_opts)
-        def dummy_method(self, **kwargs):
-            return kwargs
+    def _get_dummy_object(self, section, config_opts):
+        class DummyClass(object):
+            @validators.config_validator(section, config_opts)
+            def dummy_method(self, **kwargs):
+                return kwargs
 
-        return dummy_method
+        return DummyClass()
 
     def test_validate_for_invalid_section(self):
+        dummy_object = self._get_dummy_object('default1', [])
         with mock.patch.object(validators, 'LOG'):
             self.assertRaises(exceptions.SectionNotFoundException,
-                              self._get_decorated_method,
-                              'default1', [])
+                              dummy_object.dummy_method)
 
     def test_validate_for_invalid_config_options(self):
+        dummy_object = self._get_dummy_object('default', ['invalid_opts'])
         with mock.patch.object(validators, 'LOG'):
             self.assertRaises(exceptions.ConfigurationNotFoundException,
-                              self._get_decorated_method,
-                              'default', ['invalid_opts'])
+                              dummy_object.dummy_method)
 
     def test_validate_for_validate(self):
+        dummy_object = self._get_dummy_object('default', ['key1'])
         with mock.patch.object(validators, 'LOG'):
-            dummy_method = self._get_decorated_method('default', ['key1'])
-            self.assertEqual({'key': 'value'}, dummy_method(self, key='value'))
+            self.assertEqual({'key': 'value'},
+                             dummy_object.dummy_method(key='value'))
