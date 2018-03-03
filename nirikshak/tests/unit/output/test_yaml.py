@@ -14,10 +14,15 @@
 import os
 
 import mock
-import nirikshak
+import yaml
 
+import nirikshak
+from nirikshak.common import exceptions
+from nirikshak.common import yaml_util
 from nirikshak.output import dump_yaml
 from nirikshak.tests.unit import base as base_test
+
+TEST_FILE = 'test_file'
 
 
 class YAMLFormatOutputTest(base_test.BaseTestCase):
@@ -30,12 +35,13 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
         nirikshak.CONF.clear()
 
     # pylint: disable=no-self-use
+    @mock.patch.object(dump_yaml, 'open')
     @mock.patch.object(dump_yaml.YAMLFormatOutput, 'read_file')
-    @mock.patch.object(dump_yaml.YAMLFormatOutput, '_write_file')
-    def test_conf_without_section(self, mock_output_yaml, mock_output_file):
+    @mock.patch.object(yaml, 'dump')
+    def test_conf_without_section(self, mock_yaml_dump, mock_read_file, mock_open):
         f_name = '/var/lib/nirikshak/result.yaml'
         soochis = base_test.get_test_keystone_soochi()['jaanches']
-        mock_output_file.return_value = {'port_5000': soochis['port_5000']}
+        mock_read_file.return_value = {'port_5000': soochis['port_5000']}
         exp = {'port_35357': soochis['port_35357']}
         dump_yaml.YAMLFormatOutput().output(**exp)
         result = {
@@ -45,8 +51,9 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
             }
         }
         result.update({'port_5000': soochis['port_5000']})
-        mock_output_file.assert_called_with(f_name)
-        mock_output_yaml.assert_called_with(result, f_name)
+        mock_read_file.assert_called_with(f_name)
+        mock_yaml_dump.assert_called_once_with(result, mock.ANY, default_flow_style=False)
+        mock_open.assert_called_once_with(f_name, "w")
 
     @mock.patch.object(dump_yaml.YAMLFormatOutput, 'read_file')
     @mock.patch.object(dump_yaml.YAMLFormatOutput, '_write_file')
@@ -72,9 +79,9 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
     @mock.patch.object(os, 'stat')
     def test_get_output_file(self, mock_os):
         mock_os.return_value = mock.Mock(st_size=False)
-        yaml = dump_yaml.YAMLFormatOutput().read_file('test_file')
+        yaml = dump_yaml.YAMLFormatOutput().read_file(TEST_FILE)
         self.assertEqual({}, yaml)
-        mock_os.assert_called_with('test_file')
+        mock_os.assert_called_with(TEST_FILE)
 
     @mock.patch.object(os, 'stat')
     def test_get_output_file_error(self, mock_os):
@@ -83,6 +90,32 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
             raise OSError()
 
         mock_os.side_effect = test
-        yaml = dump_yaml.YAMLFormatOutput().read_file('test_file')
+        yaml = dump_yaml.YAMLFormatOutput().read_file(TEST_FILE)
         self.assertEqual({}, yaml)
-        mock_os.assert_called_with('test_file')
+        mock_os.assert_called_with(TEST_FILE)
+
+    @mock.patch.object(yaml_util, 'get_yaml', return_value={})
+    @mock.patch.object(os, 'stat')
+    def test_get_output_file_get_yaml_success(self, mock_os, mock_get_yaml):
+        mock_os.return_value = mock.Mock(st_size=1000)
+        yaml = dump_yaml.YAMLFormatOutput().read_file(TEST_FILE)
+        self.assertEqual({}, yaml)
+        mock_os.assert_any_call(TEST_FILE)
+        mock_get_yaml.assert_called_once_with(TEST_FILE)
+
+    @mock.patch.object(yaml_util, 'get_yaml',
+                      side_effect=exceptions.FileNotFound(location=TEST_FILE))
+    @mock.patch.object(os, 'stat')
+    def test_get_output_file_FileNotFoundError(self, mock_os, mock_get_yaml):
+        yaml = dump_yaml.YAMLFormatOutput().read_file(TEST_FILE)
+        self.assertEqual({}, yaml)
+        mock_os.assert_any_call(TEST_FILE)
+        mock_get_yaml.assert_called_once_with(TEST_FILE)
+
+    @mock.patch.object(yaml_util, 'get_yaml', side_effect=IOError)
+    @mock.patch.object(os, 'stat')
+    def test_get_output_file_IOError(self, mock_os, mock_get_yaml):
+        yaml = dump_yaml.YAMLFormatOutput().read_file(TEST_FILE)
+        self.assertEqual({}, yaml)
+        mock_os.assert_any_call(TEST_FILE)
+        mock_get_yaml.assert_called_once_with(TEST_FILE)
