@@ -21,15 +21,21 @@ LOG = logging.getLogger(__name__)
 POST_TASK_PLUGIN_MAPPER = {}
 
 
+def add_plugin(plugin_name, plugin):
+    POST_TASK_PLUGIN_MAPPER[plugin_name] = plugin()
+
+
+def get_plugin(plugin_name):
+    return POST_TASK_PLUGIN_MAPPER.get(plugin_name)
+
+
 def register(post_task):
     def register_post_task(cls):
-        global POST_TASK_PLUGIN_MAPPER
-
-        if post_task in POST_TASK_PLUGIN_MAPPER:
+        if get_plugin(post_task) is None:
+            add_plugin(post_task, cls)
+        else:
             LOG.info("For %s post task, plugin is already "
                      "registered", post_task)
-        else:
-            POST_TASK_PLUGIN_MAPPER[post_task] = cls()
 
         return cls
 
@@ -45,20 +51,19 @@ class FormatOutput(object):
 
 
 def format_for_output(**kwargs):
-    values = kwargs.values()[0]
+    values = list(kwargs.values())[0]
     if values.get('post_task', 'console') == 'console':
         post_task = values.get('post_task', 'console')
     else:
         post_task = values.get('post_task', 'dummy')
 
-    try:
-        plugin = POST_TASK_PLUGIN_MAPPER[post_task]
-    except KeyError:
-        LOG.error("%s plugin for task could not be found", post_task)
-        return kwargs
-
+    plugin = get_plugin(post_task)
+    soochis = None
     try:
         soochis = getattr(plugin, 'format_output')(**kwargs)
+    except AttributeError:
+        LOG.error("%s plugin for task could not be found", post_task)
+        return kwargs
     except Exception:
         LOG.error("Error in formatting %s jaanch for %s post_task",
                   list(kwargs.keys())[0], post_task, exc_info=True)
