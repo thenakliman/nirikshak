@@ -1,0 +1,18 @@
+[run]
+branch = True
+source = nirikshak
+omit = nirikshak/*
+
+[report]
+ignore_errors = True
+omit = 
+    *systemd*,
+    *package*,
+    *__init__.py,
+
+exclude_lines = 
+    pragma: no cover
+    pass
+
+[html]
+directory = htmlcov
