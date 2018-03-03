@@ -25,13 +25,15 @@ class FormatOutputConsole(base.FormatOutput):
     def _get_jaanch_result(jaanch_parameter):
         jaanch_result = ''
         if 'result' in jaanch_parameter['output']:
-            if str(jaanch_parameter['output']['result']) == str(jaanch_parameter['input']['result']):
+            if str(jaanch_parameter['output']['result']) == \
+                    str(jaanch_parameter['input']['result']):
                 return 'pass'
-            else:
-                return 'fail'
+            return 'fail'
 
         if jaanch_result == '':
             return jaanch_parameter['input']['result']
+
+        return None
 
     def format_output(self, **kwargs):
         jaanch_name = list(kwargs.keys())[0]
@@ -42,9 +44,11 @@ class FormatOutputConsole(base.FormatOutput):
 
         jaanch_result = self._get_jaanch_result(jaanch_parameter)
         jaanch_type = jaanch_parameter['type']
-        jaanch_name_type_param = ("%s,%s,%s" % (jaanch_name, jaanch_type, input_parameter))
-        formatted_output = ("%s%s%s" % (jaanch_name_type_param,
-                                        (120 - len(jaanch_name_type_param)) * '.',
+        jaanch_name_type_param = ("%s,%s,%s" % (jaanch_name,
+                                                jaanch_type,
+                                                input_parameter))
+        separator = '.' * (120 - len(jaanch_name_type_param))
+        formatted_output = ("%s%s%s" % (jaanch_name_type_param, separator,
                                         jaanch_result))
         jaanch_parameter['formatted_output'] = formatted_output
         LOG.info("%s output has been formatted for console", formatted_output)

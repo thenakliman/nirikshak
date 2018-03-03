@@ -27,14 +27,16 @@ class TestYamlUtil(unittest.TestCase):
     def test_get_invalid_yaml(self, mock_yaml_open, mock_yaml_load):
         location = 'tmp_location'
         mock_yaml_load.side_effect = yaml.scanner.ScannerError
-        self.assertRaises(exceptions.InvalidFormatException, yaml_util.get_yaml, location)
+        self.assertRaises(exceptions.InvalidFormatException,
+                          yaml_util.get_yaml, location)
         mock_yaml_open.assert_called_once_with(location, 'r')
 
     @mock.patch.object(yaml_util, 'open')
     def test_get_non_existent_file(self, mock_yaml_open):
         location = 'tmp_location'
         mock_yaml_open.side_effect = IOError
-        self.assertRaises(exceptions.FileNotFound, yaml_util.get_yaml, location)
+        self.assertRaises(exceptions.FileNotFound,
+                          yaml_util.get_yaml, location)
         mock_yaml_open.assert_called_once_with(location, 'r')
 
     @mock.patch.object(yaml_util.yaml, 'load')

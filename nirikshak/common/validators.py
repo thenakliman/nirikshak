@@ -33,8 +33,8 @@ def config_validator(section, config_opts=()):
                 LOG.error("%s configuration option could not be "
                           "found in %s section.", opt, section)
 
-                raise exceptions.ConfigurationNotFoundException(section=section,
-                                                                option=opt)
+                raise exceptions.ConfigurationNotFoundException(
+                    section=section, option=opt)
 
     def func(function):
         def inject_validation(self, **kwargs):

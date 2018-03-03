@@ -11,9 +11,9 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+import unittest
 
 import mock
-import unittest
 
 import nirikshak
 from nirikshak.common import exceptions
@@ -34,7 +34,8 @@ class ConfigValidatorTest(unittest.TestCase):
         super(ConfigValidatorTest, self).tearDown()
         del nirikshak.CONF
 
-    def _get_dummy_object(self, section, config_opts):
+    @staticmethod
+    def _get_dummy_object(section, config_opts):
         class DummyClass(object):
             @validators.config_validator(section, config_opts)
             def dummy_method(self, **kwargs):
@@ -42,19 +43,19 @@ class ConfigValidatorTest(unittest.TestCase):
 
         return DummyClass()
 
-    def test_validate_for_invalid_section(self):
+    def test_invalid_section(self):
         dummy_object = self._get_dummy_object('default1', [])
         with mock.patch.object(validators, 'LOG'):
             self.assertRaises(exceptions.SectionNotFoundException,
                               dummy_object.dummy_method)
 
-    def test_validate_for_invalid_config_options(self):
+    def test_invalid_config_options(self):
         dummy_object = self._get_dummy_object('default', ['invalid_opts'])
         with mock.patch.object(validators, 'LOG'):
             self.assertRaises(exceptions.ConfigurationNotFoundException,
                               dummy_object.dummy_method)
 
-    def test_validate_for_validate(self):
+    def test_valid_config(self):
         dummy_object = self._get_dummy_object('default', ['key1'])
         with mock.patch.object(validators, 'LOG'):
             self.assertEqual({'key': 'value'},

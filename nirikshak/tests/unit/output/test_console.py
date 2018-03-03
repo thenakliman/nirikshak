@@ -11,22 +11,24 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-import unittest
-
 import mock
 
 from nirikshak.output import console
 from nirikshak.tests.unit import base
+try:
+    import builtins
+except ImportError:
+    import __builtin__ as builtins
 
-@unittest.skip("Correct print function for python3")
+
 class OutputTest(base.BaseTestCase):
     # pylint: disable=no-self-use
-    def ttest_output(self):
-        inp = {}
-        t_soochis = base.get_test_keystone_soochi()['jaanches']['port_5000']
-        inp['port_5000'] = t_soochis
-        inp['port_5000']['formatted_output'] = 'test_output'
-        with mock.patch.object(builtin, 'print') as mock_print:
-            console.ConsoleFormatOutput().output(**inp)
-            # fixme(thenakliman): mock print
-            mock_print.assert_called()
+    def test_output(self):
+        fake_jaanch = {
+            'fake_jaanch': {
+                'formatted_output': 'test-jaanch'
+                }
+            }
+        with mock.patch.object(builtins, 'print') as mock_print:
+            console.ConsoleFormatOutput().output(**fake_jaanch)
+            mock_print.assert_called_once_with('test-jaanch')

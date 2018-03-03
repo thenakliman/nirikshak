@@ -12,21 +12,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 import copy
-import mock 
+import mock
 
 from nirikshak.tests.unit import base as test_base
 from nirikshak.post_task import console
 
 
 class TestFormatOutputConsole(test_base.BaseTestCase):
-    def setUp(self):
-        super(TestFormatOutputConsole, self).setUp()
-
-
-    def tearDown(self):
-        super(TestFormatOutputConsole, self).tearDown()
-
-
     @staticmethod
     def _get_fake_jaanch():
         fake_jaanch = {'jaanch': {}}
@@ -36,9 +28,9 @@ class TestFormatOutputConsole(test_base.BaseTestCase):
                 'result': 10
                 },
             'type': 'console',
-             'output': {
-                 'result': 10
-             }
+            'output': {
+                'result': 10
+            }
         }
         return fake_jaanch
 
@@ -55,22 +47,27 @@ class TestFormatOutputConsole(test_base.BaseTestCase):
         required_empty_spaces = 120 - len(jaanch_name_type_args_appended)
         jaanch_result = None
         try:
-            jaanch_result = "pass" if jaanch['jaanch']['input']['result'] == jaanch['jaanch']['output']['result'] else "fail"
+            if (jaanch['jaanch']['input']['result'] ==
+                    jaanch['jaanch']['output']['result']):
+                jaanch_result = 'pass'
+            else:
+                jaanch_result = 'fail'
         except KeyError:
             jaanch_result = jaanch['jaanch']['input']['result']
 
-        jaanch['jaanch']['formatted_output'] = ('%s%s%s' % (jaanch_name_type_args_appended,
-                                                 '.' * required_empty_spaces,
-                                                 jaanch_result)) 
+        jaanch['jaanch']['formatted_output'] = (
+            '%s%s%s' % (jaanch_name_type_args_appended,
+                        '.' * required_empty_spaces,
+                        jaanch_result))
 
         return jaanch
 
     def _test_post_task_with_given_jaanch(self, fake_jaanch, mock_info_log):
         console_post_task = console.FormatOutputConsole()
         formatted_output = console_post_task.format_output(**fake_jaanch)
-        # print(formatted_output, self._get_output_for_fake_jaanch(**copy.deepcopy(fake_jaanch)))
-        self.assertDictEqual(formatted_output,
-                             self._get_output_for_fake_jaanch(**copy.deepcopy(fake_jaanch)))
+        duplicate_jaanch = copy.deepcopy(fake_jaanch)
+        expected_output = self._get_output_for_fake_jaanch(**duplicate_jaanch)
+        self.assertDictEqual(formatted_output, expected_output)
         mock_info_log.assert_called()
 
     @mock.patch.object(console.LOG, 'info')
@@ -79,19 +76,19 @@ class TestFormatOutputConsole(test_base.BaseTestCase):
         self._test_post_task_with_given_jaanch(fake_jaanch, mock_info_log)
 
     @mock.patch.object(console.LOG, 'info')
-    def test_post_task_for_console_with_multiple_args(self, mock_info_log):
+    def test_console_with_multiple_args(self, mock_info_log):
         fake_jaanch = self._get_fake_jaanch()
         fake_jaanch['jaanch']['input']['args']['key1'] = 'value1'
         self._test_post_task_with_given_jaanch(fake_jaanch, mock_info_log)
 
     @mock.patch.object(console.LOG, 'info')
-    def test_post_task_for_console_that_fail(self, mock_info_log):
+    def test_console_when_jaanch_fail(self, mock_info_log):
         fake_jaanch = self._get_fake_jaanch()
         fake_jaanch['jaanch']['output']['result'] = 20
         self._test_post_task_with_given_jaanch(fake_jaanch, mock_info_log)
 
     @mock.patch.object(console.LOG, 'info')
-    def test_post_task_for_console_if_expected_output_not_given(self, mock_info_log):
+    def test_console_exp_output_not_given(self, mock_info_log):
         fake_jaanch = self._get_fake_jaanch()
         del fake_jaanch['jaanch']['output']['result']
         self._test_post_task_with_given_jaanch(fake_jaanch, mock_info_log)

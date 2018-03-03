@@ -11,8 +11,6 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-import unittest
-
 import mock
 import requests
 
@@ -20,6 +18,7 @@ import nirikshak
 from nirikshak.tests.unit import base as base_test
 from nirikshak.output import base
 from nirikshak.output import send
+
 
 class TestSend(base_test.BaseTestCase):
     @staticmethod
@@ -58,10 +57,10 @@ class TestSend(base_test.BaseTestCase):
                               mock_put_request, mock_error_log):
 
         data = {'jaanch': {'result': {}}}
+
         def make_dict(key, exp, **kwargs):
             kwargs[key]['result']['output'] = exp
             return kwargs
-
 
         def dump_json(jaanch):
             return jaanch
@@ -81,6 +80,7 @@ class TestSend(base_test.BaseTestCase):
                               mock_put_request, mock_info_log):
 
         data = {'jaanch': {'result': {}}}
+
         def make_dict(key, exp, **kwargs):
             kwargs[key]['result']['output'] = exp
             return kwargs

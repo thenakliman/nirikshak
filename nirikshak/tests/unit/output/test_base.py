@@ -11,11 +11,10 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+import unittest
 
 import copy
 import mock
-
-import unittest
 
 from nirikshak.output import base
 
@@ -57,18 +56,19 @@ class TestOutputBase(unittest.TestCase):
     @mock.patch.object(base.LOG, 'error')
     def test_output_for_non_existing_type(self, mock_error_log):
         fake_jaanch = get_fake_jaanch()
-        fake_jaanch['jaanch']['output']['type'] = 'fake_plugin' 
+        fake_jaanch['jaanch']['output']['type'] = 'fake_plugin'
         self.assertDictEqual(fake_jaanch, base.output(**fake_jaanch))
         mock_error_log.assert_called()
 
+    @staticmethod
     @mock.patch.object(base.LOG, 'error')
-    def test_output_if_plugin_fails(self, mock_error_log):
+    def test_output_if_plugin_fails(mock_error_log):
         register_plugin()
         # NOTE(thenakliman): Register the same plugin multiple times
         register_plugin()
         fake_jaanch = get_fake_jaanch()
         fake_jaanch['jaanch']['raise_exception'] = True
-        base.output(**fake_jaanch) 
+        base.output(**fake_jaanch)
         mock_error_log.assert_called()
 
     @mock.patch.object(base.LOG, 'info')
@@ -96,7 +96,10 @@ class TestMakeOutputDict(unittest.TestCase):
         exp_jaanch = base.make_output_dict('jaanch', 10,
                                            **copy.deepcopy(fake_jaanch))
         fake_jaanch['jaanch']['input'] = fake_jaanch['jaanch']['input']['args']
-        fake_jaanch['jaanch']['output'] = {'expected_output': 10, 'actual_output': 10}
+        fake_jaanch['jaanch']['output'] = {
+            'expected_output': 10,
+            'actual_output': 10
+        }
         self.assertDictEqual(exp_jaanch, fake_jaanch)
 
     def test_make_output_dict_if_args_not_available(self):

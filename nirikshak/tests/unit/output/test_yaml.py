@@ -38,7 +38,9 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
     @mock.patch.object(dump_yaml, 'open')
     @mock.patch.object(dump_yaml.YAMLFormatOutput, 'read_file')
     @mock.patch.object(yaml, 'dump')
-    def test_conf_without_section(self, mock_yaml_dump, mock_read_file, mock_open):
+    def test_conf_without_section(self, mock_yaml_dump,
+                                  mock_read_file, mock_open):
+
         f_name = '/var/lib/nirikshak/result.yaml'
         soochis = base_test.get_test_keystone_soochi()['jaanches']
         mock_read_file.return_value = {'port_5000': soochis['port_5000']}
@@ -52,7 +54,8 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
         }
         result.update({'port_5000': soochis['port_5000']})
         mock_read_file.assert_called_with(f_name)
-        mock_yaml_dump.assert_called_once_with(result, mock.ANY, default_flow_style=False)
+        mock_yaml_dump.assert_called_once_with(result, mock.ANY,
+                                               default_flow_style=False)
         mock_open.assert_called_once_with(f_name, "w")
 
     @mock.patch.object(dump_yaml.YAMLFormatOutput, 'read_file')
@@ -104,7 +107,7 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
         mock_get_yaml.assert_called_once_with(TEST_FILE)
 
     @mock.patch.object(yaml_util, 'get_yaml',
-                      side_effect=exceptions.FileNotFound(location=TEST_FILE))
+                       side_effect=exceptions.FileNotFound(location=TEST_FILE))
     @mock.patch.object(os, 'stat')
     def test_get_output_file_FileNotFoundError(self, mock_os, mock_get_yaml):
         yaml = dump_yaml.YAMLFormatOutput().read_file(TEST_FILE)

@@ -96,7 +96,9 @@ class JSONFormatOutputTest(base_test.BaseTestCase):
     @mock.patch.object(json, 'load', return_value={})
     @mock.patch.object(dump_json, 'open')
     @mock.patch.object(os, 'stat')
-    def test_get_output_file_json_dump_called(self, mock_os, mock_open, mock_json_load):
+    def test_get_output_file_json_dump_called(self, mock_os, mock_open,
+                                              mock_json_load):
+
         mock_os.return_value = mock.Mock(st_size=1000)
         exp = dump_json.JSONFormatOutput().get_output_file('test_file')
         self.assertEqual({}, exp)
@@ -109,7 +111,9 @@ class JSONFormatOutputTest(base_test.BaseTestCase):
     @mock.patch.object(dump_json, 'open')
     @mock.patch.object(os, 'stat')
     def test_get_output_file_content_json_error(self, mock_os, mock_open,
-                                                mock_json_load, mock_error_log):
+                                                mock_json_load,
+                                                mock_error_log):
+
         mock_os.return_value = mock.Mock(st_size=1000)
         exp = dump_json.JSONFormatOutput().get_output_file('test_file')
         self.assertEqual({}, exp)

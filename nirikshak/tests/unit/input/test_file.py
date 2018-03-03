@@ -23,7 +23,9 @@ from nirikshak.tests.unit import base
 class InputFileTest(base.BaseTestCase):
     def setUp(self):
         base.create_conf()
-        utils.load_modules_from_location([os.path.dirname(input_file.__file__)])
+        utils.load_modules_from_location(
+            [os.path.dirname(input_file.__file__)])
+
         super(InputFileTest, self).setUp()
 
     @staticmethod

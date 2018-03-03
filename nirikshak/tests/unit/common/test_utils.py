@@ -16,12 +16,13 @@ import unittest
 
 from nirikshak.common import utils
 
+
 class TestUtil(unittest.TestCase):
     def _test_dict_merge(self, dict1, dict2, exp_dict):
         utils.merge_dict(dict1, dict2)
         self.assertDictEqual(dict1, exp_dict)
 
-    def test_merge_one_empty_one_nonempty(self):
+    def test_merge_one_empty_one_not(self):
         dict1 = {}
         dict2 = {1: 3, 2: 'r'}
         exp_dict = {1: 3, 2: 'r'}
@@ -74,7 +75,7 @@ class TestUtil(unittest.TestCase):
                 'g': 2,
                 'k': {
                     'l': [2, 3],
-                    'm': {'n':2}
+                    'm': {'n': 2}
                 }
             }
         }

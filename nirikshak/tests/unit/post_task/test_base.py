@@ -11,10 +11,9 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+import unittest
 
 import mock
-
-import unittest
 
 from nirikshak.post_task import base
 
@@ -26,7 +25,7 @@ def register_plugin():
     class DummyClass(base.FormatOutput):
         def format_output(self, **kwargs):
             if kwargs.get('jaanch').get('raise_exception'):
-                raise Exception 
+                raise Exception
 
             return ['soochis']
 
@@ -40,8 +39,9 @@ class TestRegister(unittest.TestCase):
         register_plugin()
         self.assertIsNotNone(base.get_plugin(PLUGIN_NAME))
 
+    @staticmethod
     @mock.patch.object(base.LOG, 'info')
-    def test_register_already_registered_plugin(self, mock_info_log):
+    def test_register_already_registered_plugin(mock_info_log):
         register_plugin()
         register_plugin()
         mock_info_log.assert_called()
@@ -50,7 +50,7 @@ class TestRegister(unittest.TestCase):
 class TestFormatForOutput(unittest.TestCase):
     def tearDown(self):
         super(TestFormatForOutput, self).tearDown()
-        base.POST_TASK_PLUGIN_MAPPER = {} 
+        base.POST_TASK_PLUGIN_MAPPER = {}
 
     @staticmethod
     def _get_fake_jaanch():
@@ -76,6 +76,11 @@ class TestFormatForOutput(unittest.TestCase):
     @mock.patch.object(base.LOG, 'error')
     def test_format_output_if_error_occur_in_post_task(self, mock_error_log):
         register_plugin()
-        fake_jaanch = {'jaanch': {'post_task': 'dummy_class', 'raise_exception': True}}
+        fake_jaanch = {
+            'jaanch': {
+                'post_task': 'dummy_class',
+                'raise_exception': True
+                }
+            }
         self.assertIsNone(base.format_for_output(**fake_jaanch))
         mock_error_log.assert_called()

@@ -12,8 +12,6 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import unittest
-
 import csv
 import mock
 
@@ -65,9 +63,14 @@ class TestOutputCSV(base_test.BaseTestCase):
         mock_csv_writer_writerow = mock.Mock()
         mock_csv_writer.writerow = mock_csv_writer_writerow
         dump_csv.CSVFormatOutput().output(**jaanch)
-        mock_csv_reader.assert_called_once_with(mock.ANY, delimiter=' ', quotechar='|')
-        csv_sample_value += ('jaanch,input,key,value,output,expected_output,None,actual_output,None'.split(','),)
-        mock_writerow.assert_has_calls([mock.call(value) for value in csv_sample_value])
+        mock_csv_reader.assert_called_once_with(mock.ANY, delimiter=' ',
+                                                quotechar='|')
+        csv_sample_value += (
+            self._get_expected_csv_output_from_jaanch(jaanch),)
+
+        mock_writerow.assert_has_calls(
+            [mock.call(value) for value in csv_sample_value])
+
         self.assertEqual(3, mock_writerow.call_count)
         mock_info_log.assert_called()
 

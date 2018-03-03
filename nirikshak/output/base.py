@@ -45,7 +45,7 @@ class FormatOutput(object):
 
 
 def output(**kwargs):
-    jaanch_parameters = kwargs.values()[0]
+    jaanch_parameters = list(kwargs.values())[0]
     output_plugin = jaanch_parameters.get('output', {}).get('type', 'console')
 
     try:
@@ -67,14 +67,14 @@ def output(**kwargs):
 
 
 def make_output_dict(key, expected_result, **kwargs):
-    output = {}
+    output_dict = {}
     try:
-        output = {'actual_output': kwargs[key]['input']['result']}
+        output_dict = {'actual_output': kwargs[key]['input']['result']}
     except KeyError:
         LOG.error("result key does not exist in the dictionary")
 
     if expected_result is not None:
-        output['expected_output'] = expected_result
+        output_dict['expected_output'] = expected_result
 
     jaanch = {key: {}}
     try:
@@ -82,5 +82,5 @@ def make_output_dict(key, expected_result, **kwargs):
     except KeyError:
         pass
 
-    jaanch[key]['output'] = output
+    jaanch[key]['output'] = output_dict
     return jaanch
