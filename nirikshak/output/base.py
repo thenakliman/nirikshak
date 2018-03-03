@@ -25,7 +25,7 @@ def register(plugin_name):
     def register_output(cls):
         global OUTPUT_PLUGIN_MAPPER
 
-        if output in OUTPUT_PLUGIN_MAPPER:
+        if plugin_name in OUTPUT_PLUGIN_MAPPER:
             LOG.info("For %s output, plugin is already "
                      "registered", plugin_name)
         else:
@@ -45,13 +45,13 @@ class FormatOutput(object):
 
 
 def output(**kwargs):
-    values = kwargs.values()[0]
-    out = values.get('output', {}).get('type', 'console')
+    jaanch_parameters = kwargs.values()[0]
+    output_plugin = jaanch_parameters.get('output', {}).get('type', 'console')
 
     try:
-        plugin = OUTPUT_PLUGIN_MAPPER[out]
+        plugin = OUTPUT_PLUGIN_MAPPER[output_plugin]
     except KeyError:
-        LOG.error("%s plugin for output could not be found", out)
+        LOG.error("%s plugin for output could not be found", output_plugin)
         return kwargs
 
     soochis = kwargs
@@ -59,7 +59,7 @@ def output(**kwargs):
         soochis = getattr(plugin, 'output')(**kwargs)
     except Exception:
         LOG.error("%s jaanch get failed for %s output.",
-                  list(kwargs.keys())[0], out, exc_info=True)
+                  list(kwargs.keys())[0], output_plugin, exc_info=True)
     else:
         LOG.info("%s soochis has been returned by the plugin", soochis)
 
@@ -67,14 +67,14 @@ def output(**kwargs):
 
 
 def make_output_dict(key, expected_result, **kwargs):
-    out = None
+    output = {}
     try:
-        out = {'actual_output': kwargs[key]['input']['result']}
+        output = {'actual_output': kwargs[key]['input']['result']}
     except KeyError:
         LOG.error("result key does not exist in the dictionary")
 
     if expected_result is not None:
-        out['expected_output'] = expected_result
+        output['expected_output'] = expected_result
 
     jaanch = {key: {}}
     try:
@@ -82,5 +82,5 @@ def make_output_dict(key, expected_result, **kwargs):
     except KeyError:
         pass
 
-    jaanch[key]['output'] = out
+    jaanch[key]['output'] = output
     return jaanch

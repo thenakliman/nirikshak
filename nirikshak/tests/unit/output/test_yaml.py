@@ -41,7 +41,7 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
         result = {
             'port_35357': {
                 'input': soochis['port_35357']['input']['args'],
-                'output': None
+                'output': {}
             }
         }
         result.update({'port_5000': soochis['port_5000']})
