@@ -15,10 +15,6 @@ import mock
 
 from nirikshak.output import console
 from nirikshak.tests.unit import base
-try:
-    import builtins
-except ImportError:
-    import __builtin__ as builtins
 
 
 class OutputTest(base.BaseTestCase):
@@ -29,6 +25,6 @@ class OutputTest(base.BaseTestCase):
                 'formatted_output': 'test-jaanch'
                 }
             }
-        with mock.patch.object(builtins, 'print') as mock_print:
+        with mock.patch.object(console, 'print') as mock_print:
             console.ConsoleFormatOutput().output(**fake_jaanch)
             mock_print.assert_called_once_with('test-jaanch')
