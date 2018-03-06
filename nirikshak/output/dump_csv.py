@@ -16,12 +16,13 @@ import logging
 import csv
 
 import nirikshak
+from nirikshak.common import plugins
 from nirikshak.output import base
 
 LOG = logging.getLogger(__name__)
 
 
-@base.register('csv')
+@plugins.register('csv')
 class CSVFormatOutput(base.FormatOutput):
     @staticmethod
     def _get_output_file_location():

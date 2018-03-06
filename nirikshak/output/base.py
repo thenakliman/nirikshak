@@ -16,24 +16,10 @@ from abc import ABCMeta, abstractmethod
 import logging
 import six
 
+from nirikshak.common import plugins
+
+
 LOG = logging.getLogger(__name__)
-
-OUTPUT_PLUGIN_MAPPER = {}
-
-
-def register(plugin_name):
-    def register_output(cls):
-        global OUTPUT_PLUGIN_MAPPER
-
-        if plugin_name in OUTPUT_PLUGIN_MAPPER:
-            LOG.info("For %s output, plugin is already "
-                     "registered", plugin_name)
-        else:
-            OUTPUT_PLUGIN_MAPPER[plugin_name] = cls()
-
-        return cls
-
-    return register_output
 
 
 @six.add_metaclass(ABCMeta)
@@ -49,7 +35,7 @@ def output(**kwargs):
     output_plugin = jaanch_parameters.get('output', {}).get('type', 'console')
 
     try:
-        plugin = OUTPUT_PLUGIN_MAPPER[output_plugin]
+        plugin = plugins.get_plugin(output_plugin)
     except KeyError:
         LOG.error("%s plugin for output could not be found", output_plugin)
         return kwargs

@@ -18,6 +18,7 @@ import requests
 
 import nirikshak
 from nirikshak.output import base
+from nirikshak.common import plugins
 from nirikshak.common import validators
 
 LOG = logging.getLogger(__name__)
@@ -25,7 +26,7 @@ LOG = logging.getLogger(__name__)
 SECTION = 'output_send'
 
 
-@base.register('send')
+@plugins.register('send')
 class NetworkSendOutput(base.FormatOutput):
     @validators.config_validator(SECTION, ('host', 'port'))
     def output(self, **kwargs):

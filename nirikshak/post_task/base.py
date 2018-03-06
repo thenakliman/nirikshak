@@ -16,30 +16,9 @@ from abc import ABCMeta, abstractmethod
 import logging
 import six
 
+from nirikshak.common import plugins
+
 LOG = logging.getLogger(__name__)
-
-POST_TASK_PLUGIN_MAPPER = {}
-
-
-def add_plugin(plugin_name, plugin):
-    POST_TASK_PLUGIN_MAPPER[plugin_name] = plugin()
-
-
-def get_plugin(plugin_name):
-    return POST_TASK_PLUGIN_MAPPER.get(plugin_name)
-
-
-def register(post_task):
-    def register_post_task(cls):
-        if get_plugin(post_task) is None:
-            add_plugin(post_task, cls)
-        else:
-            LOG.info("For %s post task, plugin is already "
-                     "registered", post_task)
-
-        return cls
-
-    return register_post_task
 
 
 @six.add_metaclass(ABCMeta)
@@ -57,7 +36,7 @@ def format_for_output(**kwargs):
     else:
         post_task = values.get('post_task', 'dummy')
 
-    plugin = get_plugin(post_task)
+    plugin = plugins.get_plugin(post_task)
     soochis = None
     try:
         soochis = getattr(plugin, 'format_output')(**kwargs)

@@ -14,12 +14,13 @@
 
 import logging
 
+from nirikshak.common import plugins
 from nirikshak.post_task import base
 
 LOG = logging.getLogger(__name__)
 
 
-@base.register('console')
+@plugins.register('console')
 class FormatOutputConsole(base.FormatOutput):
     @staticmethod
     def _get_jaanch_result(jaanch_parameter):

@@ -17,12 +17,13 @@ import json
 import os
 
 import nirikshak
+from nirikshak.common import plugins
 from nirikshak.output import base
 
 LOG = logging.getLogger(__name__)
 
 
-@base.register('json')
+@plugins.register('json')
 class JSONFormatOutput(base.FormatOutput):
     @staticmethod
     def get_output_file(f_name):

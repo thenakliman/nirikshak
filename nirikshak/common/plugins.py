@@ -11,14 +11,22 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-from __future__ import print_function
-
-from nirikshak.common import plugins
-from nirikshak.output import base
 
 
-@plugins.register('console')
-class ConsoleFormatOutput(base.FormatOutput):
-    def output(self, **args):
-        k = list(args.keys())[0]
-        print(args[k]['formatted_output'])
+_PLUGINS = {}
+
+
+def add_plugin(plugin_name, plugin):
+    _PLUGINS[plugin_name] = plugin()
+
+
+def get_plugin(plugin_name):
+    return _PLUGINS.get(plugin_name)
+
+
+def register(plugin_name):
+    def save_plugin(cls):
+        add_plugin(plugin_name, cls)
+        return cls
+
+    return save_plugin

@@ -12,10 +12,11 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from nirikshak.common import plugins
 from nirikshak.post_task import base
 
 
-@base.register('dummy')
+@plugins.register('dummy')
 class FormatOutputConsole(base.FormatOutput):
 
     def format_output(self, **kwargs):

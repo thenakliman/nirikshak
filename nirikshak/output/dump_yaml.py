@@ -17,14 +17,15 @@ import os
 import yaml
 
 import nirikshak
-from nirikshak.common import yaml_util
 from nirikshak.common import exceptions
+from nirikshak.common import plugins
+from nirikshak.common import yaml_util
 from nirikshak.output import base
 
 LOG = logging.getLogger(__name__)
 
 
-@base.register('yaml')
+@plugins.register('yaml')
 class YAMLFormatOutput(base.FormatOutput):
 
     @staticmethod

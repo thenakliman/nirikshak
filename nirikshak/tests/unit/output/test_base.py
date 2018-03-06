@@ -16,13 +16,14 @@ import unittest
 import copy
 import mock
 
+from nirikshak.common import plugins
 from nirikshak.output import base
 
 PLUGIN_NAME = 'dummy_output'
 
 
 def register_plugin():
-    @base.register(PLUGIN_NAME)
+    @plugins.register(PLUGIN_NAME)
     class DummyClass(base.FormatOutput):
         def output(self, **kwargs):
             if kwargs['jaanch'].get('raise_exception'):
@@ -51,7 +52,7 @@ def get_fake_jaanch():
 class TestOutputBase(unittest.TestCase):
     def tearDown(self):
         super(TestOutputBase, self).tearDown()
-        base.OUTPUT_PLUGIN_MAPPER.clear()
+        plugins._PLUGINS.clear()
 
     @mock.patch.object(base.LOG, 'error')
     def test_output_for_non_existing_type(self, mock_error_log):

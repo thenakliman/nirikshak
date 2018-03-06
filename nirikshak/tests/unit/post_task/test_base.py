@@ -16,12 +16,13 @@ import unittest
 import mock
 
 from nirikshak.post_task import base
+from nirikshak.common import plugins
 
 PLUGIN_NAME = 'dummy_class'
 
 
 def register_plugin():
-    @base.register(PLUGIN_NAME)
+    @plugins.register(PLUGIN_NAME)
     class DummyClass(base.FormatOutput):
         def format_output(self, **kwargs):
             if kwargs.get('jaanch').get('raise_exception'):
@@ -30,27 +31,14 @@ def register_plugin():
             return ['soochis']
 
 
-class TestRegister(unittest.TestCase):
-    def tearDown(self):
-        super(TestRegister, self).tearDown()
-        base.POST_TASK_PLUGIN_MAPPER = {}
-
-    def test_register_post_task(self):
-        register_plugin()
-        self.assertIsNotNone(base.get_plugin(PLUGIN_NAME))
-
-    @staticmethod
-    @mock.patch.object(base.LOG, 'info')
-    def test_register_already_registered_plugin(mock_info_log):
-        register_plugin()
-        register_plugin()
-        mock_info_log.assert_called()
-
-
 class TestFormatForOutput(unittest.TestCase):
+    def setUp(self):
+        super(TestFormatForOutput, self).setUp()
+        plugins._PLUGINS.clear()
+
     def tearDown(self):
         super(TestFormatForOutput, self).tearDown()
-        base.POST_TASK_PLUGIN_MAPPER = {}
+        plugins._PLUGINS.clear()
 
     @staticmethod
     def _get_fake_jaanch():
