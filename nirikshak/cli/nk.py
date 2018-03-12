@@ -46,7 +46,3 @@ def main():
     nirikshak.initialize_logging()
     base.Router().start(**argument)
     logging.info("Jaanch has been finished, check results")
-
-
-if __name__ == "__main__":
-    main()
