@@ -14,7 +14,12 @@
 
 from __future__ import print_function
 import logging
-import configparser
+try:
+    # for python3.5
+    import configparser
+except ImportError:
+    # for python2.7
+    import ConfigParser as configparser
 
 CONF = None
 
