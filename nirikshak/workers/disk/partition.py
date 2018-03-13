@@ -15,12 +15,13 @@
 import logging
 import psutil
 
+from nirikshak.common import plugins
 from nirikshak.workers import base
 
 LOG = logging.getLogger(__name__)
 
 
-@base.register('disk_partition')
+@plugins.register('disk_partition')
 class DiskPartitionWorker(base.Worker):
 
     @base.match_expected_output

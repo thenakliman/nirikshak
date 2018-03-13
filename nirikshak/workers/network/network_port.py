@@ -15,6 +15,7 @@
 import logging
 import socket
 
+from nirikshak.common import plugins
 from nirikshak.workers import base
 
 LOG = logging.getLogger(__name__)
@@ -25,7 +26,7 @@ PROTOCOL_MAPPING = {
 }
 
 
-@base.register('network_port')
+@plugins.register('network_port')
 class NetworkPortWorker(base.Worker):
 
     @base.match_expected_output

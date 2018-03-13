@@ -15,12 +15,13 @@
 import logging
 import configparser
 
+from nirikshak.common import plugins
 from nirikshak.workers import base
 
 LOG = logging.getLogger(__name__)
 
 
-@base.register('ini')
+@plugins.register('ini')
 class INIConfigValidatorWorker(base.Worker):
 
     @base.match_expected_output

@@ -17,6 +17,7 @@ import logging
 import apt
 
 from nirikshak.common import constants
+from nirikshak.common import plugins
 from nirikshak.common import synchronizer
 from nirikshak.workers import base
 
@@ -26,7 +27,7 @@ LOG = logging.getLogger(__name__)
 LOCK_NAME = 'APT'
 
 
-@base.register('apt_install')
+@plugins.register('apt_install')
 class APTWorker(base.Worker):
 
     @base.match_expected_output

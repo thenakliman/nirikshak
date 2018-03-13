@@ -15,12 +15,13 @@
 import logging
 import dbus
 
+from nirikshak.common import plugins
 from nirikshak.workers import base
 
 LOG = logging.getLogger(__name__)
 
 
-@base.register('systemd_enabled')
+@plugins.register('systemd_enabled')
 class SystemdEnabledWorker(base.Worker):
 
     @base.match_expected_output

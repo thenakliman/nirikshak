@@ -18,23 +18,11 @@ import logging
 import six
 
 from nirikshak.common import exceptions
+from nirikshak.common import plugins
 
 LOG = logging.getLogger(__name__)
 
 WORKER_PLUGIN_MAPPER = {}
-
-
-def register(worker):
-    def register_worker(cls):
-        global WORKER_PLUGIN_MAPPER
-        if worker in WORKER_PLUGIN_MAPPER:
-            LOG.info("For %s worker type, plugin is already "
-                     "registered", worker)
-
-        WORKER_PLUGIN_MAPPER[worker] = cls()
-        return cls
-
-    return register_worker
 
 
 def validate(required=(), optional=()):
@@ -80,7 +68,6 @@ def match_expected_output(validator):
 
 
 def do_work(**kwargs):
-    global WORKER_PLUGIN_MAPPER
     key = list(kwargs.keys())[0]
     kwargs = kwargs[key]
     try:
@@ -89,12 +76,7 @@ def do_work(**kwargs):
         LOG.error("type for worker is not defined")
         return kwargs
 
-    try:
-        plugin = WORKER_PLUGIN_MAPPER[worker]
-    except KeyError:
-        LOG.error("%s worker could not be found", worker)
-        return kwargs
-
+    plugin = plugins.get_plugin(worker)
     try:
         result = getattr(plugin, 'work')(**kwargs)
     except Exception:

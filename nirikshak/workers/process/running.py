@@ -14,12 +14,13 @@
 import logging
 import psutil
 
+from nirikshak.common import plugins
 from nirikshak.workers import base
 
 LOG = logging.getLogger(__name__)
 
 
-@base.register('process_running')
+@plugins.register('process_running')
 class RunningProcessWorker(base.Worker):
 
     @base.match_expected_output
