@@ -24,17 +24,13 @@ LOG = logging.getLogger(__name__)
 class FormatOutputConsole(base.FormatOutput):
     @staticmethod
     def _get_jaanch_result(jaanch_parameter):
-        jaanch_result = ''
         if 'result' in jaanch_parameter['output']:
             if str(jaanch_parameter['output']['result']) == \
                     str(jaanch_parameter['input']['result']):
                 return 'pass'
             return 'fail'
 
-        if jaanch_result == '':
-            return jaanch_parameter['input']['result']
-
-        return None
+        return jaanch_parameter['input']['result']
 
     def format_output(self, **kwargs):
         jaanch_name = list(kwargs.keys())[0]

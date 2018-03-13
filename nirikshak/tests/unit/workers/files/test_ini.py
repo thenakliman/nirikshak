@@ -34,13 +34,14 @@ class INIConfigValidatorWorkerTest(base.BaseTestCase):
         result = ini.INIConfigValidatorWorker().work(**jaanch)
         self.assertEqual(result, jaanch)
 
-    @mock.patch.object(configparser.ConfigParser, 'read')
+    @mock.patch.object(configparser, 'ConfigParser')
     def test_init_invalid_config(self, mock_config_parser):
         jaanch = base.get_ini_jaanch()
 
         def test_get(section=None, key=None):
             raise ValueError
 
+        mock_config_parser.return_value = mock.Mock(get=test_get)
         mock_config_parser.get = test_get
         result = ini.INIConfigValidatorWorker().work(**jaanch)
         self.assertEqual(result, jaanch)

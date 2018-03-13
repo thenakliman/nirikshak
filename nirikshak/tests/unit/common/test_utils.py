@@ -54,7 +54,8 @@ class TestUtil(unittest.TestCase):
                 'k': {
                     'l': [2, 3]
                 }
-            }
+            },
+            'n': {1: 2}
         }
         dict2 = {
             'c': 1,
@@ -64,7 +65,8 @@ class TestUtil(unittest.TestCase):
                     'm': {'n': 2}
                 }
             },
-            'h': [1, 2]
+            'h': [1, 2],
+            'n': {4: 29}
         }
         exp_dict = {
             'a': 2,
@@ -77,6 +79,7 @@ class TestUtil(unittest.TestCase):
                     'l': [2, 3],
                     'm': {'n': 2}
                 }
-            }
+            },
+            'n': {1: 2, 4: 29}
         }
         self._test_dict_merge(dict1, dict2, exp_dict)

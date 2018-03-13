@@ -87,15 +87,15 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
         mock_os.assert_called_with(TEST_FILE)
 
     @mock.patch.object(os, 'stat')
-    def test_get_output_file_error(self, mock_os):
+    def test_get_output_file_error(self, mock_os_stat):
 
-        def test():
+        def test(fileLocation):
             raise OSError()
 
-        mock_os.side_effect = test
+        mock_os_stat.side_effect = test
         yaml = dump_yaml.YAMLFormatOutput().read_file(TEST_FILE)
         self.assertEqual({}, yaml)
-        mock_os.assert_called_with(TEST_FILE)
+        mock_os_stat.assert_called_with(TEST_FILE)
 
     @mock.patch.object(yaml_util, 'get_yaml', return_value={})
     @mock.patch.object(os, 'stat')

@@ -34,12 +34,8 @@ def output(**kwargs):
     jaanch_parameters = list(kwargs.values())[0]
     output_plugin = jaanch_parameters.get('output', {}).get('type', 'console')
 
-    try:
-        plugin = plugins.get_plugin(output_plugin)
-    except KeyError:
-        LOG.error("%s plugin for output could not be found", output_plugin)
-        return kwargs
-
+    # NOTE(thenakliman): if plugin is not registered then it returns kwargs
+    plugin = plugins.get_plugin(output_plugin)
     soochis = kwargs
     try:
         soochis = getattr(plugin, 'output')(**kwargs)

@@ -238,12 +238,9 @@ class InputFileTest(base.BaseTestCase):
     @mock.patch('nirikshak.common.yaml_util.get_yaml')
     def test_with_invalid_groups(self, get_yaml):
         def get_yaml_file(location):
-            if 'main' in location:
-                t_soochis = base.get_main_yaml()
-                t_soochis['monitor']['groups'] = ['test_group']
-                return t_soochis
-
-            return self.mock_get_yaml(location)
+            t_soochis = base.get_main_yaml()
+            t_soochis['monitor']['groups'] = ['test_group']
+            return t_soochis
 
         get_yaml.side_effect = get_yaml_file
         soochis = input_file.get_soochis(soochis=[], groups=['monitor'])
