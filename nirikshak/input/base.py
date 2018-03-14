@@ -19,26 +19,11 @@ import six
 
 import nirikshak
 from nirikshak.common import exceptions
+from nirikshak.common import plugins
 from nirikshak.common import utils
 from nirikshak.input import input as input_base
 
 LOG = logging.getLogger(__name__)
-
-INPUT_PLUGIN_MAPPER = {}
-
-
-def register(input_type):
-    def register_input(cls):
-        global INPUT_PLUGIN_MAPPER
-
-        if input_type in INPUT_PLUGIN_MAPPER:
-            LOG.info("For %s input type, plugin is already "
-                     "registered", input_type)
-
-        INPUT_PLUGIN_MAPPER[input_type] = cls()
-        return cls
-
-    return register_input
 
 
 @six.add_metaclass(ABCMeta)
@@ -157,12 +142,12 @@ class Input(input_base.Input):
 
 def get_soochis(soochis=None, groups=None):
     input_type = nirikshak.CONF['default'].get('input_type', 'input_file')
+    plugin = plugins.get_plugin(input_type)
     try:
-        plugin = INPUT_PLUGIN_MAPPER[input_type]
-    except KeyError:
-        LOG.error("%s plugin for input could not found", input_type)
+        soochis = getattr(plugin, 'get_soochis')(soochis=soochis, groups=groups)
+    except Exception:
+        LOG.error("Error in getting soochis from %s plugin", input_type)
         return []
 
-    soochis = getattr(plugin, 'get_soochis')(soochis=soochis, groups=groups)
     LOG.info("%s soochis has been returned by the plugin", soochis)
     return soochis
