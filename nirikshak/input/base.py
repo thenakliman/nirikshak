@@ -144,7 +144,8 @@ def get_soochis(soochis=None, groups=None):
     input_type = nirikshak.CONF['default'].get('input_type', 'input_file')
     plugin = plugins.get_plugin(input_type)
     try:
-        soochis = getattr(plugin, 'get_soochis')(soochis=soochis, groups=groups)
+        soochis = getattr(plugin, 'get_soochis')(soochis=soochis,
+                                                 groups=groups)
     except Exception:
         LOG.error("Error in getting soochis from %s plugin", input_type)
         return []

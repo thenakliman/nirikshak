@@ -21,6 +21,9 @@ def merge_dict(dict2, dict1):
         if dict2.get(key):
             if isinstance(dict2[key], dict):
                 merge_dict(dict2[key], dict1[key])
+            # NOTE(thenakliman): If use case comes then we might have to
+            # consider set and list merging if they are being under the
+            # same key. Waiting for use case.
         else:
             dict2[key] = copy.deepcopy(value)
 
