@@ -81,6 +81,7 @@ def do_work(**kwargs):
         result = getattr(plugin, 'work')(**kwargs)
     except Exception:
         LOG.error("%s worker failed", exc_info=True)
+        return kwargs
     else:
         LOG.info("%s jaanch has been completed by the plugin", key)
 

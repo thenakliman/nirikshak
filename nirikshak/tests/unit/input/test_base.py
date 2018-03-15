@@ -16,6 +16,8 @@ import os
 import mock
 
 import nirikshak
+from nirikshak.common import exceptions
+from nirikshak.common import plugins
 from nirikshak.common import utils
 from nirikshak.input import base as input_base
 from nirikshak.tests.unit import base
@@ -249,4 +251,63 @@ class InputFileTest(base.BaseTestCase):
 
         get_yaml.side_effect = get_yaml_file
         soochis = input_base.get_soochis(soochis=[], groups=['monitor'])
+
         self.assertEqual([], soochis)
+
+    @staticmethod
+    def _get_fake_plugin():
+        @plugins.register('input_file')
+        class FakePlugin(input_base.Input):
+            def get_main_file(self):
+                pass
+
+            def get_soochi_content(self, soochi):
+                pass
+
+            def get_yaml_file(self):
+                pass
+
+        return FakePlugin
+
+    def test_soochi_with_error(self):
+        self._get_fake_plugin()
+
+        self.assertEqual([], input_base.get_soochis())
+
+    def test_get_soochi_file_not_found(self):
+
+        def get_main_file(self):
+            raise exceptions.FileNotFound
+
+        fake_plugin = self._get_fake_plugin()
+        fake_plugin.get_main_file = get_main_file
+
+        self.assertEqual([], input_base.get_soochis())
+
+    def test_get_soochi_file_failed(self):
+        fake_plugin = self._get_fake_plugin()
+
+        def get_soochi_content(self, soochi):
+            raise exceptions.FileNotFound
+
+        def _get_executable_soochis(self, soochis, group):
+            return [base.get_test_keystone_soochi()]
+
+        fake_plugin.get_soochi_content = get_soochi_content
+        fake_plugin._get_executable_soochis = _get_executable_soochis
+
+        self.assertEqual([], input_base.get_soochis())
+
+    def test_get_invalid_soochi_file_failed(self):
+        fake_plugin = self._get_fake_plugin()
+
+        def get_soochi_content(self, soochi):
+            raise exceptions.InvalidFormatException
+
+        def _get_executable_soochis(self, soochis, group):
+            return [base.get_test_keystone_soochi()]
+
+        fake_plugin.get_soochi_content = get_soochi_content
+        fake_plugin._get_executable_soochis = _get_executable_soochis
+
+        self.assertEqual([], input_base.get_soochis())

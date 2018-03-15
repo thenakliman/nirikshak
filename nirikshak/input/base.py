@@ -74,21 +74,6 @@ class Input(input_base.Input):
     def _get_config(configuration, group):
         return configuration[group].get('config', {})
 
-    @classmethod
-    def _merge_config(cls, group_config, soochi_config):
-        config = {}
-        for key, value in group_config.items():
-            if soochi_config.get(key):
-                if isinstance(soochi_config[key], dict):
-                    config[key] = cls._merge_config(group_config[key],
-                                                    soochi_config[key])
-                else:
-                    config[key] = value
-            else:
-                config[key] = copy.deepcopy(value)
-
-        return config
-
     def _get_executable_soochis(self, soochis, groups):
         group_config = {}
 
