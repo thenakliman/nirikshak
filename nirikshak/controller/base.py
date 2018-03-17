@@ -76,11 +76,6 @@ class Router(object):
         return [os.path.dirname(module.__file__)]
 
     @staticmethod
-    def _call_method(module, method, *args, **kwargs):
-        """Generfic method to call method defined in other module"""
-        return getattr(module, method)(*args, **kwargs)
-
-    @staticmethod
     def _get_soochis(soochis=None, groups=None):
         """Calls the input module to return soochis to be executed"""
         return inputs.get_soochis(soochis, groups)
