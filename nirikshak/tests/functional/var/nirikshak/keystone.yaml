@@ -1,0 +1,47 @@
+jaanches: 
+  port_5000:
+    type: network_port
+    input:
+      args:
+        ip: localhost
+        port: 5000
+  port_35357:
+    type: network_port
+    post_task: dummy
+    input:
+      args:
+        ip: localhost
+        port: 35357
+  disk_not_mounted:
+    type: disk_partition
+    input:
+      args:
+        device: /dev/sda5
+        fstype: ext4
+        mountpoint: /
+  disk_mounted:
+    type: disk_partition
+    input:
+      args:
+        device: /dev/sda1
+        fstype: ext4
+        mountpoint: /etc/hosts
+  process_not_running:
+    type: process_running
+    input:
+      args:
+        name: sshd
+  ini:
+    type: ini
+    input:
+      args:
+        file: /etc/nirikshak/nirikshak.conf
+        section: default
+        key: log_level
+  ini_does_not_exist:
+    type: ini
+    input:
+      args:
+        file: /etc/nirikshak/nirikshak.conf
+        section: default
+        key: log_levell

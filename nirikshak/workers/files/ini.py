@@ -13,7 +13,10 @@
 # under the License.
 
 import logging
-import configparser
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
 
 from nirikshak.common import plugins
 from nirikshak.workers import base
