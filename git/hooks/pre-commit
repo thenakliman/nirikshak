@@ -1,0 +1,8 @@
+#!/bin/sh
+
+echo "Running pep8 style check .."
+tox -epep8
+echo "Running py27 tests .."
+tox -epy27
+echo "Running py35 tests .."
+tox -epy35
