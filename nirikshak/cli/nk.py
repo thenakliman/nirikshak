@@ -44,5 +44,5 @@ def main():
     del argument['config_file']
     nirikshak.initialize_config()
     nirikshak.initialize_logging()
-    base.Router().start(**argument)
+    base.execute(**argument)
     logging.info("Jaanch has been finished, check results")

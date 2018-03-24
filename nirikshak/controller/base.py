@@ -47,82 +47,84 @@ def worker(queue, soochi):
             LOG.error("%s jaanch failed to get executed", name)
 
 
-class Router(object):
-    """This class routes the work to proper modules and load them
-       as per requirement."""
-    def __init__(self):
-        workers_num = nirikshak.CONF['default'].get('workers', -1)
-        workers_num = int(workers_num)
-        # fixme(thenakliman): Verify locking is really being done
-        lock = []
-        for resource in constants.LOCKABLE_RESOURCES_INDEX.__dict__:
-            if not resource.startswith('__'):
-                lock.append(multiprocessing.Lock())
+def _get_workers_pool():
+    workers_num = nirikshak.CONF['default'].get('workers', -1)
+    workers_num = int(workers_num)
+    # fixme(thenakliman): Verify locking is really being done
+    lock = []
+    for resource in constants.LOCKABLE_RESOURCES_INDEX.__dict__:
+        if not resource.startswith('__'):
+            lock.append(multiprocessing.Lock())
 
-        if workers_num == -1:
-            workers_num = multiprocessing.cpu_count()
+    if workers_num == -1:
+        workers_num = multiprocessing.cpu_count()
 
-        self.pool = multiprocessing.Pool(workers_num,
-                                         initializer=synchronizer.init_locks,
-                                         initargs=(lock,))
+    return multiprocessing.Pool(workers_num,
+                                initializer=synchronizer.init_locks,
+                                initargs=(lock,))
 
-        self.queue = multiprocessing.Manager().Queue()
-        utils.load_modules_from_location(self.get_module_path(output))
-        utils.load_modules_from_location(self.get_module_path(inputs))
-        LOG.info("Router has been initilized")
 
-    @staticmethod
-    def get_module_path(module):
-        return [os.path.dirname(module.__file__)]
+def _load_modules():
+    utils.load_modules_from_location(get_module_path(output))
+    utils.load_modules_from_location(get_module_path(inputs))
 
-    @staticmethod
-    def _get_soochis(soochis=None, groups=None):
-        """Calls the input module to return soochis to be executed"""
-        return inputs.get_soochis(soochis, groups)
 
-    @staticmethod
-    def _format_output(**k):
-        """Calls post task formatting to be done."""
-        return post_task.format_for_output(**k)
+def get_module_path(module):
+    return [os.path.dirname(module.__file__)]
 
-    @staticmethod
-    def _output_result(**k):
-        """Output the result through plugins defined in the configuration"""
-        return output.output(**k)
 
-    def _start_worker(self, soochis_def):
-        """Dispatch the worker to process pool"""
-        for soochi in soochis_def:
-            self.pool.apply_async(worker, args=(self.queue, soochi))
+def _get_soochis(soochis=None, groups=None):
+    """Calls the input module to return soochis to be executed"""
+    return inputs.get_soochis(soochis, groups)
 
-        self.pool.close()
-        self.pool.join()
-        while not self.queue.empty():
-            try:
-                jaanch = self.queue.get()
-                formatted_output = self._format_output(**jaanch)
-                self._output_result(**formatted_output)
-            except ImportError:
-                pass
-            except exceptions.PostTaskException:
-                pass
 
-    @staticmethod
-    def _merge_configs(soochis_def):
-        """Merge configuration dictionaries"""
-        new_def = []
-        for soochis in soochis_def:
-            config = soochis[0]
-            for jaanch in soochis[1]['jaanches']:
-                utils.merge_dict(soochis[1]['jaanches'][jaanch], config)
-            new_def.append(soochis[1])
+def _format_output(**k):
+    """Calls post task formatting to be done."""
+    return post_task.format_for_output(**k)
 
-        return new_def
 
-    def start(self, soochis=None, groups=None):
-        """Start jaanch process"""
-        LOG.info("Starting execution of soochis.")
-        soochis_def = self._get_soochis(soochis, groups)
-        soochis_def = self._merge_configs(soochis_def)
-        self._start_worker(soochis_def)
-        LOG.info("Execution of soochis are finished.")
+def _output_result(**k):
+    """Output the result through plugins defined in the configuration"""
+    return output.output(**k)
+
+
+def _start_worker(soochis_def):
+    """Dispatch the worker to process pool"""
+    queue = multiprocessing.Manager().Queue()
+    pool = _get_workers_pool()
+    for soochi in soochis_def:
+        pool.apply_async(worker, args=(queue, soochi))
+
+    pool.close()
+    pool.join()
+    while not queue.empty():
+        try:
+            jaanch = queue.get()
+            formatted_output = _format_output(**jaanch)
+            _output_result(**formatted_output)
+        except ImportError:
+            pass
+        except exceptions.PostTaskException:
+            pass
+
+
+def _merge_configs(soochis_def):
+    """Merge configuration dictionaries"""
+    new_def = []
+    for soochis in soochis_def:
+        config = soochis[0]
+        for jaanch in soochis[1]['jaanches']:
+            utils.merge_dict(soochis[1]['jaanches'][jaanch], config)
+        new_def.append(soochis[1])
+
+    return new_def
+
+
+def execute(soochis=None, groups=None):
+    """Start jaanch process"""
+    LOG.info("Starting execution of soochis.")
+    _load_modules()
+    soochis_def = _get_soochis(soochis, groups)
+    soochis_def = _merge_configs(soochis_def)
+    _start_worker(soochis_def)
+    LOG.info("Execution of soochis are finished.")

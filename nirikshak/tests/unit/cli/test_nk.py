@@ -24,13 +24,13 @@ from nirikshak.tests.unit import base as test_base
 class TestMain(test_base.BaseTestCase):
     @staticmethod
     @mock.patch.object(nk.logging, 'info')
-    @mock.patch.object(base, 'Router')
+    @mock.patch.object(base, 'execute')
     @mock.patch.object(nirikshak, 'initialize_config')
     @mock.patch.object(nirikshak, 'initialize_logging')
-    def test_main(mock_config, mock_logging, mock_router, mock_info):
+    def test_main(mock_config, mock_logging, mock_execute, mock_info):
         sys.argv = ['--group=deployment']
         nk.main()
         mock_config.assert_called_once_with()
-        mock_router.assert_called()
+        mock_execute.assert_called()
         mock_logging.assert_called_once_with()
         mock_info.assert_called()

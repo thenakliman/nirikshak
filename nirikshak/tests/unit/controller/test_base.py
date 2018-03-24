@@ -69,7 +69,7 @@ class WorkerTest(unittest.TestCase):
         mock_output.side_effect = output
         mock_post_task.side_effect = post_task
 
-        base_controller.Router().start(soochis=['soochi'], groups=['group'])
+        base_controller.execute(soochis=['soochi'], groups=['group'])
 
         mock_get_soochis.assert_called_once_with(['soochi'], ['group'])
         post_task_calls = [mock.call(jaanch1={'work': True}),
@@ -86,7 +86,7 @@ class WorkerTest(unittest.TestCase):
 
         mock_get_soochis.return_value = self._get_fake_jaanch()
         mock_do_work.side_effect = do_worker
-        base_controller.Router().start(soochis=['soochi'], groups=['group'])
+        base_controller.execute(soochis=['soochi'], groups=['group'])
 
         mock_get_soochis.assert_called_once_with(['soochi'], ['group'])
         post_task_calls = [mock.call(jaanch1={'work': True}),
@@ -114,7 +114,7 @@ class WorkerTest(unittest.TestCase):
     def test_workers_are_set_from_config(self):
         nirikshak.CONF['default']['workers'] = -1
         self.assertEqual(multiprocessing.cpu_count(),
-                         base_controller.Router().pool._processes)
+                         base_controller._get_workers_pool()._processes)
 
 
 class WorkerInvokeTest(unittest.TestCase):
