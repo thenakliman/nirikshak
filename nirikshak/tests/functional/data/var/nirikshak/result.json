@@ -1,0 +1,84 @@
+{
+    "disk_mounted": {
+        "input": {
+            "device": "/dev/sda1",
+            "fstype": "ext4",
+            "mountpoint": "/etc/resolv.conf"
+        },
+        "output": {
+            "actual_output": true
+        }
+    },
+    "disk_not_mounted": {
+        "input": {
+            "device": "/dev/sda5",
+            "fstype": "ext4",
+            "mountpoint": "/"
+        },
+        "output": {
+            "actual_output": null
+        }
+    },
+    "ini": {
+        "input": {
+            "file": "/etc/nirikshak/nirikshak.conf",
+            "key": "log_level",
+            "section": "default"
+        },
+        "output": {
+            "actual_output": "debug"
+        }
+    },
+    "ini_does_not_exist": {
+        "input": {
+            "file": "/etc/nirikshak/nirikshak.conf",
+            "key": "log_levell",
+            "section": "default"
+        },
+        "output": {
+            "actual_output": null
+        }
+    },
+    "port_135357": {
+        "input": {
+            "ip": "192.168.1.100",
+            "port": 35357
+        },
+        "output": {
+            "actual_output": 11
+        }
+    },
+    "port_15000": {
+        "input": {
+            "ip": "192.168.1.100",
+            "port": 5000
+        },
+        "output": {
+            "actual_output": 11
+        }
+    },
+    "port_35357": {
+        "input": {
+            "ip": "localhost",
+            "port": 35357
+        },
+        "output": {
+            "actual_output": 111
+        }
+    },
+    "port_5000": {
+        "input": {
+            "ip": "localhost",
+            "port": 5000
+        },
+        "output": {
+            "actual_output": 111
+        }
+    },
+    "process": {
+        "input": {
+            "name": "python /root/workers/process/inifinity.py"
+        },
+        "output": {}
+    }
+}
