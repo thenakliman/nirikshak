@@ -14,6 +14,7 @@
 
 from abc import ABCMeta
 from abc import abstractmethod
+import copy
 import logging
 import six
 
@@ -68,8 +69,6 @@ def match_expected_output(validator):
 
 
 def do_work(**kwargs):
-    key = list(kwargs.keys())[0]
-    kwargs = kwargs[key]
     try:
         worker = kwargs['type']
     except KeyError:
@@ -77,12 +76,13 @@ def do_work(**kwargs):
         return kwargs
 
     plugin = plugins.get_plugin(worker)
+    result = copy.deepcopy(kwargs)
     try:
         result = getattr(plugin, 'work')(**kwargs)
     except Exception:
         LOG.error("%s worker failed", exc_info=True)
         return kwargs
     else:
-        LOG.info("%s jaanch has been completed by the plugin", key)
+        LOG.info("%s jaanch has been completed by the plugin", kwargs['name'])
 
     return result
