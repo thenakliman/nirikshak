@@ -1,11 +1,11 @@
 jaanches: 
-  port_15000:
+  - name: port_15000
     type: network_port
     input:
       args:
         ip: 192.168.1.100
         port: 5000
-  port_135357:
+  - name: port_135357
     type: network_port
     input:
       args:

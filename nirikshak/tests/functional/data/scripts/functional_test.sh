@@ -4,6 +4,9 @@ git clone https://github.com/thenakliman/nirikshak
 echo "Chaing directory ..."
 cd /nirikshak
 
+echo "Checkout ci branch"
+git checkout -b ci
+
 echo "Installing latest code of nirikshak..."
 python setup.py install
 

@@ -1,5 +1,5 @@
 jaanches: 
-  port_5000:
+  - name: port_5000
     type: network/network_port
     input:
       type: file
@@ -9,7 +9,7 @@ jaanches:
         port: 5000
     output:
       type: console
-  port_35357:
+  - name: port_35357
     type: network/network_port
     input:
       type: file
