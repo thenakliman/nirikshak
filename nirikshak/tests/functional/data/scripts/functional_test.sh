@@ -5,7 +5,7 @@ echo "Chaing directory ..."
 cd /nirikshak
 
 echo "Checkout ci branch"
-git checkout -b ci
+git checkout -b functional_test
 
 echo "Installing latest code of nirikshak..."
 python setup.py install
