@@ -44,7 +44,8 @@ class WorkerTest(unittest.TestCase):
                  {'name': 'jaanch1', 'jaanch1_param': 'jaanch1_body'}]}],
             [{'key2': 'value2'}, {
                 'jaanches': [{
-                    'name': 'jaanch2', 'jaanch2_param': 'jaanch2_body', 'k2': 'v2'}]}]
+                    'name': 'jaanch2',
+                    'jaanch2_param': 'jaanch2_body', 'k2': 'v2'}]}]
         ]
 
     @mock.patch.object(base_post_task, 'format_for_output')

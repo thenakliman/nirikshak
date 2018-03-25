@@ -30,11 +30,10 @@ class FormatOutput(object):
 
 
 def format_for_output(**kwargs):
-    values = list(kwargs.values())[0]
-    if values.get('post_task', 'console') == 'console':
-        post_task = values.get('post_task', 'console')
+    if kwargs.get('post_task', 'console') == 'console':
+        post_task = kwargs.get('post_task', 'console')
     else:
-        post_task = values.get('post_task', 'dummy')
+        post_task = kwargs.get('post_task', 'dummy')
 
     plugin = plugins.get_plugin(post_task)
     soochis = None
@@ -45,9 +44,9 @@ def format_for_output(**kwargs):
         return kwargs
     except Exception:
         LOG.error("Error in formatting %s jaanch for %s post_task",
-                  list(kwargs.keys())[0], post_task, exc_info=True)
+                  kwargs['name'], post_task, exc_info=True)
     else:
         LOG.info("%s jaanch has been formatter by %s plugin",
-                 list(kwargs.keys())[0], post_task)
+                 kwargs['name'], post_task)
 
     return soochis

@@ -25,7 +25,7 @@ def register_plugin():
     @plugins.register(PLUGIN_NAME)
     class DummyClass(base.FormatOutput):
         def format_output(self, **kwargs):
-            if kwargs.get('jaanch').get('raise_exception'):
+            if kwargs.get('raise_exception'):
                 raise Exception
 
             return ['soochis']
@@ -42,11 +42,10 @@ class TestFormatForOutput(unittest.TestCase):
 
     @staticmethod
     def _get_fake_jaanch():
-        fake_jaanch = {'jaanch': {}}
-        fake_jaanch['jaanch'] = {
+        return {
+            'name': 'fake_jaancn',
             'post_task': 'dummy_class'
         }
-        return fake_jaanch
 
     @mock.patch.object(base.LOG, 'info')
     def test_format_output_if_post_task_defined(self, mock_info_log):
@@ -57,18 +56,17 @@ class TestFormatForOutput(unittest.TestCase):
 
     @mock.patch.object(base.LOG, 'error')
     def test_format_output_if_post_task_not_defined(self, mock_error_log):
-        fake_jaanch = {'jaanch': {}}
-        self.assertEqual(base.format_for_output(**fake_jaanch), fake_jaanch)
+        self.assertEqual(base.format_for_output(**{'name': 'fake_jaanch'}),
+                         {'name': 'fake_jaanch'})
         mock_error_log.assert_called()
 
     @mock.patch.object(base.LOG, 'error')
     def test_format_output_if_error_occur_in_post_task(self, mock_error_log):
         register_plugin()
         fake_jaanch = {
-            'jaanch': {
+                'name': 'fake_jaanch',
                 'post_task': 'dummy_class',
                 'raise_exception': True
-                }
             }
         self.assertIsNone(base.format_for_output(**fake_jaanch))
         mock_error_log.assert_called()
