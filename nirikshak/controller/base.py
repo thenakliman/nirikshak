@@ -40,11 +40,11 @@ def worker(queue, soochi):
     else:
         LOG.info("Loading worker modules.")
 
-    for name, jaanch in soochi['jaanches'].items():
+    for jaanch in soochi['jaanches']:
         try:
-            queue.put({name: base_worker.do_work(**{name: jaanch})})
+            queue.put(base_worker.do_work(**jaanch))
         except Exception:
-            LOG.error("%s jaanch failed to get executed", name)
+            LOG.error("%s jaanch failed to get executed", jaanch['name'])
 
 
 def _get_workers_pool():
@@ -114,7 +114,7 @@ def _merge_configs(soochis_def):
     for soochis in soochis_def:
         config = soochis[0]
         for jaanch in soochis[1]['jaanches']:
-            utils.merge_dict(soochis[1]['jaanches'][jaanch], config)
+            utils.merge_dict(jaanch, config)
         new_def.append(soochis[1])
 
     return new_def
