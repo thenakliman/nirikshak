@@ -1,11 +1,18 @@
-echo "Cloning repository"
-git clone https://github.com/thenakliman/nirikshak
+#echo "Cloning repository"
+#git clone https://github.com/thenakliman/nirikshak
 
 echo "Chaing directory ..."
 cd /nirikshak
 
 echo "Checkout ci branch"
-git checkout -b functional_test
+#git checkout -b functional_test
+
+echo "Current branch "
+git branch
+
+git log --oneline -10
+
+#git pull origin functional_test
 
 echo "Installing latest code of nirikshak..."
 python setup.py install
