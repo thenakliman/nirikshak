@@ -30,39 +30,39 @@ class FormatOutput(object):
         pass
 
 
-def output(**kwargs):
-    jaanch_parameters = list(kwargs.values())[0]
+def output(**jaanch_parameters):
     output_plugin = jaanch_parameters.get('output', {}).get('type', 'console')
 
     # NOTE(thenakliman): if plugin is not registered then it returns kwargs
     plugin = plugins.get_plugin(output_plugin)
-    soochis = kwargs
+    soochis = jaanch_parameters
     try:
-        soochis = getattr(plugin, 'output')(**kwargs)
+        soochis = getattr(plugin, 'output')(**jaanch_parameters)
     except Exception:
         LOG.error("%s jaanch get failed for %s output.",
-                  list(kwargs.keys())[0], output_plugin, exc_info=True)
+                  jaanch_parameters['name'], output_plugin, exc_info=True)
     else:
         LOG.info("%s soochis has been returned by the plugin", soochis)
 
     return soochis
 
 
-def make_output_dict(key, expected_result, **kwargs):
+def make_output_dict(expected_result, **kwargs):
     output_dict = {}
     try:
-        output_dict = {'actual_output': kwargs[key]['input']['result']}
+        output_dict = {'actual_output': kwargs['input']['result']}
     except KeyError:
         LOG.error("result key does not exist in the dictionary")
 
     if expected_result is not None:
         output_dict['expected_output'] = expected_result
 
-    jaanch = {key: {}}
+    jaanch = {}
     try:
-        jaanch[key]['input'] = kwargs[key]['input']['args']
+        jaanch['input'] = kwargs['input']['args']
     except KeyError:
         pass
 
-    jaanch[key]['output'] = output_dict
+    jaanch['name'] = kwargs['name']
+    jaanch['output'] = output_dict
     return jaanch

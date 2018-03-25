@@ -56,10 +56,10 @@ class TestSend(base_test.BaseTestCase):
     def test_output_send_fail(self, mock_base_make_dict, mock_json_dumps,
                               mock_put_request, mock_error_log):
 
-        data = {'jaanch': {'result': {}}}
+        data = {'result': {}}
 
-        def make_dict(key, exp, **kwargs):
-            kwargs[key]['result']['output'] = exp
+        def make_dict(exp, **kwargs):
+            kwargs['result']['output'] = exp
             return kwargs
 
         def dump_json(jaanch):
@@ -79,10 +79,10 @@ class TestSend(base_test.BaseTestCase):
     def test_output_send_pass(self, mock_base_make_dict, mock_json_dumps,
                               mock_put_request, mock_info_log):
 
-        data = {'jaanch': {'result': {}}}
+        data = {'result': {}}
 
-        def make_dict(key, exp, **kwargs):
-            kwargs[key]['result']['output'] = exp
+        def make_dict(exp, **kwargs):
+            kwargs['result']['output'] = exp
             return kwargs
 
         def dump_json(jaanch):

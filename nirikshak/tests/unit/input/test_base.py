@@ -127,12 +127,12 @@ class InputFileTest(base.BaseTestCase):
 
         exp_soochis = [base.get_test_keystone_soochi()]
         tmp = base.get_test_glance_soochi()
-        del tmp['jaanches']['port_9292']
+        tmp['jaanches'].pop(0)
         exp_soochis.append(tmp)
 
         for _, soochi in soochis:
-            if soochi['jaanches'].get('port_9292'):
-                del soochi['jaanches']['port_9292']
+            if soochi['jaanches'][0]['name'] == 'port_9292':
+                soochi['jaanches'].pop(0)
 
             self.assertIn(soochi, exp_soochis)
 

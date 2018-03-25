@@ -56,17 +56,16 @@ class YAMLFormatOutput(base.FormatOutput):
             out_file = '/var/lib/nirikshak/result.yaml'
 
         output_file = self.read_file(out_file)
-        key = list(kwargs.keys())[0]
         try:
-            expected_result = kwargs[key]['output']['result']
+            expected_result = kwargs['output']['result']
         except KeyError:
             expected_result = None
 
-        jaanch = base.make_output_dict(key, expected_result, **kwargs)
+        jaanch = base.make_output_dict(expected_result, **kwargs)
         if not output_file:
-            output_file = jaanch
+            output_file = [jaanch]
         else:
-            output_file.update(jaanch)
+            output_file.append(jaanch)
 
         self._write_file(output_file, out_file)
         LOG.info("Output has been dumped in %s file", out_file)
