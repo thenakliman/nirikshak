@@ -40,11 +40,11 @@ class WorkerTest(unittest.TestCase):
     def _get_fake_jaanch():
         return [
             [{'key1': 'value1'},
-             {'jaanches':
-                 {'jaanch1': {'jaanch1_param': 'jaanch1_body'}}}],
+             {'jaanches': [
+                 {'name': 'jaanch1', 'jaanch1_param': 'jaanch1_body'}]}],
             [{'key2': 'value2'}, {
-                'jaanches': {
-                    'jaanch2': {'jaanch2_param': 'jaanch2_body', 'k2': 'v2'}}}]
+                'jaanches': [{
+                    'name': 'jaanch2', 'jaanch2_param': 'jaanch2_body', 'k2': 'v2'}]}]
         ]
 
     @mock.patch.object(base_post_task, 'format_for_output')
@@ -72,8 +72,7 @@ class WorkerTest(unittest.TestCase):
         base_controller.execute(soochis=['soochi'], groups=['group'])
 
         mock_get_soochis.assert_called_once_with(['soochi'], ['group'])
-        post_task_calls = [mock.call(jaanch1={'work': True}),
-                           mock.call(jaanch2={'work': True})]
+        post_task_calls = [mock.call(work=True), mock.call(work=True)]
         mock_post_task.assert_has_calls(post_task_calls, any_order=True)
         mock_output = mock.call(work=True, post_task=True)
         mock_output.assert_has_calls([mock_output, mock_output])
@@ -89,8 +88,7 @@ class WorkerTest(unittest.TestCase):
         base_controller.execute(soochis=['soochi'], groups=['group'])
 
         mock_get_soochis.assert_called_once_with(['soochi'], ['group'])
-        post_task_calls = [mock.call(jaanch1={'work': True}),
-                           mock.call(jaanch2={'work': True})]
+        post_task_calls = [mock.call(work=True), mock.call(work=True)]
         mock_post_task.assert_has_calls(post_task_calls, any_order=True)
 
     @mock.patch.object(base_post_task, 'format_for_output',
@@ -130,13 +128,13 @@ class WorkerInvokeTest(unittest.TestCase):
     def test_worker_failed_in_queue_put(self, mock_load_worker,
                                         mock_do_worker):
 
-        jaanches = {'jaanches': {'fake_jaanch': 10}}
+        jaanches = {'jaanches': [{'name': 'fake_jaanch'}]}
         mock_queue = mock.Mock(put=mock.Mock(side_effect=Exception))
 
         base_controller.worker(mock_queue, jaanches)
 
         mock_load_worker.assert_called_once_with()
-        mock_do_worker.assert_called_with(**jaanches['jaanches'])
+        mock_do_worker.assert_called_with(name='fake_jaanch')
         mock_queue.put.assert_called_once()
 
     @mock.patch.object(base_worker, 'do_work')
@@ -147,11 +145,11 @@ class WorkerInvokeTest(unittest.TestCase):
             return 10
 
         mock_base_worker.side_effect = side_effect
-        jaanches = {'jaanches': {'fake_jaanch': 15}}
+        jaanches = {'jaanches': [{'name': 'fake_jaanch'}]}
         mock_queue = mock.Mock(put=mock.Mock())
 
         base_controller.worker(mock_queue, jaanches)
 
-        mock_base_worker.assert_called_with(**jaanches['jaanches'])
-        mock_queue.put.assert_called_once_with({'fake_jaanch': 10})
+        mock_base_worker.assert_called_with(name='fake_jaanch')
+        mock_queue.put.assert_called_once_with(10)
         mock_load_workers.assert_called_once_with()
