@@ -15,3 +15,11 @@ docker run -it --rm \
               --mount type=bind,src="$PWD/func-tests-build/logs/nirikshak.log",target="/var/log/nirikshak.log" \
               --mount type=bind,src="$PWD/$FUNCTIONAL_TEST_DIR/workers/",target="/root/workers/" \
               thenakliman/nirikshak_functional_test:latest
+
+diff $PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.json $PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json
+
+if [ $? -eq 1 ]; then
+    echo "result.json failed"
+else
+    echo "Result.json passed"
+fi
