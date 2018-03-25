@@ -77,6 +77,7 @@ class TestOutputBase(unittest.TestCase):
         fake_jaanch = get_fake_jaanch()
         exp_jaanch = copy.deepcopy(fake_jaanch)
         exp_jaanch['test_result'] = 'pass'
+
         self.assertDictEqual(exp_jaanch, base.output(**fake_jaanch))
         mock_info_log.assert_called()
 
