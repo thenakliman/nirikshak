@@ -26,16 +26,16 @@ def register_plugin():
     @plugins.register(PLUGIN_NAME)
     class DummyClass(base.FormatOutput):
         def output(self, **kwargs):
-            if kwargs['jaanch'].get('raise_exception'):
+            if kwargs.get('raise_exception'):
                 raise Exception
 
-            kwargs['jaanch']['test_result'] = 'pass'
+            kwargs['test_result'] = 'pass'
             return kwargs
 
 
 def get_fake_jaanch():
     return {
-        'jaanch': {
+            'name': 'FakeJaanch',
             'output': {
                 'type': PLUGIN_NAME,
                 'result': 10
@@ -46,7 +46,6 @@ def get_fake_jaanch():
                 }
             }
         }
-    }
 
 
 class TestOutputBase(unittest.TestCase):
@@ -57,7 +56,7 @@ class TestOutputBase(unittest.TestCase):
     @mock.patch.object(base.LOG, 'error')
     def test_output_for_non_existing_type(self, mock_error_log):
         fake_jaanch = get_fake_jaanch()
-        fake_jaanch['jaanch']['output']['type'] = 'fake_plugin'
+        fake_jaanch['output']['type'] = 'fake_plugin'
         self.assertDictEqual(fake_jaanch, base.output(**fake_jaanch))
         mock_error_log.assert_called()
 
@@ -68,7 +67,7 @@ class TestOutputBase(unittest.TestCase):
         # NOTE(thenakliman): Register the same plugin multiple times
         register_plugin()
         fake_jaanch = get_fake_jaanch()
-        fake_jaanch['jaanch']['raise_exception'] = True
+        fake_jaanch['raise_exception'] = True
         base.output(**fake_jaanch)
         mock_error_log.assert_called()
 
@@ -77,7 +76,8 @@ class TestOutputBase(unittest.TestCase):
         register_plugin()
         fake_jaanch = get_fake_jaanch()
         exp_jaanch = copy.deepcopy(fake_jaanch)
-        exp_jaanch['jaanch']['test_result'] = 'pass'
+        exp_jaanch['test_result'] = 'pass'
+        print(exp_jaanch, base.output(**fake_jaanch))
         self.assertDictEqual(exp_jaanch, base.output(**fake_jaanch))
         mock_info_log.assert_called()
 
@@ -85,28 +85,22 @@ class TestOutputBase(unittest.TestCase):
 class TestMakeOutputDict(unittest.TestCase):
     def test_make_output_dict(self):
         fake_jaanch = get_fake_jaanch()
-        exp_jaanch = base.make_output_dict('jaanch', 10,
-                                           **copy.deepcopy(fake_jaanch))
-        fake_jaanch['jaanch']['input'] = fake_jaanch['jaanch']['input']['args']
-        fake_jaanch['jaanch']['output'] = {'expected_output': 10}
+        exp_jaanch = base.make_output_dict(10, **copy.deepcopy(fake_jaanch))
+        fake_jaanch['input'] = fake_jaanch['input']['args']
+        fake_jaanch['output'] = {'expected_output': 10}
         self.assertDictEqual(exp_jaanch, fake_jaanch)
 
     def test_make_output_dict_from_succesful_worker_execution(self):
         fake_jaanch = get_fake_jaanch()
-        fake_jaanch['jaanch']['input']['result'] = 10
-        exp_jaanch = base.make_output_dict('jaanch', 10,
-                                           **copy.deepcopy(fake_jaanch))
-        fake_jaanch['jaanch']['input'] = fake_jaanch['jaanch']['input']['args']
-        fake_jaanch['jaanch']['output'] = {
-            'expected_output': 10,
-            'actual_output': 10
-        }
+        fake_jaanch['input']['result'] = 10
+        exp_jaanch = base.make_output_dict(10, **copy.deepcopy(fake_jaanch))
+        fake_jaanch['input'] = fake_jaanch['input']['args']
+        fake_jaanch['output'] = {'expected_output': 10, 'actual_output': 10}
         self.assertDictEqual(exp_jaanch, fake_jaanch)
 
     def test_make_output_dict_if_args_not_available(self):
         fake_jaanch = get_fake_jaanch()
-        del fake_jaanch['jaanch']['input']
-        exp_jaanch = base.make_output_dict('jaanch', 10,
-                                           **copy.deepcopy(fake_jaanch))
-        fake_jaanch['jaanch']['output'] = {'expected_output': 10}
+        del fake_jaanch['input']
+        exp_jaanch = base.make_output_dict(10, **copy.deepcopy(fake_jaanch))
+        fake_jaanch['output'] = {'expected_output': 10}
         self.assertDictEqual(exp_jaanch, fake_jaanch)

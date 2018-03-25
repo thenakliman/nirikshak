@@ -11,6 +11,7 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+import copy
 import os
 
 import mock
@@ -42,19 +43,17 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
                                   mock_read_file, mock_open):
 
         f_name = '/var/lib/nirikshak/result.yaml'
-        soochis = base_test.get_test_keystone_soochi()['jaanches']
-        mock_read_file.return_value = {'port_5000': soochis['port_5000']}
-        exp = {'port_35357': soochis['port_35357']}
-        dump_yaml.YAMLFormatOutput().output(**exp)
-        result = {
-            'port_35357': {
-                'input': soochis['port_35357']['input']['args'],
-                'output': {}
-            }
+        soochi1, soochi2 = base_test.get_test_keystone_soochi()['jaanches']
+        mock_read_file.return_value = copy.deepcopy([soochi1])
+        dump_yaml.YAMLFormatOutput().output(**soochi2)
+        exp_result = {
+            'name': 'port_3537',
+            'input': soochi2['input']['args'],
+            'output': {}
         }
-        result.update({'port_5000': soochis['port_5000']})
+        exp_soochis = [copy.deepcopy(soochi1), exp_result]
         mock_read_file.assert_called_with(f_name)
-        mock_yaml_dump.assert_called_once_with(result, mock.ANY,
+        mock_yaml_dump.assert_called_once_with(exp_soochis, mock.ANY,
                                                default_flow_style=False)
         mock_open.assert_called_once_with(f_name, "w")
 
@@ -64,20 +63,18 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
         nirikshak.CONF['output_yaml'] = {'output_dir':
                                          '/var/nirikshak/result.yaml'}
         f_name = nirikshak.CONF['output_yaml']['output_dir']
-        soochis = base_test.get_test_keystone_soochi()['jaanches']
-        soochis['port_35357']['output']['result'] = 'test'
-        soochis['port_35357']['input']['result'] = 'test'
-        mock_output_file.return_value = {}
-        exp = {'port_35357': soochis['port_35357']}
-        dump_yaml.YAMLFormatOutput().output(**exp)
-        result = {
-            'port_35357': {
-                'input': soochis['port_35357']['input']['args'],
+        soochi1, soochi2 = base_test.get_test_keystone_soochi()['jaanches']
+        soochi2['output']['result'] = 'test'
+        soochi2['input']['result'] = 'test'
+        mock_output_file.return_value = []
+        dump_yaml.YAMLFormatOutput().output(**soochi2)
+        exp_result = [{
+                'name': soochi2['name'],
+                'input': soochi2['input']['args'],
                 'output': {'actual_output': 'test', 'expected_output': 'test'}
-            }
-        }
+            }]
         mock_output_file.assert_called_with(f_name)
-        mock_output_yaml.assert_called_with(result, f_name)
+        mock_output_yaml.assert_called_with(exp_result, f_name)
 
     @mock.patch.object(os, 'stat')
     def test_get_output_file(self, mock_os):
