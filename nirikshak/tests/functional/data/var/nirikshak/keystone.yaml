@@ -27,10 +27,15 @@ jaanches:
         fstype: ext4
         mountpoint: /etc/resolv.conf
   - name: process
-    type: process
+    type: process_running
     input:
       args:
-        name: "python /root/workers/process/inifinity.py"
+        name: inifinity
+  - name: not_existing_process
+    type: process_running
+    input:
+      args:
+        name: inifinity_process
   - name: ini
     type: ini
     input:
