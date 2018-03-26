@@ -28,5 +28,7 @@ else
     echo "Result.json passed"
 fi
 
-echo "Clean output file ...."
-rm $PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json
+if [ "$dev_env" = false ]; then
+    echo "Clean output file ...."
+    rm $PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json
+fi
