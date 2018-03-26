@@ -48,8 +48,8 @@ def get_main_yaml():
 
 def get_test_keystone_soochi():
     jaanches = {
-        'jaanches': {
-            'port_5000': {
+        'jaanches': [{
+                'name': 'port_5000',
                 'type': 'file',
                 'post_task': 'console',
                 'input': {
@@ -62,7 +62,8 @@ def get_test_keystone_soochi():
                     'type': 'console'
                 }
             },
-            'port_35357': {
+            {
+                'name': 'port_3537',
                 'type': 'file',
                 'post_task': 'console',
                 'input': {
@@ -74,8 +75,7 @@ def get_test_keystone_soochi():
                 'output': {
                     'type': 'console'
                     }
-                }
-            }
+            }]
         }
 
     return jaanches
@@ -83,8 +83,8 @@ def get_test_keystone_soochi():
 
 def get_test_glance_soochi():
     jaanches = {
-        'jaanches': {
-            'port_9292': {
+        'jaanches': [{
+                'name': 'port_9292',
                 'type': 'file',
                 'post_task': 'console',
                 'input': {
@@ -97,7 +97,8 @@ def get_test_glance_soochi():
                     'type': 'console'
                 }
             },
-            'port_1234': {
+            {
+                'name': 'port_1234',
                 'type': 'file',
                 'post_task': 'console',
                 'input': {
@@ -110,7 +111,7 @@ def get_test_glance_soochi():
                     'type': 'console'
                 }
             }
-        }
+        ]
     }
 
     return jaanches
@@ -132,6 +133,7 @@ def create_conf():
 
 def get_disk_jaanch():
     jaanch = {
+        'name': 'disk_jaanch',
         'type': 'disk_partition',
         'input': {
             'args': {
@@ -147,6 +149,7 @@ def get_disk_jaanch():
 
 def get_ini_jaanch():
     jaanch = {
+        'name': 'ini_jaanch',
         'type': 'ini',
         'input': {
             'args': {

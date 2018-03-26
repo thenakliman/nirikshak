@@ -24,7 +24,7 @@ from nirikshak.workers import base as worker_base
 class WorkBaseTest(unittest.TestCase):
     def setUp(self):
         super(WorkBaseTest, self).setUp()
-        self.sample_jaanch = {'jaanch': base.get_ini_jaanch()}
+        self.sample_jaanch = base.get_ini_jaanch()
 
     @property
     def jaanch(self):
@@ -32,8 +32,8 @@ class WorkBaseTest(unittest.TestCase):
 
     def test_if_type_not_defined(self):
         jaanch = self.jaanch
-        del jaanch['jaanch']['type']
-        self.assertDictEqual(jaanch['jaanch'], worker_base.do_work(**jaanch))
+        del jaanch['type']
+        self.assertDictEqual(jaanch, worker_base.do_work(**jaanch))
 
     @staticmethod
     def _register_plugin():
@@ -45,8 +45,7 @@ class WorkBaseTest(unittest.TestCase):
 
     def test_plugin_fails(self):
         self._register_plugin()
-        self.assertDictEqual(self.jaanch['jaanch'],
-                             worker_base.do_work(**self.jaanch))
+        self.assertDictEqual(self.jaanch, worker_base.do_work(**self.jaanch))
 
     def test_do_work(self):
         fake_result = 'fake_result'
@@ -64,10 +63,9 @@ class WorkBaseTest(unittest.TestCase):
             return 10
 
         self._register_plugin().work = work
-        exp_jaanch = self.jaanch['jaanch']
+        exp_jaanch = self.jaanch
         exp_jaanch['input']['result'] = 10
-        self.assertDictEqual(exp_jaanch,
-                             work('fake_worker', **self.jaanch['jaanch']))
+        self.assertDictEqual(exp_jaanch, work('fake_worker', **self.jaanch))
 
     def test_match_expected_output(self):
 
@@ -76,14 +74,13 @@ class WorkBaseTest(unittest.TestCase):
             return 10
 
         self._register_plugin().work = work
-        exp_jaanch = self.jaanch['jaanch']
+        exp_jaanch = self.jaanch
         jaanch = self.jaanch
-        jaanch['jaanch']['output']['result'] = 10
+        jaanch['output']['result'] = 10
         exp_jaanch['output']['result'] = 10
         exp_jaanch['input']['result'] = True
 
-        self.assertDictEqual(exp_jaanch,
-                             work('fake_worker', **jaanch['jaanch']))
+        self.assertDictEqual(exp_jaanch, work('fake_worker', **jaanch))
 
     def test_if_args_are_not_provided_at_all(self):
         @plugins.register('ini')
@@ -103,4 +100,4 @@ class WorkBaseTest(unittest.TestCase):
                 pass
 
         self.assertRaises(exceptions.ExtraArgsException,
-                          FakePlugin().func, **self.jaanch['jaanch'])
+                          FakePlugin().func, **self.jaanch)

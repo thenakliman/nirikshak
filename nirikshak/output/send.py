@@ -36,12 +36,11 @@ class NetworkSendOutput(base.FormatOutput):
         protocol = nirikshak.CONF[SECTION].get('protocol', 'http')
         url = nirikshak.CONF[SECTION].get('url', '')
         url = ("%s://%s:%s/%s" % (protocol, host, port, url))
-        key = list(kwargs.keys())[0]
         try:
-            expected_result = kwargs[key]['output']['result']
+            expected_result = kwargs['output']['result']
         except KeyError:
             expected_result = None
-        jaanch = base.make_output_dict(key, expected_result, **kwargs)
+        jaanch = base.make_output_dict(expected_result, **kwargs)
         payld = json.dumps(jaanch)
         try:
             getattr(requests, method)(url, data=payld)

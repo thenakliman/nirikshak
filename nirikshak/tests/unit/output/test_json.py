@@ -35,19 +35,18 @@ class JSONFormatOutputTest(base_test.BaseTestCase):
     @mock.patch.object(json, 'dumps')
     def test_conf_without_section(self, mock_output_json, mock_output_file):
         f_name = '/var/lib/nirikshak/result.json'
-        soochis = base_test.get_test_keystone_soochi()['jaanches']
-        mock_output_file.return_value = {'port_5000': soochis['port_5000']}
-        exp = {'port_35357': soochis['port_35357']}
+        soochi1, soochi2 = base_test.get_test_keystone_soochi()['jaanches']
+        mock_output_file.return_value = [soochi1]
         # fixme(thenakliman): mock open method properly
         with mock.patch.object(dump_json, 'open') as mock_open:
-            dump_json.JSONFormatOutput().output(**exp)
-        result = {
-            'port_35357': {
-                'input': soochis['port_35357']['input']['args'],
+            dump_json.JSONFormatOutput().output(**soochi2)
+        result = [soochi1]
+        result.append(
+            {
+                'name': 'port_3537',
+                'input': soochi2['input']['args'],
                 'output': {}
-            }
-        }
-        result.update({'port_5000': soochis['port_5000']})
+            })
         mock_output_file.assert_called_once_with(f_name)
         mock_output_json.assert_called_once_with(result, indent=4,
                                                  sort_keys=True,
@@ -60,18 +59,18 @@ class JSONFormatOutputTest(base_test.BaseTestCase):
         nirikshak.CONF['output_json'] = {'output_dir':
                                          '/var/nirikshak/result.json'}
         f_name = nirikshak.CONF['output_json']['output_dir']
-        soochis = base_test.get_test_keystone_soochi()['jaanches']
-        soochis['port_35357']['output']['result'] = 'test'
-        soochis['port_35357']['input']['result'] = 'test'
-        mock_output_file.return_value = {}
-        exp = {'port_35357': soochis['port_35357']}
-        dump_json.JSONFormatOutput().output(**exp)
-        result = {
-            'port_35357': {
-                'input': soochis['port_35357']['input']['args'],
+        soochi1, soochi2 = base_test.get_test_keystone_soochi()['jaanches']
+        soochi2['output']['result'] = 'test'
+        soochi2['input']['result'] = 'test'
+        mock_output_file.return_value = []
+        dump_json.JSONFormatOutput().output(**soochi2)
+        result = [
+            {
+                'name': 'port_3537',
+                'input': soochi2['input']['args'],
                 'output': {'actual_output': 'test', 'expected_output': 'test'}
             }
-        }
+        ]
         mock_output_file.assert_called_once_with(f_name)
         mock_output_json.assert_called_once_with(result, f_name)
 

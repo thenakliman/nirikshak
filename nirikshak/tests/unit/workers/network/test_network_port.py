@@ -27,8 +27,7 @@ class WorkerTest(unittest.TestCase):
     def setUp(self):
         sample_jaanch = {}
         sample_jaanch = base.get_test_keystone_soochi()
-        sample_jaanch = sample_jaanch['jaanches']['port_5000']
-        self.sample_jaanch = sample_jaanch
+        self.sample_jaanch = sample_jaanch['jaanches'][0]
         super(WorkerTest, self).setUp()
 
     @mock.patch.object(socket, 'socket')

@@ -15,7 +15,7 @@
 import logging
 try:
     import configparser
-except ImportError:
+except ImportError:                        # pragma: no cover
     import ConfigParser as configparser
 
 from nirikshak.common import plugins
