@@ -20,6 +20,7 @@ lib/
 lib64/
 parts/
 sdist/
+func-tests-build/
 
 *.egg-info/
 .installed.cfg
