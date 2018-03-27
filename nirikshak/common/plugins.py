@@ -17,11 +17,14 @@ _PLUGINS = {}
 
 
 def add_plugin(plugin_name, plugin):
-    _PLUGINS[plugin_name] = plugin()
+    _PLUGINS[plugin_name] = plugin
 
 
 def get_plugin(plugin_name):
-    return _PLUGINS.get(plugin_name)
+    if plugin_name in _PLUGINS:
+        return _PLUGINS[plugin_name]()
+
+    return None
 
 
 def register(plugin_name):

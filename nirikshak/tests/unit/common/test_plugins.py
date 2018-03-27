@@ -24,6 +24,8 @@ def register_plugin(plugin_name):
     class DummyPlugin(object):
         name = plugin_name
 
+    return DummyPlugin
+
 
 class TestPlugin(unittest.TestCase):
     def tearDown(self):
@@ -47,3 +49,8 @@ class TestPlugin(unittest.TestCase):
 
         self.assertEqual(plugins.get_plugin(FAKE_PLUGIN_NAME).name,
                          'fake_plugin2')
+
+    def test_the_same_plugin_object_is_returned(self):
+        dummy_plugin = register_plugin(FAKE_PLUGIN_NAME)
+        self.assertTrue(isinstance(plugins.get_plugin(FAKE_PLUGIN_NAME),
+                                   dummy_plugin))
