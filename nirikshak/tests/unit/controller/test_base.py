@@ -40,13 +40,10 @@ class WorkerTest(unittest.TestCase):
     def _get_fake_jaanch():
         return [
             [{'key1': 'value1'},
-             {'jaanches': [
-                 {'name': 'jaanch1', 'jaanch1_param': 'jaanch1_body'}]}],
-            [{'key2': 'value2'}, {
-                'jaanches': [{
-                    'name': 'jaanch2',
-                    'jaanch2_param': 'jaanch2_body', 'k2': 'v2'}]}]
-        ]
+             [{'name': 'jaanch1', 'jaanch1_param': 'jaanch1_body'}]],
+            [{'key2': 'value2'}, [
+                {'name': 'jaanch2',
+                 'jaanch2_param': 'jaanch2_body', 'k2': 'v2'}]]]
 
     @mock.patch.object(base_post_task, 'format_for_output')
     @mock.patch.object(output, 'output')
@@ -120,8 +117,7 @@ class WorkerInvokeTest(unittest.TestCase):
     @mock.patch.object(nirikshak.workers, 'load_workers',
                        side_effect=ImportError)
     def test_worker_load_fails(self, mock_worker):
-        jaanches = {'jaanches': {}}
-        base_controller.worker(mock.Mock(), jaanches)
+        base_controller.worker(mock.Mock(), {})
         mock_worker.assert_called_once_with()
 
     @mock.patch.object(base_worker, 'do_work')
@@ -129,7 +125,7 @@ class WorkerInvokeTest(unittest.TestCase):
     def test_worker_failed_in_queue_put(self, mock_load_worker,
                                         mock_do_worker):
 
-        jaanches = {'jaanches': [{'name': 'fake_jaanch'}]}
+        jaanches = [{'name': 'fake_jaanch'}]
         mock_queue = mock.Mock(put=mock.Mock(side_effect=Exception))
 
         base_controller.worker(mock_queue, jaanches)
@@ -146,7 +142,7 @@ class WorkerInvokeTest(unittest.TestCase):
             return 10
 
         mock_base_worker.side_effect = side_effect
-        jaanches = {'jaanches': [{'name': 'fake_jaanch'}]}
+        jaanches = [{'name': 'fake_jaanch'}]
         mock_queue = mock.Mock(put=mock.Mock())
 
         base_controller.worker(mock_queue, jaanches)

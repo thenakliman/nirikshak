@@ -12,6 +12,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import copy
 import unittest
 
 from nirikshak.post_task import dummy
@@ -21,8 +22,10 @@ from nirikshak.tests.unit import base
 class PostTaskTest(unittest.TestCase):
     def test_format_main_dict(self):
         dct = base.get_main_yaml()
-        self.assertEqual(dct, dummy.FormatOutputConsole().format_output(**dct))
+        self.assertEqual(copy.deepcopy(dct),
+                         dummy.FormatOutputConsole().format_output(**dct))
 
     def test_format_soochi(self):
-        dct = base.get_test_keystone_soochi()
-        self.assertEqual(dct, dummy.FormatOutputConsole().format_output(**dct))
+        dct = base.get_test_keystone_soochi()[0]
+        self.assertEqual(copy.deepcopy(dct),
+                         dummy.FormatOutputConsole().format_output(**dct))
