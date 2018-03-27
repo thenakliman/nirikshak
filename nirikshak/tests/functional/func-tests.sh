@@ -4,6 +4,7 @@ echo "Creating temporary director ...."
 mkdir -p func-tests-build/logs
 
 FUNCTIONAL_TEST_DIR=nirikshak/tests/functional/data
+FUNCTIONAL_TEST_CASE_STATUS=true
 
 echo "Clean output file ...."
 rm $PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json
@@ -22,13 +23,18 @@ docker run -it --rm \
 
 diff $PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.json $PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json
 
-if [ $? -eq 1 ]; then
-    echo "result.json failed"
-else
+if [ $? -eq 0 ]; then
     echo "Result.json passed"
+else
+    echo "result.json failed"
+    FUNCTIONAL_TEST_CASE_STATUS=false
 fi
 
 if [ "$dev_env" = false ]; then
     echo "Clean output file ...."
     rm $PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json
+fi
+
+if [ "$FUNCTIONAL_TEST_CASE_STATUS" == false ]; then
+    exit 1
 fi
