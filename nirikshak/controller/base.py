@@ -40,7 +40,7 @@ def worker(queue, soochi):
     else:
         LOG.info("Loading worker modules.")
 
-    for jaanch in soochi['jaanches']:
+    for jaanch in soochi:
         try:
             queue.put(base_worker.do_work(**jaanch))
         except Exception:
@@ -113,7 +113,7 @@ def _merge_configs(soochis_def):
     new_def = []
     for soochis in soochis_def:
         config = soochis[0]
-        for jaanch in soochis[1]['jaanches']:
+        for jaanch in soochis[1]:
             utils.merge_dict(jaanch, config)
         new_def.append(soochis[1])
 

@@ -1,21 +1,20 @@
-jaanches: 
-  - name: port_5000
-    type: network/network_port
-    input:
-      type: file
-      post_task: console
-      args:
-        ip: 192.168.1.100
-        port: 5000
-    output:
-      type: console
-  - name: port_35357
-    type: network/network_port
-    input:
-      type: file
-      post_task: console
-      args:
-        ip: 192.168.1.100
-        port: 35357
-    output:
-      type: console
+- name: port_5000
+  type: network/network_port
+  input:
+    type: file
+    post_task: console
+    args:
+      ip: 192.168.1.100
+      port: 5000
+  output:
+    type: console
+- name: port_35357
+  type: network/network_port
+  input:
+    type: file
+    post_task: console
+    args:
+      ip: 192.168.1.100
+      port: 35357
+  output:
+    type: console

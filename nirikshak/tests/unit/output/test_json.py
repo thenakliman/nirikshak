@@ -35,7 +35,7 @@ class JSONFormatOutputTest(base_test.BaseTestCase):
     @mock.patch.object(json, 'dumps')
     def test_conf_without_section(self, mock_output_json, mock_output_file):
         f_name = '/var/lib/nirikshak/result.json'
-        soochi1, soochi2 = base_test.get_test_keystone_soochi()['jaanches']
+        soochi1, soochi2 = base_test.get_test_keystone_soochi()
         mock_output_file.return_value = [soochi1]
         # fixme(thenakliman): mock open method properly
         with mock.patch.object(dump_json, 'open') as mock_open:
@@ -59,7 +59,7 @@ class JSONFormatOutputTest(base_test.BaseTestCase):
         nirikshak.CONF['output_json'] = {'output_dir':
                                          '/var/nirikshak/result.json'}
         f_name = nirikshak.CONF['output_json']['output_dir']
-        soochi1, soochi2 = base_test.get_test_keystone_soochi()['jaanches']
+        soochi1, soochi2 = base_test.get_test_keystone_soochi()
         soochi2['output']['result'] = 'test'
         soochi2['input']['result'] = 'test'
         mock_output_file.return_value = []

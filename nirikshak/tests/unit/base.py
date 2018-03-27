@@ -47,74 +47,65 @@ def get_main_yaml():
 
 
 def get_test_keystone_soochi():
-    jaanches = {
-        'jaanches': [{
-                'name': 'port_5000',
-                'type': 'file',
-                'post_task': 'console',
-                'input': {
-                    'args': {
-                        'ip': '192.168.1.100',
-                        'port': 5000
-                    }
-                },
-                'output': {
-                    'type': 'console'
+    return [{
+        'name': 'port_5000',
+        'type': 'file',
+        'post_task': 'console',
+        'input': {
+            'args': {
+                'ip': '192.168.1.100',
+                'port': 5000
+            }
+        },
+        'output': {
+            'type': 'console'
+            }
+        },
+        {
+            'name': 'port_3537',
+            'type': 'file',
+            'post_task': 'console',
+            'input': {
+                'args': {
+                    'ip': '192.168.1.100',
+                    'port': 35357
                 }
             },
-            {
-                'name': 'port_3537',
-                'type': 'file',
-                'post_task': 'console',
-                'input': {
-                    'args': {
-                        'ip': '192.168.1.100',
-                        'port': 35357
-                    }
-                },
-                'output': {
-                    'type': 'console'
-                    }
-            }]
-        }
-
-    return jaanches
+            'output': {
+                'type': 'console'
+            }
+        }]
 
 
 def get_test_glance_soochi():
-    jaanches = {
-        'jaanches': [{
-                'name': 'port_9292',
-                'type': 'file',
-                'post_task': 'console',
-                'input': {
-                    'args': {
-                        'ip': '192.168.1.100',
-                        'port': 9292
-                    }
-                },
-                'output': {
-                    'type': 'console'
-                }
-            },
-            {
-                'name': 'port_1234',
-                'type': 'file',
-                'post_task': 'console',
-                'input': {
-                    'args': {
-                        'ip': '192.168.1.100',
-                        'port': 1234
-                    }
-                },
-                'output': {
-                    'type': 'console'
-                }
+    return [{
+        'name': 'port_9292',
+        'type': 'file',
+        'post_task': 'console',
+        'input': {
+            'args': {
+                'ip': '192.168.1.100',
+                'port': 9292
             }
-        ]
-    }
-
-    return jaanches
+        },
+        'output': {
+            'type': 'console'
+            }
+        },
+        {
+            'name': 'port_1234',
+            'type': 'file',
+            'post_task': 'console',
+            'input': {
+                'args': {
+                    'ip': '192.168.1.100',
+                    'port': 1234
+                 }
+            },
+            'output': {
+                'type': 'console'
+            }
+        }]
 
 
 def create_conf():

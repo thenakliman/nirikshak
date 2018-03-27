@@ -43,7 +43,7 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
                                   mock_read_file, mock_open):
 
         f_name = '/var/lib/nirikshak/result.yaml'
-        soochi1, soochi2 = base_test.get_test_keystone_soochi()['jaanches']
+        soochi1, soochi2 = base_test.get_test_keystone_soochi()
         mock_read_file.return_value = copy.deepcopy([soochi1])
         dump_yaml.YAMLFormatOutput().output(**soochi2)
         exp_result = {
@@ -63,7 +63,7 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
         nirikshak.CONF['output_yaml'] = {'output_dir':
                                          '/var/nirikshak/result.yaml'}
         f_name = nirikshak.CONF['output_yaml']['output_dir']
-        soochi1, soochi2 = base_test.get_test_keystone_soochi()['jaanches']
+        soochi1, soochi2 = base_test.get_test_keystone_soochi()
         soochi2['output']['result'] = 'test'
         soochi2['input']['result'] = 'test'
         mock_output_file.return_value = []
