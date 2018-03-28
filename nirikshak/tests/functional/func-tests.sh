@@ -6,13 +6,31 @@ mkdir -p func-tests-build/logs
 FUNCTIONAL_TEST_DIR=nirikshak/tests/functional/data
 FUNCTIONAL_TEST_CASE_STATUS=true
 
-echo "Clean output file ...."
-rm $PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json
+cleanup_output_file() {
+    rm $1
+}
 
-echo "Running Test cases for result.json .."
-docker run -it --rm \
+compare_against_expected_output() {
+    diff $1 $2
+    if [ $? -eq 0 ]; then
+        echo "Result.json passed"
+    else
+        echo "result.json failed"
+        FUNCTIONAL_TEST_CASE_STATUS=false
+    fi
+}
+
+run_test() {
+    OUTPUT_FILE=$2
+    EXPECTED_OUTPUT_FILE=$1
+    GROUPS_TO_RUN=$3
+    echo "Clean output file"
+    cleanup_output_file $OUTPUT_FILE
+
+    docker run -it --rm \
               --hostname functional \
               --name functional \
+              --env GROUPS=$GROUPS_TO_RUN \
               --mount type=bind,src="$PWD/$FUNCTIONAL_TEST_DIR/etc/nirikshak/nirikshak.conf",target="/etc/nirikshak/nirikshak.conf" \
               --mount type=bind,src="$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak",target="/var/lib/nirikshak" \
               --mount type=bind,src="$PWD/$FUNCTIONAL_TEST_DIR/scripts/functional_test.sh",target="/home/functional_test.sh" \
@@ -21,19 +39,16 @@ docker run -it --rm \
               --mount type=bind,src="$PWD",target="/nirikshak" \
               thenakliman/nirikshak_functional_test:latest
 
-diff $PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.json $PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json
+    compare_against_expected_output $OUTPUT_FILE $EXPECTED_OUTPUT_FILE
+    if [ "$dev_env" = false ]; then
+        echo "Clean output file ...."
+        rm $OUTPUT_FILE
+    fi
+}
 
-if [ $? -eq 0 ]; then
-    echo "Result.json passed"
-else
-    echo "result.json failed"
-    FUNCTIONAL_TEST_CASE_STATUS=false
-fi
-
-if [ "$dev_env" = false ]; then
-    echo "Clean output file ...."
-    rm $PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json
-fi
+echo "Running Test cases for JSON Output .."
+run_test "$PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.json" "$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json" "deployment"
+run_test $PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.yaml "$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.yaml" "monitor"
 
 if [ "$FUNCTIONAL_TEST_CASE_STATUS" == false ]; then
     exit 1

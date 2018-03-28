@@ -4,7 +4,7 @@
     type: file
     post_task: console
     args:
-      ip: 192.168.1.100
+      ip: localhost
       port: 5000
   output:
     type: console
@@ -14,7 +14,7 @@
     type: file
     post_task: console
     args:
-      ip: 192.168.1.100
+      ip: localhost
       port: 35357
   output:
     type: console

@@ -25,5 +25,8 @@ inifinity &
 echo "Running process ....."
 ps -eaf
 
-echo "Running deployment group ...."
-nirikshak --groups=deployment
+echo "Environment variables ..."
+export
+
+echo "Running $GROUPS group ...."
+nirikshak --groups="$GROUPS"

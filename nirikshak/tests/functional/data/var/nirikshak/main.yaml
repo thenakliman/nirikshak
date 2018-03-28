@@ -12,8 +12,12 @@ deployment:
       soochi: glance
 
 monitor:
-  groups:
-   - deployment
+  config:
+    post_task: dummy
+    input:
+      type: file
+    output:
+      type: yaml
   soochis:
     keystone:
       soochi: keystone
