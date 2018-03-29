@@ -1,18 +1,6 @@
 - input:
     ip: localhost
     port: 5000
-  name: port_15000
-  output:
-    actual_output: 0
-- input:
-    ip: localhost
-    port: 35357
-  name: port_135357
-  output:
-    actual_output: 111
-- input:
-    ip: localhost
-    port: 5000
   name: port_5000
   output:
     actual_output: 0

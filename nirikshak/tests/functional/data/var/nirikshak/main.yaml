@@ -8,8 +8,6 @@ deployment:
   soochis:
     keystone:
       soochi: keystone
-    glance:
-      soochi: glance
 
 monitor:
   config:
@@ -21,5 +19,3 @@ monitor:
   soochis:
     keystone:
       soochi: keystone
-    glance:
-      soochi: glance
