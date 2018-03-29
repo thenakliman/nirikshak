@@ -34,18 +34,17 @@ class TestOutputCSV(base_test.BaseTestCase):
 
     @staticmethod
     def _get_fake_jaanch():
-        jaanch = {'jaanch': {}}
-        jaanch['jaanch'] = {
+        return {
+            'name': 'fake-jaanch',
             'output': {},
             'input': {'args': {'key': 'value'}}
         }
-        return jaanch
 
     # NOTE(thenakliman): this method is tightly coupled with _get_fake_jaanch
     @staticmethod
     def _get_expected_csv_output_from_jaanch(jaanch):
-        exp_result = jaanch['jaanch']['output'].get('result')
-        return ('jaanch,input,key,value,output,expected_output,%s,'
+        exp_result = jaanch['output'].get('result')
+        return ('fake-jaanch,input,key,value,output,expected_output,%s,'
                 'actual_output,None' % exp_result).split(',')
 
     @mock.patch.object(dump_csv.LOG, 'info')
@@ -111,7 +110,7 @@ class TestOutputCSV(base_test.BaseTestCase):
                                                          mock_csv_writer,
                                                          mock_info_log):
         jaanch = self._get_fake_jaanch()
-        jaanch['jaanch']['output']['result'] = 10
+        jaanch['output']['result'] = 10
         self._test_for_dump_csv(mock_open, mock_csv_writer,
                                 mock_info_log, jaanch)
 

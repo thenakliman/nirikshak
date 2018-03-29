@@ -89,8 +89,10 @@ class WorkBaseTest(unittest.TestCase):
             def func(self, **kwargs):
                 pass
 
+        jaanch = self.jaanch
+        del jaanch['input']
         self.assertRaises(exceptions.MissingRequiredArgsException,
-                          FakePlugin().func, **self.jaanch)
+                          FakePlugin().func, **jaanch)
 
     def test_if_extra_args_are_provided(self):
         @plugins.register('ini')

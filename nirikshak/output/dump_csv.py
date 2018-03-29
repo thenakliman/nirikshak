@@ -49,18 +49,17 @@ class CSVFormatOutput(base.FormatOutput):
 
     @staticmethod
     def _format_output_for_csv(**kwargs):
-        key = list(kwargs.keys())[0]
         try:
-            expected_result = kwargs[key]['output']['result']
+            expected_result = kwargs['output']['result']
         except KeyError:
             expected_result = None
 
-        jaanch = ("%s,input") % key
-        for k, value in kwargs[key]['input']['args'].items():
+        jaanch = ("%s,input") % kwargs['name']
+        for k, value in kwargs['input']['args'].items():
             jaanch = ("%s,%s,%s" % (jaanch, k, value))
             jaanch = ("%s,output,expected_output,%s,actual_output,%s" % (
                 jaanch, expected_result,
-                kwargs[key]['input'].get('result')))
+                kwargs['input'].get('result')))
 
         return jaanch
 

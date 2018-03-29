@@ -11,6 +11,7 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+import copy
 import mock
 import requests
 
@@ -56,10 +57,8 @@ class TestSend(base_test.BaseTestCase):
     def test_output_send_fail(self, mock_base_make_dict, mock_json_dumps,
                               mock_put_request, mock_error_log):
 
-        data = {'result': {}}
-
         def make_dict(exp, **kwargs):
-            kwargs['result']['output'] = exp
+            kwargs['output'] = 20
             return kwargs
 
         def dump_json(jaanch):
@@ -68,7 +67,10 @@ class TestSend(base_test.BaseTestCase):
         mock_base_make_dict.side_effect = make_dict
         mock_json_dumps.side_effect = dump_json
         mock_put_request.side_effect = requests.exceptions.ConnectionError
-        send.NetworkSendOutput().output(**data)
+        data = {'key': 'vallue', 'output': {'result': 10}}
+
+        send.NetworkSendOutput().output(**copy.deepcopy(data))
+        data['output'] = 20
         mock_put_request.assert_called_once_with(self._make_url(), data=data)
         mock_error_log.assert_called()
 
@@ -79,10 +81,8 @@ class TestSend(base_test.BaseTestCase):
     def test_output_send_pass(self, mock_base_make_dict, mock_json_dumps,
                               mock_put_request, mock_info_log):
 
-        data = {'result': {}}
-
         def make_dict(exp, **kwargs):
-            kwargs['result']['output'] = exp
+            kwargs['output'] = 20
             return kwargs
 
         def dump_json(jaanch):
@@ -90,6 +90,10 @@ class TestSend(base_test.BaseTestCase):
 
         mock_base_make_dict.side_effect = make_dict
         mock_json_dumps.side_effect = dump_json
-        send.NetworkSendOutput().output(**data)
+        data = {'key': 'vallue', 'output': {}}
+
+        send.NetworkSendOutput().output(**copy.deepcopy(data))
+
+        data['output'] = 20
         mock_put_request.assert_called_once_with(self._make_url(), data=data)
         mock_info_log.assert_called()

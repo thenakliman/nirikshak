@@ -75,8 +75,6 @@ class Input(input_base.Input):
         return configuration[group].get('config', {})
 
     def _get_executable_soochis(self, soochis, groups):
-        group_config = {}
-
         try:
             content = self.get_main_file()
         except exceptions.FileNotFound:
@@ -85,44 +83,44 @@ class Input(input_base.Input):
 
         groups = self._get_groups(content, groups)
 
-        t_soochis = {}
+        soochis_name_with_config = {}
         for soochi in soochis:
-            t_soochis[soochi] = {
-                'soochi': soochi,
-                'config': {}
-            }
+            soochis_name_with_config[soochi] = {}
 
+        group_config = {}
         for group in groups:
             group_config[group] = self._get_config(content, group)
             if 'soochis' in content[group]:
-                for name, soochi_def in content[group]['soochis'].items():
-                    config = copy.deepcopy(soochi_def.get('config', {}))
+                for name, soochi_config in content[group]['soochis'].items():
+                    config = copy.deepcopy(soochi_config.get('config', {}))
                     utils.merge_dict(config, group_config[group])
-                    t_soochis[name] = {'config': config}
+                    soochis_name_with_config[name] = config
 
-        LOG.info("%s soochis to be executed.", t_soochis)
+        LOG.info("%s soochis to be executed.",
+                 list(soochis_name_with_config.keys()))
         soochis_with_config = []
-        for soochi, config in t_soochis.items():
+        for soochi, config in soochis_name_with_config.items():
             soochis_with_config.append({soochi: config})
+
         return soochis_with_config
 
     def get_soochis(self, soochis, groups):
-        t_soochis = []
+        soochis_with_content_and_config = []
         soochis = self._get_executable_soochis(soochis, groups)
         for soochi in soochis:
-            name = list(soochi.keys())[0]
             soochi_content = []
+            soochi_name, soochi_config = soochi.items()[0]
             try:
-                soochi_content = self.get_soochi_content(name)
+                soochi_content = self.get_soochi_content(soochi_name)
             except exceptions.FileNotFound:
-                LOG.error("%s file not found", name)
+                LOG.error("%s file not found", soochi_name)
             except exceptions.InvalidFormatException:
-                LOG.error("%s file has invalid format", name)
+                LOG.error("%s file has invalid format", soochi_name)
             else:
-                soochi = (soochi[name]['config'], soochi_content)
-                t_soochis.append(soochi)
+                soochis_with_content_and_config.append(
+                    (soochi_config, soochi_content))
 
-        return t_soochis
+        return soochis_with_content_and_config
 
 
 def get_soochis(soochis=None, groups=None):
