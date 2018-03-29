@@ -291,7 +291,7 @@ class InputFileTest(base.BaseTestCase):
             raise exceptions.FileNotFound
 
         def _get_executable_soochis(self, soochis, group):
-            return [base.get_test_keystone_soochi()]
+            return [{'name': {}}]
 
         fake_plugin.get_soochi_content = get_soochi_content
         fake_plugin._get_executable_soochis = _get_executable_soochis
@@ -305,7 +305,7 @@ class InputFileTest(base.BaseTestCase):
             raise exceptions.InvalidFormatException
 
         def _get_executable_soochis(self, soochis, group):
-            return [base.get_test_keystone_soochi()]
+            return [{'name': {}}]
 
         fake_plugin.get_soochi_content = get_soochi_content
         fake_plugin._get_executable_soochis = _get_executable_soochis

@@ -21,10 +21,9 @@ class OutputTest(base.BaseTestCase):
     # pylint: disable=no-self-use
     def test_output(self):
         fake_jaanch = {
-            'fake_jaanch': {
-                'formatted_output': 'test-jaanch'
-                }
-            }
+            'name': 'fake-jaanch',
+            'formatted_output': 'test-jaanch'
+        }
         with mock.patch.object(console, 'print') as mock_print:
             console.ConsoleFormatOutput().output(**fake_jaanch)
             mock_print.assert_called_once_with('test-jaanch')
