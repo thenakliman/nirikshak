@@ -19,3 +19,13 @@ monitor:
   soochis:
     keystone:
       soochi: keystone
+pipeline:
+  config:
+    post_task: dummy
+    input:
+      type: file
+    output:
+      type: csv
+  soochis:
+    keystone:
+      soochi: keystone

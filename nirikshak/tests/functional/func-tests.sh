@@ -1,5 +1,9 @@
 #/bin/bash
 
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
 echo "Creating temporary director ...."
 mkdir -p func-tests-build/logs
 
@@ -13,9 +17,9 @@ cleanup_output_file() {
 compare_against_expected_output() {
     diff $1 $2
     if [ $? -eq 0 ]; then
-        echo "Result.json passed"
+        echo -e "${GREEN}****************** PASSED *****************${NC}"
     else
-        echo "result.json failed"
+        echo -e "${RED}****************** FAILED *****************${NC}"
         FUNCTIONAL_TEST_CASE_STATUS=false
     fi
 }
@@ -49,6 +53,7 @@ run_test() {
 echo "Running Test cases for JSON Output .."
 run_test "$PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.json" "$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json" "deployment"
 run_test $PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.yaml "$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.yaml" "monitor"
+run_test $PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.csv "$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.csv" "pipeline"
 
 if [ "$FUNCTIONAL_TEST_CASE_STATUS" == false ]; then
     exit 1
