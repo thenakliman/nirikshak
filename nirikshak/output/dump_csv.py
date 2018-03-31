@@ -57,9 +57,10 @@ class CSVFormatOutput(base.FormatOutput):
         jaanch = ("%s,input") % kwargs['name']
         for k, value in kwargs['input']['args'].items():
             jaanch = ("%s,%s,%s" % (jaanch, k, value))
-            jaanch = ("%s,output,expected_output,%s,actual_output,%s" % (
-                jaanch, expected_result,
-                kwargs['input'].get('result')))
+
+        jaanch = ("%s,output,expected_output,%s,actual_output,%s" % (
+            jaanch, expected_result,
+            kwargs['input'].get('result')))
 
         return jaanch
 

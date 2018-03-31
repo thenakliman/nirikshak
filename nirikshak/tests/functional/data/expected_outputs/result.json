@@ -80,25 +80,5 @@
         "output": {
             "actual_output": null
         }
-    },
-    {
-        "input": {
-            "ip": "192.168.1.100",
-            "port": 5000
-        },
-        "name": "port_15000",
-        "output": {
-            "actual_output": 11
-        }
-    },
-    {
-        "input": {
-            "ip": "192.168.1.100",
-            "port": 35357
-        },
-        "name": "port_135357",
-        "output": {
-            "actual_output": 11
-        }
     }
 ]

@@ -8,14 +8,24 @@ deployment:
   soochis:
     keystone:
       soochi: keystone
-    glance:
-      soochi: glance
 
 monitor:
-  groups:
-   - deployment
+  config:
+    post_task: dummy
+    input:
+      type: file
+    output:
+      type: yaml
   soochis:
     keystone:
       soochi: keystone
-    glance:
-      soochi: glance
+pipeline:
+  config:
+    post_task: dummy
+    input:
+      type: file
+    output:
+      type: csv
+  soochis:
+    keystone:
+      soochi: keystone
