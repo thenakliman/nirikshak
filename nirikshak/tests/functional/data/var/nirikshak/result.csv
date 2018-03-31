@@ -1,8 +1,0 @@
-port_5000,input,ip,localhost,port,5000,output,expected_output,None,actual_output,0
-port_35357,input,ip,localhost,port,35357,output,expected_output,None,actual_output,111
-disk_not_mounted,input,device,/dev/sda5,mountpoint,/,fstype,ext4,output,expected_output,None,actual_output,None
-disk_mounted,input,device,/dev/sda1,mountpoint,/etc/resolv.conf,fstype,ext4,output,expected_output,None,actual_output,True
-process,input,name,inifinity,output,expected_output,None,actual_output,True
-not_existing_process,input,name,inifinity_process,output,expected_output,None,actual_output,False
-ini,input,section,default,key,log_level,file,/etc/nirikshak/nirikshak.conf,output,expected_output,None,actual_output,debug
-ini_does_not_exist,input,section,default,key,log_levell,file,/etc/nirikshak/nirikshak.conf,output,expected_output,None,actual_output,None

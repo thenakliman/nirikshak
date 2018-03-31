@@ -18,9 +18,11 @@ compare_against_expected_output() {
     diff $1 $2
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}****************** PASSED *****************${NC}"
+        return 1
     else
         echo -e "${RED}****************** FAILED *****************${NC}"
         FUNCTIONAL_TEST_CASE_STATUS=false
+        return 0
     fi
 }
 
@@ -44,11 +46,15 @@ run_test() {
               thenakliman/nirikshak_functional_test:latest
 
     compare_against_expected_output $OUTPUT_FILE $EXPECTED_OUTPUT_FILE
-    if [ "$dev_env" = false ]; then
+    result_match_expected_output=$?
+    if [ "$dev_env" = false -a "$result_match_expected_output" -eq 1 ]; then
         echo "Clean output file ...."
         rm $OUTPUT_FILE
     fi
 }
+
+echo "Evironment variables .."
+export
 
 echo "Running Test cases for JSON Output .."
 run_test "$PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.json" "$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json" "deployment"
