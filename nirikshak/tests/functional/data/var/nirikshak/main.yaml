@@ -29,3 +29,13 @@ pipeline:
   soochis:
     keystone:
       soochi: keystone
+webserver:
+  config:
+    post_task: dummy
+    input:
+      type: file
+    output:
+      type: send
+  soochis:
+    keystone:
+      soochi: keystone

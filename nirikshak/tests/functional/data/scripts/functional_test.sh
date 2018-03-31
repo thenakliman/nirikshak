@@ -17,6 +17,9 @@ git branch
 echo "Installing latest code of nirikshak..."
 python setup.py install
 
+echo "Running socker listening server"
+python "./nirikshak/tests/functional/data/output/send/listening_server.py" "./nirikshak/tests/functional/data/var/nirikshak/result.txt" 12345 &
+
 echo "Current working directoru $PWD"
 cp /root/workers/process/inifinity.py /usr/local/bin/inifinity
 

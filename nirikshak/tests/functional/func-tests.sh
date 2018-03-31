@@ -56,11 +56,16 @@ run_test() {
 echo "Evironment variables .."
 export
 
-echo "Running Test cases for JSON Output .."
-run_test "$PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.json" "$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json" "deployment"
-run_test $PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.yaml "$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.yaml" "monitor"
-run_test $PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.csv "$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.csv" "pipeline"
+run_file_based_output_test() {
+    echo "Running Test cases for JSON Output .."
+    run_test "$PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.json" "$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.json" "deployment"
+    run_test $PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.yaml "$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.yaml" "monitor"
+    run_test $PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.csv "$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.csv" "pipeline"
+    run_test $PWD/$FUNCTIONAL_TEST_DIR/expected_outputs/result.txt "$PWD/$FUNCTIONAL_TEST_DIR/var/nirikshak/result.txt" "webserver"
+}
 
-if [ "$FUNCTIONAL_TEST_CASE_STATUS" == false ]; then
+run_file_based_output_test
+
+if [ "$FUNCTIONAL_TEST_CASE_STATUS" = false ]; then
     exit 1
 fi
