@@ -24,7 +24,5 @@ def append_to_json_file(file_name, content):
 
 
 if __name__ == '__main__':
-    print(sys.argv)
     file_name, port = sys.argv[1:]
-    print(file_name, port)
     create_server(file_name, int(port))
