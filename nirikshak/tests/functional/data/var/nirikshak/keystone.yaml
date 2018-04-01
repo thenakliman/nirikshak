@@ -49,3 +49,8 @@
       file: /etc/nirikshak/nirikshak.conf
       section: default
       key: log_levell
+- name: disk_available_space
+  type: disk_free_space
+  input:
+    args:
+      mountpoint: /dev

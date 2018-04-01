@@ -80,5 +80,14 @@
         "output": {
             "actual_output": null
         }
+    },
+    {
+        "input": {
+            "mountpoint": "/dev"
+        },
+        "name": "disk_available_space",
+        "output": {
+            "actual_output": 67108864
+        }
     }
 ]
