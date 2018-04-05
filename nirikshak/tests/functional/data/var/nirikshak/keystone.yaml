@@ -54,3 +54,19 @@
   input:
     args:
       mountpoint: /dev
+- name: google
+  type: network_connectivity
+  input:
+    args:
+      host: www.google.com
+- name: localhost
+  type: network_connectivity
+  input:
+    args:
+      host: localhost
+# Un comment it once network connectivity failure does not result in indefinite stuck
+#- name: fakehost
+#  type: network_connectivity
+#  input:
+#    args:
+#      host: fakehost

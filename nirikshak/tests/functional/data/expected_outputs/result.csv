@@ -7,3 +7,5 @@ not_existing_process,input,name,inifinity_process,output,expected_output,None,ac
 ini,input,section,default,key,log_level,file,/etc/nirikshak/nirikshak.conf,output,expected_output,None,actual_output,debug
 ini_does_not_exist,input,section,default,key,log_levell,file,/etc/nirikshak/nirikshak.conf,output,expected_output,None,actual_output,None
 disk_available_space,input,mountpoint,/dev,output,expected_output,None,actual_output,67108864
+google,input,host,www.google.com,output,expected_output,None,actual_output,False
+localhost,input,host,localhost,output,expected_output,None,actual_output,True

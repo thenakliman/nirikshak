@@ -89,5 +89,23 @@
         "output": {
             "actual_output": 67108864
         }
+    },
+    {
+        "input": {
+            "host": "www.google.com"
+        },
+        "name": "google",
+        "output": {
+            "actual_output": false
+        }
+    },
+    {
+        "input": {
+            "host": "localhost"
+        },
+        "name": "localhost",
+        "output": {
+            "actual_output": true
+        }
     }
 ]
