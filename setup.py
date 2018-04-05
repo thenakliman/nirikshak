@@ -26,7 +26,7 @@ setuptools.setup(
         "PyYAML==3.11",
         "psutil==5.2.2",
         "six==1.10.0",
-        "python-ping",
+        "ping",
         # Need to fix for following packages
         # "python-apt==1.1.0b1",
         # "python3-distutils-extra",

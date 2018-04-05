@@ -96,7 +96,7 @@
         },
         "name": "google",
         "output": {
-            "actual_output": false
+            "actual_output": true
         }
     },
     {
@@ -106,6 +106,15 @@
         "name": "localhost",
         "output": {
             "actual_output": true
+        }
+    },
+    {
+        "input": {
+            "host": "fakehost"
+        },
+        "name": "fakehost",
+        "output": {
+            "actual_output": false
         }
     }
 ]
