@@ -30,4 +30,7 @@ def merge_dict(dict2, dict1):
 
 def load_modules_from_location(location):
     for loader, name, _ in pkgutil.walk_packages(location):
-        loader.find_module(name).load_module(name)
+        try:
+            loader.find_module(name).load_module(name)
+        except Exception:
+            pass
