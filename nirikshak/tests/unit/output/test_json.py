@@ -45,7 +45,7 @@ class JSONFormatOutputTest(base_test.BaseTestCase):
             {
                 'name': 'port_3537',
                 'input': soochi2['input']['args'],
-                'output': {}
+                'output': None
             })
         mock_output_file.assert_called_once_with(f_name)
         mock_output_json.assert_called_once_with(result, indent=4,

@@ -64,5 +64,7 @@ def make_output_dict(expected_result, **kwargs):
         pass
 
     jaanch['name'] = kwargs['name']
-    jaanch['output'] = output_dict
+    LOG.info("=================", output_dict)
+    jaanch['output'] = output_dict or None
+    LOG.info("=================", output_dict)
     return jaanch

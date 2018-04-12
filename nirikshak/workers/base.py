@@ -34,6 +34,12 @@ def validate(required=(), optional=()):
                 available = set(list(kwargs['input']['args'].keys()))
             except KeyError:
                 available = set()
+            except AttributeError:
+                available = set()
+            except Exception as e:
+                print(e)
+                available = set()
+
 
             missing = require - available
             if missing:

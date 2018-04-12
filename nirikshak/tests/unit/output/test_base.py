@@ -103,3 +103,10 @@ class TestMakeOutputDict(unittest.TestCase):
         exp_jaanch = base.make_output_dict(10, **copy.deepcopy(fake_jaanch))
         fake_jaanch['output'] = {'expected_output': 10}
         self.assertDictEqual(exp_jaanch, fake_jaanch)
+
+    def test_make_output_dict_expected_output_is_not_given(self):
+        fake_jaanch = get_fake_jaanch()
+        exp_jaanch = base.make_output_dict(None, **copy.deepcopy(fake_jaanch))
+        fake_jaanch["input"] = fake_jaanch["input"]["args"]
+        fake_jaanch["output"] = None
+        self.assertDictEqual(exp_jaanch, fake_jaanch)
