@@ -49,7 +49,7 @@ class YAMLFormatOutputTest(base_test.BaseTestCase):
         exp_result = {
             'name': 'port_3537',
             'input': soochi2['input']['args'],
-            'output': {}
+            'output': None
         }
         exp_soochis = [copy.deepcopy(soochi1), exp_result]
         mock_read_file.assert_called_with(f_name)
