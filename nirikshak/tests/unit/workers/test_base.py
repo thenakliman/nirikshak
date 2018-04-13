@@ -94,6 +94,17 @@ class WorkBaseTest(unittest.TestCase):
         self.assertRaises(exceptions.MissingRequiredArgsException,
                           FakePlugin().func, **jaanch)
 
+    def test_if_args_are_not_required_for_a_jaanch(self):
+        @plugins.register('ini')
+        class FakePlugin(object):
+            @worker_base.validate(required=tuple())
+            def func(self, **kwargs):
+                return 10
+
+        jaanch = self.jaanch
+        del jaanch['input']['args']
+        self.assertEqual(10, FakePlugin().func(**jaanch))
+
     def test_if_extra_args_are_provided(self):
         @plugins.register('ini')
         class FakePlugin(object):
