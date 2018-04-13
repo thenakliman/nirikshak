@@ -116,5 +116,12 @@
         "output": {
             "actual_output": false
         }
+    },
+    {
+        "input": null,
+        "name": "memoryusage",
+        "output": {
+            "actual_output": 9.1
+        }
     }
 ]
