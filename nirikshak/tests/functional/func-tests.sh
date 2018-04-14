@@ -11,7 +11,7 @@ FUNCTIONAL_TEST_DIR=nirikshak/tests/functional/data
 FUNCTIONAL_TEST_CASE_STATUS=true
 
 cleanup_output_file() {
-    rm $1
+    rm -f $1
 }
 
 compare_against_expected_output() {
@@ -33,7 +33,7 @@ run_test() {
     echo "Clean output file"
     cleanup_output_file $OUTPUT_FILE
 
-    docker run -it --rm \
+    sudo docker run -it --rm \
               --hostname functional \
               --name functional \
               --env GROUPS=$GROUPS_TO_RUN \
@@ -49,7 +49,7 @@ run_test() {
     result_match_expected_output=$?
     if [ "$dev_env" = false -a "$result_match_expected_output" -eq 1 ]; then
         echo "Clean output file ...."
-        rm $OUTPUT_FILE
+        rm -f $OUTPUT_FILE
     fi
 }
 

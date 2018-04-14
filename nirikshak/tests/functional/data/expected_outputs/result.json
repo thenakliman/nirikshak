@@ -23,7 +23,7 @@
         "input": {
             "device": "/dev/sda5",
             "fstype": "ext4",
-            "mountpoint": "/"
+            "mountpoint": "/nirikshak"
         },
         "name": "disk_not_mounted",
         "output": {
@@ -32,9 +32,9 @@
     },
     {
         "input": {
-            "device": "/dev/sda1",
+            "device": "/dev/nvme0n1p3",
             "fstype": "ext4",
-            "mountpoint": "/etc/resolv.conf"
+            "mountpoint": "/nirikshak"
         },
         "name": "disk_mounted",
         "output": {
@@ -115,13 +115,6 @@
         "name": "fakehost",
         "output": {
             "actual_output": false
-        }
-    },
-    {
-        "input": null,
-        "name": "memoryusage",
-        "output": {
-            "actual_output": 9.1
         }
     }
 ]

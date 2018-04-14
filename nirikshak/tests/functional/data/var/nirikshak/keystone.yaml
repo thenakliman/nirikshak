@@ -17,14 +17,14 @@
     args:
       device: /dev/sda5
       fstype: ext4
-      mountpoint: /
+      mountpoint: /nirikshak
 - name: disk_mounted
   type: disk_partition
   input:
     args:
-      device: /dev/sda1
+      device: /dev/nvme0n1p3
       fstype: ext4
-      mountpoint: /etc/resolv.conf
+      mountpoint: /nirikshak
 - name: process
   type: process_running
   input:
