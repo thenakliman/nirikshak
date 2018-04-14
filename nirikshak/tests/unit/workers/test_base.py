@@ -102,7 +102,7 @@ class WorkBaseTest(unittest.TestCase):
                 return 10
 
         jaanch = self.jaanch
-        del jaanch['input']['args']
+        del jaanch['input']
         self.assertEqual(10, FakePlugin().func(**jaanch))
 
     def test_if_extra_args_are_provided(self):

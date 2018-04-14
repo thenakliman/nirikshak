@@ -64,7 +64,11 @@ def match_expected_output(validator):
         if 'result' in kwargs.get('output', {}):
             tmp = (tmp == kwargs['output']['result'])
 
-        kwargs['input']['result'] = tmp
+        try:
+            kwargs['input']['result'] = tmp
+        except KeyError:
+            kwargs['input'] = {'result': tmp}
+
         return kwargs
 
     return convert_output
