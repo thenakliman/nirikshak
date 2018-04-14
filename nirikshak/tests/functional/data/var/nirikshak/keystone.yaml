@@ -69,7 +69,3 @@
   input:
     args:
       host: fakehost
-- name: memoryusage
-  type: memory_usage
-  input:
-    args:
